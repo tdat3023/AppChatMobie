@@ -3,7 +3,8 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {View, SafeAreaView, Text} from 'react-native';
-import {MaterialCommunityIcons, Ionicons} from '@expo/vector-icons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Home from './Login/home';
 import Login from './Login/login';
 import PasswordRes from './Login/PassWordRes';
@@ -17,8 +18,6 @@ import 'firebase/compat/auth';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-
-
 
 function MyTabs() {
   return (

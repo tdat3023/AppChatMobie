@@ -13,12 +13,10 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
-import {
-  AntDesign,
-  Ionicons,
-  MaterialCommunityIcons,
-  Feather,
-} from '@expo/vector-icons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Feather from 'react-native-vector-icons/Feather';
 import {firebase} from 'AwesomeProject/firebase/firebaseDB';
 import 'firebase/compat/auth';
 import {
@@ -32,17 +30,20 @@ export default Resgister = function ({navigation, route}) {
   const [errorEmail, setErrorEmail] = useState('');
   const [errorPassword, setErrorPassword] = useState('');
   //states to store email/password
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [retypePassword, setRetypePassword] = useState();
-  // const isValidationOK = () => {
-  //   email.length > 0 &&
-  //     password.length > 0 &&
-  //     isValidEmail(email) == true &&
-  //     isValidPassword(password) == true &&
-  //     password == retypePassword;
-  // };
+  const isValidationOK = () => {
+    firstName.length > 0 &&
+      lastName.length > 0 &&
+      email.length > 0 &&
+      password.length > 0 &&
+      isValidEmail(email) == true &&
+      isValidPassword(password) == true &&
+      password == retypePassword;
+  };
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -60,24 +61,40 @@ export default Resgister = function ({navigation, route}) {
         </View>
         <View style={styles.textRemind}>
           <Text style={{fontSize: 12}}>
-            Vui lòng nhập email và mật khẩu để đăng ký
+            Vui lòng nhập thông tin vào form dưới đây để đăng ký
           </Text>
         </View>
         {/* body */}
         <View style={styles.body}>
-          {/* name */}
+          {/* first name */}
           <View style={{marginHorizontal: 15, marginTop: 15}}>
-            <Text style={{fontSize: 20}}>Email:</Text>
+            <Text style={{fontSize: 20}}>First Name:</Text>
             <TextInput
               onChangeText={text => {
-                setEmail(name);
+                setEmail(firstName);
               }}
               style={{
                 color: 'black',
                 borderBottomWidth: 1,
               }}
-              placeholder="Nguyen Van A"
-              value={name}
+              placeholder="Nguyen"
+              value={firstName}
+            />
+          </View>
+
+          {/* last name */}
+          <View style={{marginHorizontal: 15, marginTop: 15}}>
+            <Text style={{fontSize: 20}}>Last Name:</Text>
+            <TextInput
+              onChangeText={text => {
+                setEmail(lastName);
+              }}
+              style={{
+                color: 'black',
+                borderBottomWidth: 1,
+              }}
+              placeholder="Van A"
+              value={lastName}
             />
           </View>
 
@@ -113,7 +130,6 @@ export default Resgister = function ({navigation, route}) {
               style={{
                 color: 'red',
                 fontSize: 20,
-                marginBottom: 10,
               }}>
               {errorEmail}
             </Text>
@@ -142,7 +158,6 @@ export default Resgister = function ({navigation, route}) {
             <View
               style={{
                 height: 1,
-                // backgroundColor: colors.primary,
                 width: '100%',
                 marginBottom: 10,
                 marginHorizontal: 15,
@@ -259,6 +274,14 @@ const styles = StyleSheet.create({
   textTop: {
     fontSize: 20,
     color: 'white',
+  },
+
+  textRemind: {
+    width: '100%',
+    height: 50,
+    backgroundColor: 'gray',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   body: {

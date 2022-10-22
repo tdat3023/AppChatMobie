@@ -18,7 +18,10 @@ import {
   StatusBar,
   RefreshControl,
 } from 'react-native';
-import {AntDesign, Ionicons, MaterialCommunityIcons} from '@expo/vector-icons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Feather from 'react-native-vector-icons/Feather';
 
 const WinWidth = Dimensions.get('window').width;
 const WinHeight = Dimensions.get('window').height;

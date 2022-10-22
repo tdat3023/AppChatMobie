@@ -18,7 +18,9 @@ import {
   StatusBar,
   RefreshControl,
 } from 'react-native';
-import {AntDesign, Ionicons, MaterialCommunityIcons} from '@expo/vector-icons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ChatScreen from './chatScreen';
 
 function ChatItem({item, navigation}) {

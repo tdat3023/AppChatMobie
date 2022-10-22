@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useState, useEffect, useRef} from 'react';
 import {
   View,
@@ -69,7 +70,7 @@ export default Login = function ({navigation}) {
             onPress={() => {
               navigation.goBack();
             }}>
-            <Ionicons name="heart-half" size={30} color="black"></Ionicons>
+            <AntDesign name="arrowleft" size={30} color="white"></AntDesign>
           </TouchableOpacity>
           <Text style={styles.textTopTag}>Đăng nhập</Text>
         </View>
@@ -116,14 +117,14 @@ export default Login = function ({navigation}) {
               {getPassWordVisible ? (
                 <Ionicons
                   style={styles.imageEye}
-                  name="person"
+                  name="eye"
                   size={24}
                   color="black"
                 />
               ) : (
                 <Ionicons
                   style={styles.imageEye}
-                  name="eye"
+                  name="eye-off"
                   size={24}
                   color="black"
                 />
@@ -155,7 +156,9 @@ export default Login = function ({navigation}) {
           <TouchableOpacity
             style={styles.login}
             disabled={isValidationOK() == false}
-            onPress={() => handleLogin()}></TouchableOpacity>
+            onPress={() => handleLogin()}>
+            <AntDesign name="login" size={30} color="white"></AntDesign>
+          </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>
