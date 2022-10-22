@@ -15,7 +15,8 @@ import {
   Platform,
   StatusBar,
 } from 'react-native';
-// import {firebaseDatabase, firebase} from 'AwesomeProject/firebase/firebaseDB';
+import {firebase} from 'AwesomeProject/firebase/firebaseDB';
+import 'firebase/compat/auth';
 import {
   isValidEmail,
   isValidPassword,
@@ -39,15 +40,25 @@ export default Login = function ({navigation}) {
       password.length > 0 &&
       isValidEmail(email) == true &&
       isValidPassword(password) == true;
-    // console.log(firebaseDatabase);
   };
-  // const getUser = () => {
-  //   db.doc('mpgsWVjXZQUr8tPOUTgojSQeWfs2')
-  //     .get()
-  //     .then(results => {
-  //       console.log('user', results);
-  //     });
-  // };
+
+  const handleLogin = () => {
+    //send email, pass to server
+    const loginFunc = (mail, pass) => {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(mail, pass)
+        .then(userCredential => {
+          //redict homepage
+          navigation.navigate('HomeTabs');
+        })
+        .catch(error => {
+          alert('error');
+        });
+    };
+    loginFunc(email, password);
+  };
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -84,10 +95,7 @@ export default Login = function ({navigation}) {
                 );
                 setEmail(text);
               }}
-              placeholder="example@gmail.com"
-
-              // placeholderTextColor={colors.placeholder}
-            ></TextInput>
+              placeholder="example@gmail.com"></TextInput>
           </View>
 
           {/* password */}
@@ -126,13 +134,9 @@ export default Login = function ({navigation}) {
           {/* recover password */}
           <View style={styles.recoverPassword}>
             <TouchableOpacity
-            // onPress={() => {
-            //   getUser;
-            // }}
-            // onPress={() => {
-            //   alert('{user.email}');
-            // }}
-            >
+              onPress={() => {
+                alert('Emai= ${email}');
+              }}>
               <Text style={{fontSize: 15, color: 'blue'}}>
                 Lấy lại mật khẩu
               </Text>
@@ -150,24 +154,8 @@ export default Login = function ({navigation}) {
 
           <TouchableOpacity
             style={styles.login}
-            // disabled={isValidationOK() == false}
-            // onPress={() => {
-            //   signInWithEmailAndPassword(auth, email, password)
-            //     .then(userCredential => {
-            //       const user = userCredential.user;
-            //       debugger;
-            //       navigate('UITab');
-            //     })
-            //     .catch(error => {
-            //       debugger;
-            //       alert(`Cannot signin, error: ${error.message}`);
-            //     });
-            //   console.log(`Email = ${email}, password = ${password}`);
-            // }}
-            onPress={() => {
-              navigation.navigate('HomeTabs');
-              console.log(`Email = ${email}, password = ${password}`);
-            }}></TouchableOpacity>
+            disabled={isValidationOK() == false}
+            onPress={() => handleLogin()}></TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>

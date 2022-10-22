@@ -13,10 +13,12 @@ import Contact from './contacts';
 import ChatScreen from './Chat/chatScreen';
 import Resgister from './Login/resgister';
 import {firebase} from 'AwesomeProject/firebase/firebaseDB';
+import 'firebase/compat/auth';
+
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-function ConfigFirebase() {}
+
 
 function MyTabs() {
   return (
@@ -58,27 +60,28 @@ function MyTabs() {
 }
 
 export default RootComponent = function () {
-  const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
+  // const [initializing, setInitializing] = useState(true);
+  // const [user, setUser] = useState();
 
-  console.log('config firebase');
-  //  Handle user state changes
-  function onAuthStateChange(user) {
-    setUser(user);
-    console.log(user);
-    if (initializing) setInitializing(false);
-  }
+  // console.log('config firebase');
+  // //  Handle user state changes
+  // function onAuthStateChange(user) {
+  //   setUser(user);
+  //   console.log(user);
+  //   if (initializing) setInitializing(false);
+  // }
 
-  useEffect(() => {
-    const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber;
-  }, []);
+  // useEffect(() => {
+  //   const unregisterAuthObserver = firebase.auth().onAuthStateChanged(user => {
+  //     console.log(user);
+  //     if (!user) {
+  //     } else {
+  //     }
+  //   });
 
-  if (initializing) return null;
+  //   return () => unregisterAuthObserver();
+  // }, []);
 
-  if (!user) {
-    return console.log('no user');
-  }
   return (
     <NavigationContainer>
       <Stack.Navigator

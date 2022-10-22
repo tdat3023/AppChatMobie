@@ -19,11 +19,30 @@ import {
   MaterialCommunityIcons,
   Feather,
 } from '@expo/vector-icons';
-
+import {firebase} from 'AwesomeProject/firebase/firebaseDB';
+import 'firebase/compat/auth';
+import {
+  isValidEmail,
+  isValidPassword,
+} from 'AwesomeProject/utilies/Validations';
 const WinWidth = Dimensions.get('window').width;
 const WinHeight = Dimensions.get('window').height;
 
-export default Resgister = function ({navigation}) {
+export default Resgister = function ({navigation, route}) {
+  const [errorEmail, setErrorEmail] = useState('');
+  const [errorPassword, setErrorPassword] = useState('');
+  //states to store email/password
+  const [name, setName] = useState();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [retypePassword, setRetypePassword] = useState();
+  // const isValidationOK = () => {
+  //   email.length > 0 &&
+  //     password.length > 0 &&
+  //     isValidEmail(email) == true &&
+  //     isValidPassword(password) == true &&
+  //     password == retypePassword;
+  // };
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -39,31 +58,154 @@ export default Resgister = function ({navigation}) {
 
           <Text style={styles.textTop}>Tạo tài khoản</Text>
         </View>
-
+        <View style={styles.textRemind}>
+          <Text style={{fontSize: 12}}>
+            Vui lòng nhập email và mật khẩu để đăng ký
+          </Text>
+        </View>
         {/* body */}
         <View style={styles.body}>
-          <View style={styles.textName}>
-            <Text style={{fontSize: 20, fontWeight: 'bold'}}>Tên Zalo</Text>
+          {/* name */}
+          <View style={{marginHorizontal: 15, marginTop: 15}}>
+            <Text style={{fontSize: 20}}>Email:</Text>
+            <TextInput
+              onChangeText={text => {
+                setEmail(name);
+              }}
+              style={{
+                color: 'black',
+                borderBottomWidth: 1,
+              }}
+              placeholder="Nguyen Van A"
+              value={name}
+            />
           </View>
 
-          {/* input login*/}
-
-          <View style={styles.textInput}>
-            <TextInput style={styles.input}></TextInput>
+          {/* email */}
+          <View style={{marginHorizontal: 15, marginTop: 15}}>
+            <Text style={{fontSize: 20}}>Email:</Text>
+            <TextInput
+              onChangeText={text => {
+                setErrorEmail(
+                  isValidEmail(text) == true
+                    ? ''
+                    : 'Email not in correct format',
+                );
+                setEmail(text);
+              }}
+              style={{
+                color: 'black',
+                borderBottomWidth: 1,
+              }}
+              placeholder="example@gmail.com"
+              value={email}
+            />
+            <View
+              style={{
+                height: 1,
+                width: '100%',
+                marginHorizontal: 15,
+                marginBottom: 5,
+                alignSelf: 'center',
+              }}
+            />
+            <Text
+              style={{
+                color: 'red',
+                fontSize: 20,
+                marginBottom: 10,
+              }}>
+              {errorEmail}
+            </Text>
           </View>
 
-          {/* recover password */}
-          <View style={styles.textNote}>
-            <Text style={{fontSize: 18, marginLeft: 15, marginTop: 5}}>
-              Lưu ý khi đặt tên:
-            </Text>
-            <Text style={{fontSize: 15, marginLeft: 20, marginTop: 10}}>
-              - Không vi phạm Quy định đặt tên trên Zalo
-            </Text>
-            <Text style={{fontSize: 15, marginLeft: 20, marginTop: 10}}>
-              - Nên sử dụng tên thật để giúp bạn bè dễ nhận ra bạn
+          {/* Password */}
+          <View style={{marginHorizontal: 15}}>
+            <Text style={{fontSize: 20}}>Password:</Text>
+            <TextInput
+              onChangeText={text => {
+                setErrorPassword(
+                  isValidPassword(text) == true
+                    ? ''
+                    : 'Password must be at least 3 characters',
+                );
+                setPassword(text);
+              }}
+              style={{
+                color: 'black',
+                borderBottomWidth: 1,
+              }}
+              secureTextEntry={true}
+              value={password}
+              placeholder="Enter your password"
+            />
+            <View
+              style={{
+                height: 1,
+                // backgroundColor: colors.primary,
+                width: '100%',
+                marginBottom: 10,
+                marginHorizontal: 15,
+                alignSelf: 'center',
+              }}
+            />
+            <Text style={{fontSize: 20}}>{errorPassword}</Text>
+          </View>
+
+          {/* Retype password */}
+          <View style={{marginHorizontal: 15}}>
+            <Text style={{fontSize: 20}}>Retype password:</Text>
+            <TextInput
+              onChangeText={text => {
+                setErrorPassword(
+                  isValidPassword(text) == true
+                    ? ''
+                    : 'Password must be at least 3 characters',
+                );
+                setRetypePassword(text);
+              }}
+              style={{
+                color: 'black',
+                borderBottomWidth: 1,
+              }}
+              value={retypePassword}
+              secureTextEntry={true}
+              placeholder="Re-Enter your password"
+            />
+            <View
+              style={{
+                height: 1,
+                width: '100%',
+                marginBottom: 10,
+                marginHorizontal: 15,
+                alignSelf: 'center',
+              }}
+            />
+            <Text
+              style={{
+                color: 'red',
+                fontSize: 20,
+                marginBottom: 5,
+              }}>
+              {errorPassword}
             </Text>
           </View>
+
+          {/* otp
+          <View style={{marginHorizontal: 15, marginTop: 15}}>
+            <Text style={{fontSize: 20}}>Nhập mã:</Text>
+            <TextInput
+              onChangeText={text => {
+                setEmail(name);
+              }}
+              style={{
+                color: 'black',
+                borderBottomWidth: 1,
+              }}
+              placeholder="1234"
+              value={name}
+            />
+          </View> */}
         </View>
 
         {/* footer */}
@@ -76,8 +218,22 @@ export default Resgister = function ({navigation}) {
 
           <TouchableOpacity
             style={styles.btnRegister}
+            // disabled={isValidationOK() == false}
             onPress={() => {
-              navigation.navigate('Password');
+              //alert(`Email = ${email}, password = ${password}`)
+              createUserWithEmailAndPassword(auth, email, password)
+                .then(userCredential => {
+                  const user = userCredential.user;
+                  debugger;
+                  sendEmailVerification(user).then(() => {
+                    console.log('Email verification sent');
+                  });
+                  navigate('HomeTabs');
+                })
+                .catch(error => {
+                  debugger;
+                  alert(`Cannot signin, error: ${error.message}`);
+                });
             }}>
             <AntDesign name="login" size={24} color="white" />
           </TouchableOpacity>
@@ -108,28 +264,6 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
     flexDirection: 'column',
-  },
-
-  textName: {
-    justifyContent: 'center',
-    padding: 10,
-    height: 60,
-    paddingLeft: 20,
-  },
-
-  textInput: {
-    justifyContent: 'center',
-    height: 80,
-    paddingLeft: 20,
-    paddingRight: 20,
-    alignItems: 'center',
-  },
-
-  input: {
-    width: 350,
-    height: 50,
-    borderBottomWidth: 4,
-    borderColor: 'blue',
   },
 
   footer: {
