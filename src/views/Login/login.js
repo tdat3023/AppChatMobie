@@ -54,7 +54,7 @@ export default Login = function ({navigation}) {
           navigation.navigate('HomeTabs');
         })
         .catch(error => {
-          alert('error');
+          alert('Sai Email hoặc mật khẩu!');
         });
     };
     loginFunc(email, password);

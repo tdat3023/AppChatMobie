@@ -52,21 +52,41 @@ export default Contact = ({navigation}) => {
         {/* button back */}
         <View style={styles.topTag}>
           <TouchableOpacity style={{alignItems: 'center', marginLeft: 10}}>
-            <AntDesign name="search1" size={24} color="black" />
+            <AntDesign name="search1" size={24} color="white" />
           </TouchableOpacity>
           <View style={styles.sreach}>
-            <TextInput style={styles.textTopTag}></TextInput>
+            <TextInput
+              style={styles.textTopTag}
+              placeholder="Tìm kiếm"
+              placeholderTextColor="white"
+              placeholderTextSize=""></TextInput>
           </View>
 
           <View style={styles.moreTag}>
             <TouchableOpacity>
-              <Ionicons name="person-add" size={24} color="black" />
+              <Ionicons name="person-add" size={24} color="white" />
             </TouchableOpacity>
           </View>
         </View>
 
         {/* tagTop */}
-        <View style={styles.topTagMenu}></View>
+        <View style={styles.topTagMenu}>
+          <View>
+            <TouchableOpacity>
+              <Text style={styles.text1}>BẠN BÈ</Text>
+            </TouchableOpacity>
+          </View>
+          <View>
+            <TouchableOpacity>
+              <Text style={styles.text1}>NHÓM</Text>
+            </TouchableOpacity>
+          </View>
+          <View>
+            <TouchableOpacity>
+              <Text style={styles.text1}>OA</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
 
         {/* List chat */}
         <View style={styles.bodyListChat}>
@@ -117,7 +137,6 @@ const styles = StyleSheet.create({
 
   sreach: {
     marginLeft: 10,
-    backgroundColor: 'white',
     width: 280,
   },
 
@@ -141,16 +160,19 @@ const styles = StyleSheet.create({
   topTag: {
     width: '100%',
     height: 50,
-    backgroundColor: 'blue',
+    backgroundColor: '#66B2FF',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
+  },
+  textTopTag: {
+    fontSize: 20,
   },
 
   topTagMenu: {
     width: '100%',
     height: 50,
-    backgroundColor: 'yellow',
+    borderBottomWidth: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
@@ -195,5 +217,9 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     fontSize: 20,
     fontWeight: 'bold',
+  },
+
+  text1: {
+    fontSize: 20,
   },
 });

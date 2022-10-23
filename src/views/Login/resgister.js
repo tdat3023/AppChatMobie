@@ -266,7 +266,7 @@ const styles = StyleSheet.create({
 
   header: {
     height: 60,
-    backgroundColor: 'blue',
+    backgroundColor: '#66B2FF',
     alignItems: 'center',
     flexDirection: 'row',
   },

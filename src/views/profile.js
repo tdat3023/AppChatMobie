@@ -140,8 +140,9 @@ const styles = StyleSheet.create({
     height: 250,
   },
   imageA3: {
-    height: 120,
-    width: 120,
+    height: 200,
+    width: 200,
+    borderRadius: 100,
   },
   containerEA: {
     alignItems: 'center',

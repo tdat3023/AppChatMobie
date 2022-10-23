@@ -70,10 +70,14 @@ export default ChatApp = function ({navigation}) {
             onPress={() => {
               navigation.goBack();
             }}>
-            <AntDesign name="search1" size={24} color="black" />
+            <AntDesign name="search1" size={24} color="white" />
           </TouchableOpacity>
+          {/* sreach */}
           <View style={styles.sreach}>
-            <TextInput style={styles.textTopTag}></TextInput>
+            <TextInput
+              style={styles.textTopTag}
+              placeholder="Tìm kiếm"
+              placeholderTextColor="white"></TextInput>
           </View>
 
           <View style={styles.moreTag}>
@@ -81,21 +85,34 @@ export default ChatApp = function ({navigation}) {
               <MaterialCommunityIcons
                 name="qrcode-scan"
                 size={24}
-                color="black"
+                color="white"
               />
             </TouchableOpacity>
 
             <TouchableOpacity>
               <Ionicons
-                style={{marginLeft: 5, marginRight: 5}}
+                style={{marginLeft: 15, marginRight: 5}}
                 name="add-sharp"
-                size={24}
-                color="black"
+                size={28}
+                color="white"
               />
             </TouchableOpacity>
           </View>
         </View>
 
+        {/* classìy */}
+        <View style={styles.topTagMenu}>
+          <View>
+            <TouchableOpacity>
+              <Text style={styles.text1}>TIN NHẮN</Text>
+            </TouchableOpacity>
+          </View>
+          <View>
+            <TouchableOpacity>
+              <Text style={styles.text1}>TIN CHỜ</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
         {/* List chat */}
         <View style={styles.bodyListChat}>
           <FlatList
@@ -120,14 +137,14 @@ const styles = StyleSheet.create({
 
   sreach: {
     marginLeft: 10,
-    backgroundColor: 'white',
-    width: '70%',
+    width: '60%',
   },
 
   moreTag: {
     marginLeft: 10,
     justifyContent: 'space-between',
     flexDirection: 'row',
+    alignItems: 'center',
   },
 
   notification: {
@@ -141,15 +158,28 @@ const styles = StyleSheet.create({
   topTag: {
     width: '100%',
     height: 50,
-    backgroundColor: 'blue',
+    backgroundColor: '#66B2FF',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
   },
 
+  textTopTag: {
+    fontSize: 20,
+  },
+
   bodyListChat: {
     width: '100%',
     alignItems: 'center',
+  },
+
+  topTagMenu: {
+    width: '100%',
+    height: 50,
+    borderBottomWidth: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
   },
 
   viewOne: {
@@ -203,5 +233,8 @@ const styles = StyleSheet.create({
 
   bodyList: {
     width: '100%',
+  },
+  text1: {
+    fontSize: 20,
   },
 });
