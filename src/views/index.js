@@ -13,6 +13,7 @@ import ProFile from './profile';
 import Contact from './contacts';
 import ChatScreen from './Chat/chatScreen';
 import Resgister from './Login/resgister';
+import CreateAboutScreen from './Chat/about';
 import {firebase} from 'AwesomeProject/firebase/firebaseDB';
 import 'firebase/compat/auth';
 
@@ -95,6 +96,7 @@ export default RootComponent = function () {
         />
         <Stack.Screen name="ChatScreen" component={ChatScreen} />
         <Stack.Screen name="Resgister" component={Resgister} />
+        <Stack.Screen name="CreateAboutScreen" component={CreateAboutScreen} />
 
         <Stack.Screen name="Password" component={PasswordRes} />
         {/* <Stack.Screen name="Login" component={Login} />

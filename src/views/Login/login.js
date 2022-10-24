@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {useState, useEffect, useRef} from 'react';
+import {useState, useEffect, useRef, useContext} from 'react';
 import {
   View,
   Text,
@@ -23,11 +23,18 @@ import {
   isValidPassword,
 } from 'AwesomeProject/utilies/Validations';
 
+import Contex from 'AwesomeProject/store/Context';
+
 // const fdb = firebase.firestore().collection('users');
 const WinWidth = Dimensions.get('window').width;
 const WinHeight = Dimensions.get('window').height;
 
 export default Login = function ({navigation}) {
+  const {state, depatch} = useContext(Contex);
+
+  // //detructering...
+  // const {user} = state;
+  console.log('context', Contex);
   // const user = auth().currentUser;
   const [getPassWordVisible, setPassWordVisible] = useState(false);
   //states for validating
@@ -50,11 +57,13 @@ export default Login = function ({navigation}) {
         .auth()
         .signInWithEmailAndPassword(mail, pass)
         .then(userCredential => {
+          //set user
+          console.log('userLogin: ' + state);
           //redict homepage
           navigation.navigate('HomeTabs');
         })
         .catch(error => {
-          alert('Sai Email hoặc mật khẩu!');
+          alert('Email hoặc mật khẩu không chính xác!');
         });
     };
     loginFunc(email, password);

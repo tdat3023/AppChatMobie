@@ -67,9 +67,10 @@ export default ChatApp = function ({navigation}) {
         <View style={styles.topTag}>
           <TouchableOpacity
             style={{alignItems: 'center', marginLeft: 10}}
-            onPress={() => {
-              navigation.goBack();
-            }}>
+            // onPress={() => {
+            //   navigation.goBack();
+            // }}
+          >
             <AntDesign name="search1" size={24} color="white" />
           </TouchableOpacity>
           {/* sreach */}

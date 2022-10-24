@@ -10,6 +10,7 @@ import {
   SafeAreaView,
   TextInput,
   StatusBar,
+  ScrollView,
   Image,
   Dimensions,
 } from 'react-native';
@@ -35,6 +36,7 @@ export default Resgister = function ({navigation, route}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [retypePassword, setRetypePassword] = useState();
+  const data = {name: 'cuong ga', age: '22'};
   const isValidationOK = () => {
     firstName.length > 0 &&
       lastName.length > 0 &&
@@ -65,13 +67,13 @@ export default Resgister = function ({navigation, route}) {
           </Text>
         </View>
         {/* body */}
-        <View style={styles.body}>
+        <ScrollView style={styles.body}>
           {/* first name */}
           <View style={{marginHorizontal: 15, marginTop: 15}}>
             <Text style={{fontSize: 20}}>First Name:</Text>
             <TextInput
               onChangeText={text => {
-                setEmail(firstName);
+                setFirstName(text);
               }}
               style={{
                 color: 'black',
@@ -87,7 +89,7 @@ export default Resgister = function ({navigation, route}) {
             <Text style={{fontSize: 20}}>Last Name:</Text>
             <TextInput
               onChangeText={text => {
-                setEmail(lastName);
+                setLastName(text);
               }}
               style={{
                 color: 'black',
@@ -187,41 +189,12 @@ export default Resgister = function ({navigation, route}) {
               secureTextEntry={true}
               placeholder="Re-Enter your password"
             />
-            <View
-              style={{
-                height: 1,
-                width: '100%',
-                marginBottom: 10,
-                marginHorizontal: 15,
-                alignSelf: 'center',
-              }}
-            />
-            <Text
-              style={{
-                color: 'red',
-                fontSize: 20,
-                marginBottom: 5,
-              }}>
-              {errorPassword}
-            </Text>
+            {/* <View
+              style={}
+            /> */}
+            <Text style={styles.textError}>{errorPassword}</Text>
           </View>
-
-          {/* otp
-          <View style={{marginHorizontal: 15, marginTop: 15}}>
-            <Text style={{fontSize: 20}}>Nhập mã:</Text>
-            <TextInput
-              onChangeText={text => {
-                setEmail(name);
-              }}
-              style={{
-                color: 'black',
-                borderBottomWidth: 1,
-              }}
-              placeholder="1234"
-              value={name}
-            />
-          </View> */}
-        </View>
+        </ScrollView>
 
         {/* footer */}
         <View style={styles.footer}>
@@ -233,20 +206,21 @@ export default Resgister = function ({navigation, route}) {
 
           <TouchableOpacity
             style={styles.btnRegister}
-            // disabled={isValidationOK() == false}
             onPress={() => {
               //alert(`Email = ${email}, password = ${password}`)
-              createUserWithEmailAndPassword(auth, email, password)
+              firebase
+                .auth()
+                .createUserWithEmailAndPassword(email, password)
                 .then(userCredential => {
                   const user = userCredential.user;
-                  debugger;
-                  sendEmailVerification(user).then(() => {
-                    console.log('Email verification sent');
-                  });
-                  navigate('HomeTabs');
+                  console.log(userCredential);
+
+                  // sendEmailVerification(user).then(() => {
+                  //   console.log('Email verification sent');
+                  // });
+                  navigation.navigate('HomeTabs', data);
                 })
                 .catch(error => {
-                  debugger;
                   alert(`Cannot signin, error: ${error.message}`);
                 });
             }}>
@@ -304,5 +278,11 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 100,
+  },
+
+  textError: {
+    color: 'red',
+    fontSize: 20,
+    marginBottom: 5,
   },
 });

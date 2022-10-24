@@ -16,6 +16,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import MessengerItem from './MessengerItem';
+import CreateAboutScreen from './about.js';
 
 export default ChatScreen = ({props, navigation, route}) => {
   const {item} = route.params;
@@ -46,6 +47,30 @@ export default ChatScreen = ({props, navigation, route}) => {
       timestamp: 1665542300,
       messengers: 'how about that?',
     },
+    {
+      url: 'https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg',
+      isSender: false,
+      timestamp: 1665542301,
+      messengers: 'yes',
+    },
+    {
+      url: 'https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg',
+      isSender: true,
+      timestamp: 1665542302,
+      messengers: 'how about that?',
+    },
+    {
+      url: 'https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg',
+      isSender: false,
+      timestamp: 1665542303,
+      messengers: 'yes',
+    },
+    {
+      url: 'https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg',
+      isSender: true,
+      timestamp: 1665542304,
+      messengers: 'how about that?',
+    },
   ]);
   // console.log(item);
   return (
@@ -73,7 +98,11 @@ export default ChatScreen = ({props, navigation, route}) => {
               <Ionicons name="videocam-outline" size={24} color="black" />
             </TouchableOpacity>
 
-            <TouchableOpacity>
+            <TouchableOpacity
+              style={{alignItems: 'center', marginLeft: 10}}
+              onPress={() => {
+                navigation.navigate('CreateAboutScreen');
+              }}>
               <Ionicons name="menu" size={24} color="black" />
             </TouchableOpacity>
           </View>
