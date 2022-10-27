@@ -27,7 +27,7 @@ import {
   Touchable,
   withTheme,
 } from "@draftbit/ui";
-import { firebase } from "AwesomeProject/firebase/firebaseDB";
+import { firebase } from "../firebase/firebaseDB";
 import "firebase/compat/auth";
 const WinWidth = Dimensions.get("window").width;
 const WinHeight = Dimensions.get("window").height;

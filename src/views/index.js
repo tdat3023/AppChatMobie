@@ -14,7 +14,7 @@ import Contact from "./contacts";
 import ChatScreen from "./Chat/chatScreen";
 import Resgister from "./Login/resgister";
 import CreateAboutScreen from "./Chat/about";
-import { firebase } from "AwesomeProject/firebase/firebaseDB";
+import { firebase } from "../firebase/firebaseDB";
 import "firebase/compat/auth";
 
 const Stack = createNativeStackNavigator();

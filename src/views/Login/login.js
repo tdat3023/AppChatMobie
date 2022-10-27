@@ -16,14 +16,11 @@ import {
   Platform,
   StatusBar,
 } from "react-native";
-import { firebase } from "AwesomeProject/firebase/firebaseDB";
+import { firebase } from "../../firebase/firebaseDB";
 import "firebase/compat/auth";
-import {
-  isValidEmail,
-  isValidPassword,
-} from "AwesomeProject/utilies/Validations";
+import { isValidEmail, isValidPassword } from "../../utilies/Validations";
 
-import Contex from "AwesomeProject/store/Context";
+import Contex from "../../store/Context";
 
 // const fdb = firebase.firestore().collection('users');
 const WinWidth = Dimensions.get("window").width;
@@ -117,7 +114,7 @@ export default Login = function ({ navigation }) {
               }}
               placeholder="Enter your password"
               secureTextEntry={true}
-              secureTextEntry={getPassWordVisible ? false : true}
+              //secureTextEntry={getPassWordVisible ? false : true}
             ></TextInput>
             <TouchableOpacity
               onPress={() => {
@@ -160,7 +157,7 @@ export default Login = function ({ navigation }) {
         <View style={styles.ask}>
           <TouchableOpacity>
             <Text style={{ fontSize: 15, color: "gray" }}>
-              Câu hỏi thường gặp >
+              Câu hỏi thường gặp 
             </Text>
           </TouchableOpacity>
 

@@ -25,7 +25,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import ChatItem from "./chatItem";
 import ChatScreen from "./chatScreen";
 // import "../../api/conversationApi";
-import Contex from "AwesomeProject/store/Context";
+import Contex from "../../store/Context";
 
 const WinWidth = Dimensions.get("window").width;
 const WinHeight = Dimensions.get("window").height;

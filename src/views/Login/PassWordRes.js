@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {AntDesign} from '@expo/vector-icons';
-import {Ionicons} from '@expo/vector-icons';
-import {useState, useEffect, useRef} from 'react';
+import React, { Component } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { AntDesign } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
+import { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -15,12 +15,12 @@ import {
   Dimensions,
   Platform,
   StatusBar,
-} from 'react-native';
+} from "react-native";
 
-const WinWidth = Dimensions.get('window').width;
-const WinHeight = Dimensions.get('window').height;
+const WinWidth = Dimensions.get("window").width;
+const WinHeight = Dimensions.get("window").height;
 
-export default Password = ({navigation}) => {
+export default Password = ({ navigation }) => {
   const [getPassWordVisible, setPassWordVisible] = useState(false);
   return (
     <SafeAreaView>
@@ -28,17 +28,18 @@ export default Password = ({navigation}) => {
         {/* button back */}
         <View style={styles.topTag}>
           <TouchableOpacity
-            style={{alignItems: 'center', marginLeft: 5}}
+            style={{ alignItems: "center", marginLeft: 5 }}
             onPress={() => {
               navigation.goBack();
-            }}>
+            }}
+          >
             <Ionicons name="arrow-back" size={26} color="black" />
           </TouchableOpacity>
           <Text style={styles.textTopTag}>Đăng ký</Text>
         </View>
 
         <View style={styles.textRemind}>
-          <Text style={{fontSize: 12}}>
+          <Text style={{ fontSize: 12 }}>
             Vui lòng nhập email và mật khẩu để đăng ký
           </Text>
         </View>
@@ -54,11 +55,13 @@ export default Password = ({navigation}) => {
           <View style={styles.viewPassword}>
             <TextInput
               style={styles.inputPassword}
-              secureTextEntry={getPassWordVisible ? false : true}></TextInput>
+              secureTextEntry={getPassWordVisible ? false : true}
+            ></TextInput>
             <TouchableOpacity
               onPress={() => {
                 setPassWordVisible(!getPassWordVisible);
-              }}>
+              }}
+            >
               {getPassWordVisible ? (
                 <Ionicons
                   style={styles.imageEye}
@@ -80,11 +83,13 @@ export default Password = ({navigation}) => {
           <View style={styles.viewPassword}>
             <TextInput
               style={styles.inputPassword}
-              secureTextEntry={getPassWordVisible ? false : true}></TextInput>
+              secureTextEntry={getPassWordVisible ? false : true}
+            ></TextInput>
             <TouchableOpacity
               onPress={() => {
                 setPassWordVisible(!getPassWordVisible);
-              }}>
+              }}
+            >
               {getPassWordVisible ? (
                 <Ionicons
                   style={styles.imageEye}
@@ -107,16 +112,17 @@ export default Password = ({navigation}) => {
         {/* Ask */}
         <View style={styles.ask}>
           <TouchableOpacity>
-            <Text style={{fontSize: 15, color: 'gray'}}>
-              Câu hỏi thường gặp >
+            <Text style={{ fontSize: 15, color: "gray" }}>
+              Câu hỏi thường gặp
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.login}
             onPress={() => {
-              navigation.navigate('HomeTabs');
-            }}>
+              navigation.navigate("HomeTabs");
+            }}
+          >
             <AntDesign name="login" size={24} color="black" />
           </TouchableOpacity>
         </View>
@@ -127,102 +133,102 @@ export default Password = ({navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
   },
 
   topTag: {
-    width: '100%',
+    width: "100%",
     height: 45,
-    backgroundColor: '#66B2FF',
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    alignItems: 'center',
+    backgroundColor: "#66B2FF",
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center",
   },
 
   textTopTag: {
-    alignItems: 'center',
-    marginRight: '40%',
+    alignItems: "center",
+    marginRight: "40%",
     fontSize: 15,
-    color: 'white',
+    color: "white",
   },
 
   textRemind: {
-    width: '100%',
+    width: "100%",
     height: 50,
-    backgroundColor: 'gray',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "gray",
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   input: {
     flex: 1,
-    width: '100%',
-    flexDirection: 'column',
-    alignItems: 'center',
+    width: "100%",
+    flexDirection: "column",
+    alignItems: "center",
   },
 
   viewPassword: {
     marginTop: 20,
     marginBottom: 10,
-    width: '95%',
+    width: "95%",
     height: 40,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
 
   viewAcc: {
     marginTop: 5,
-    width: '95%',
+    width: "95%",
     height: 40,
   },
 
   inputPassword: {
-    width: '100%',
+    width: "100%",
     height: 40,
-    borderBottomColor: 'black',
+    borderBottomColor: "black",
     borderBottomWidth: 1,
   },
 
   inputAcc: {
-    width: '100%',
+    width: "100%",
     height: 40,
-    borderBottomColor: 'black',
+    borderBottomColor: "black",
     borderBottomWidth: 1,
   },
 
   imageEye: {
     padding: 5,
-    height: '100%',
+    height: "100%",
     width: 40,
-    position: 'absolute',
+    position: "absolute",
     right: 0,
   },
 
   recoverPassword: {
     marginTop: 20,
     marginBottom: 10,
-    width: '95%',
+    width: "95%",
     height: 40,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
 
   ask: {
-    marginLeft: '5%',
-    width: '95%',
+    marginLeft: "5%",
+    width: "95%",
     height: 40,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
 
   login: {
     marginBottom: 20,
-    marginRight: '5%',
+    marginRight: "5%",
     width: 50,
     height: 50,
     borderRadius: 100,
-    backgroundColor: 'blue',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "blue",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

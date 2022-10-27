@@ -14,9 +14,9 @@ import {
   StatusBar,
 } from "react-native";
 
-import { firebase } from "AwesomeProject/firebase/firebaseDB";
+import { firebase } from "../../firebase/firebaseDB";
 import "firebase/compat/auth";
-import UserService from "AwesomeProject/src/services/UserService";
+import UserService from "../../services/UserService";
 
 const WinWidth = Dimensions.get("window").width;
 const WinHeight = Dimensions.get("window").height;

@@ -18,12 +18,9 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Feather from "react-native-vector-icons/Feather";
-import { firebase } from "AwesomeProject/firebase/firebaseDB";
+import { firebase } from "../../firebase/firebaseDB";
 import "firebase/compat/auth";
-import {
-  isValidEmail,
-  isValidPassword,
-} from "AwesomeProject/utilies/Validations";
+import { isValidEmail, isValidPassword } from "../../utilies/Validations";
 const WinWidth = Dimensions.get("window").width;
 const WinHeight = Dimensions.get("window").height;
 
