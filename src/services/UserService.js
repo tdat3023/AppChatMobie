@@ -1,4 +1,4 @@
-import { firebase } from "AwesomeProject/firebase/firebaseDB";
+import { firebase } from "../firebase/firebaseDB";
 import "firebase/compat/firestore";
 const db = firebase.firestore().collection("/users");
 const getById = (id) => {
