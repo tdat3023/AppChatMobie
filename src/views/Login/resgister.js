@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
-import {useState, useEffect, useRef} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import React, { Component } from "react";
+import { useState, useEffect, useRef } from "react";
+import { NavigationContainer } from "@react-navigation/native";
 import {
   View,
   Text,
@@ -13,30 +13,30 @@ import {
   ScrollView,
   Image,
   Dimensions,
-} from 'react-native';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Feather from 'react-native-vector-icons/Feather';
-import {firebase} from 'AwesomeProject/firebase/firebaseDB';
-import 'firebase/compat/auth';
+} from "react-native";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import Feather from "react-native-vector-icons/Feather";
+import { firebase } from "AwesomeProject/firebase/firebaseDB";
+import "firebase/compat/auth";
 import {
   isValidEmail,
   isValidPassword,
-} from 'AwesomeProject/utilies/Validations';
-const WinWidth = Dimensions.get('window').width;
-const WinHeight = Dimensions.get('window').height;
+} from "AwesomeProject/utilies/Validations";
+const WinWidth = Dimensions.get("window").width;
+const WinHeight = Dimensions.get("window").height;
 
-export default Resgister = function ({navigation, route}) {
-  const [errorEmail, setErrorEmail] = useState('');
-  const [errorPassword, setErrorPassword] = useState('');
+export default Resgister = function ({ navigation, route }) {
+  const [errorEmail, setErrorEmail] = useState("");
+  const [errorPassword, setErrorPassword] = useState("");
   //states to store email/password
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [retypePassword, setRetypePassword] = useState();
-  const data = {name: 'cuong ga', age: '22'};
+  const data = { name: "cuong ga", age: "22" };
   const isValidationOK = () => {
     firstName.length > 0 &&
       lastName.length > 0 &&
@@ -52,31 +52,32 @@ export default Resgister = function ({navigation, route}) {
         {/* header */}
         <View style={styles.header}>
           <TouchableOpacity
-            style={{alignItems: 'center', marginLeft: 5, marginRight: 10}}
+            style={{ alignItems: "center", marginLeft: 5, marginRight: 10 }}
             onPress={() => {
               navigation.goBack();
-            }}>
+            }}
+          >
             <Ionicons name="arrow-back" size={30} color="white" />
           </TouchableOpacity>
 
           <Text style={styles.textTop}>Tạo tài khoản</Text>
         </View>
         <View style={styles.textRemind}>
-          <Text style={{fontSize: 12}}>
+          <Text style={{ fontSize: 12 }}>
             Vui lòng nhập thông tin vào form dưới đây để đăng ký
           </Text>
         </View>
         {/* body */}
         <ScrollView style={styles.body}>
           {/* first name */}
-          <View style={{marginHorizontal: 15, marginTop: 15}}>
-            <Text style={{fontSize: 20}}>First Name:</Text>
+          <View style={styles.inputText}>
+            <Text style={{ fontSize: 20 }}>First Name:</Text>
             <TextInput
-              onChangeText={text => {
+              onChangeText={(text) => {
                 setFirstName(text);
               }}
               style={{
-                color: 'black',
+                color: "black",
                 borderBottomWidth: 1,
               }}
               placeholder="Nguyen"
@@ -85,14 +86,14 @@ export default Resgister = function ({navigation, route}) {
           </View>
 
           {/* last name */}
-          <View style={{marginHorizontal: 15, marginTop: 15}}>
-            <Text style={{fontSize: 20}}>Last Name:</Text>
+          <View style={{ marginHorizontal: 15, marginTop: 15 }}>
+            <Text style={{ fontSize: 20 }}>Last Name:</Text>
             <TextInput
-              onChangeText={text => {
+              onChangeText={(text) => {
                 setLastName(text);
               }}
               style={{
-                color: 'black',
+                color: "black",
                 borderBottomWidth: 1,
               }}
               placeholder="Van A"
@@ -101,19 +102,19 @@ export default Resgister = function ({navigation, route}) {
           </View>
 
           {/* email */}
-          <View style={{marginHorizontal: 15, marginTop: 15}}>
-            <Text style={{fontSize: 20}}>Email:</Text>
+          <View style={{ marginHorizontal: 15, marginTop: 15 }}>
+            <Text style={{ fontSize: 20 }}>Email:</Text>
             <TextInput
-              onChangeText={text => {
+              onChangeText={(text) => {
                 setErrorEmail(
                   isValidEmail(text) == true
-                    ? ''
-                    : 'Email not in correct format',
+                    ? ""
+                    : "Email not in correct format"
                 );
                 setEmail(text);
               }}
               style={{
-                color: 'black',
+                color: "black",
                 borderBottomWidth: 1,
               }}
               placeholder="example@gmail.com"
@@ -122,35 +123,36 @@ export default Resgister = function ({navigation, route}) {
             <View
               style={{
                 height: 1,
-                width: '100%',
+                width: "100%",
                 marginHorizontal: 15,
                 marginBottom: 5,
-                alignSelf: 'center',
+                alignSelf: "center",
               }}
             />
             <Text
               style={{
-                color: 'red',
+                color: "red",
                 fontSize: 20,
-              }}>
+              }}
+            >
               {errorEmail}
             </Text>
           </View>
 
           {/* Password */}
-          <View style={{marginHorizontal: 15}}>
-            <Text style={{fontSize: 20}}>Password:</Text>
+          <View style={{ marginHorizontal: 15 }}>
+            <Text style={{ fontSize: 20 }}>Password:</Text>
             <TextInput
-              onChangeText={text => {
+              onChangeText={(text) => {
                 setErrorPassword(
                   isValidPassword(text) == true
-                    ? ''
-                    : 'Password must be at least 3 characters',
+                    ? ""
+                    : "Password must be at least 3 characters"
                 );
                 setPassword(text);
               }}
               style={{
-                color: 'black',
+                color: "black",
                 borderBottomWidth: 1,
               }}
               secureTextEntry={true}
@@ -160,29 +162,29 @@ export default Resgister = function ({navigation, route}) {
             <View
               style={{
                 height: 1,
-                width: '100%',
+                width: "100%",
                 marginBottom: 10,
                 marginHorizontal: 15,
-                alignSelf: 'center',
+                alignSelf: "center",
               }}
             />
-            <Text style={{fontSize: 20}}>{errorPassword}</Text>
+            <Text style={{ fontSize: 20 }}>{errorPassword}</Text>
           </View>
 
           {/* Retype password */}
-          <View style={{marginHorizontal: 15}}>
-            <Text style={{fontSize: 20}}>Retype password:</Text>
+          <View style={{ marginHorizontal: 15 }}>
+            <Text style={{ fontSize: 20 }}>Retype password:</Text>
             <TextInput
-              onChangeText={text => {
+              onChangeText={(text) => {
                 setErrorPassword(
                   isValidPassword(text) == true
-                    ? ''
-                    : 'Password must be at least 3 characters',
+                    ? ""
+                    : "Password must be at least 3 characters"
                 );
                 setRetypePassword(text);
               }}
               style={{
-                color: 'black',
+                color: "black",
                 borderBottomWidth: 1,
               }}
               value={retypePassword}
@@ -199,7 +201,7 @@ export default Resgister = function ({navigation, route}) {
         {/* footer */}
         <View style={styles.footer}>
           <TouchableOpacity>
-            <Text style={{width: 200, fontSize: 15, color: 'gray'}}>
+            <Text style={{ width: 200, fontSize: 15, color: "gray" }}>
               Tiếp tục nghĩa là bạn đồng ý với các điều khoản sử dụng Zalo
             </Text>
           </TouchableOpacity>
@@ -211,19 +213,20 @@ export default Resgister = function ({navigation, route}) {
               firebase
                 .auth()
                 .createUserWithEmailAndPassword(email, password)
-                .then(userCredential => {
+                .then((userCredential) => {
                   const user = userCredential.user;
                   console.log(userCredential);
 
                   // sendEmailVerification(user).then(() => {
                   //   console.log('Email verification sent');
                   // });
-                  navigation.navigate('HomeTabs', data);
+                  navigation.navigate("HomeTabs", data);
                 })
-                .catch(error => {
+                .catch((error) => {
                   alert(`Cannot signin, error: ${error.message}`);
                 });
-            }}>
+            }}
+          >
             <AntDesign name="login" size={24} color="white" />
           </TouchableOpacity>
         </View>
@@ -234,55 +237,62 @@ export default Resgister = function ({navigation, route}) {
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
-    width: '100%',
+    height: "100%",
+    width: "100%",
   },
 
   header: {
     height: 60,
-    backgroundColor: '#66B2FF',
-    alignItems: 'center',
-    flexDirection: 'row',
+    backgroundColor: "#66B2FF",
+    alignItems: "center",
+    flexDirection: "row",
   },
 
   textTop: {
     fontSize: 20,
-    color: 'white',
+    color: "white",
   },
 
   textRemind: {
-    width: '100%',
+    width: "100%",
     height: 50,
-    backgroundColor: 'gray',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "gray",
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   body: {
     flex: 1,
-    flexDirection: 'column',
+    flexDirection: "column",
   },
 
   footer: {
     height: 60,
     marginTop: 20,
     padding: 10,
-    justifyContent: 'space-between',
-    flexDirection: 'row',
+    justifyContent: "space-between",
+    flexDirection: "row",
   },
 
   btnRegister: {
-    backgroundColor: 'blue',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "blue",
+    justifyContent: "center",
+    alignItems: "center",
     width: 50,
     height: 50,
     borderRadius: 100,
   },
 
   textError: {
-    color: 'red',
+    color: "red",
     fontSize: 20,
     marginBottom: 5,
+  },
+
+  inputText: {
+    fontWeight: 18,
+    borderBottomColor: "#F9F9F9",
+    marginHorizontal: 15,
+    marginTop: 15,
   },
 });

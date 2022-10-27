@@ -34,7 +34,7 @@ function ChatItem({item, navigation}) {
         <View style={styles.chatBox}>
           {/* ảnh đại diện */}
           <View style={styles.imaContainer}>
-            <Image style={styles.imaAvatar} source={{uri: item.url}}></Image>
+            <Image style={styles.imaAvatar} source={{uri: item?.url}}></Image>
           </View>
 
           <View style={styles.bodyContainer}>

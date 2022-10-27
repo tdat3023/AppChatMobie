@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {useState, useEffect, useRef} from 'react';
+import React, { Component } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -17,48 +17,72 @@ import {
   Platform,
   StatusBar,
   RefreshControl,
-} from 'react-native';
+} from "react-native";
 
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import ChatItem from './chatItem';
-import ChatScreen from './chatScreen';
+import AntDesign from "react-native-vector-icons/AntDesign";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import ChatItem from "./chatItem";
+import ChatScreen from "./chatScreen";
+// import "../../api/conversationApi";
+import Contex from "AwesomeProject/store/Context";
 
-const WinWidth = Dimensions.get('window').width;
-const WinHeight = Dimensions.get('window').height;
+const WinWidth = Dimensions.get("window").width;
+const WinHeight = Dimensions.get("window").height;
 
-export default ChatApp = function ({navigation}) {
-  const [users, setUsers] = useState([
-    {
-      id: '1',
-      url: 'https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg',
-      name: 'Tiến Đạt',
-      lastMessage: 'Hello',
-      numberOfUnReadMess: '20',
-    },
-    {
-      id: '5',
-      url: 'https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg',
-      name: 'Tiến',
-      lastMessage: 'Goodbye',
-      numberOfUnReadMess: '1',
-    },
-    {
-      id: '3',
-      url: 'https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg',
-      name: 'Test1',
-      lastMessage: 'He',
-      numberOfUnReadMess: '0',
-    },
-    {
-      id: '4',
-      url: 'https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg',
-      name: '2001',
-      lastMessage: 'báo nhà',
-      numberOfUnReadMess: '1',
-    },
-  ]);
+export default ChatApp = function ({ navigation }) {
+  // const [users, setUsers] = useState([
+  //   {
+  //     id: "1",
+  //     url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
+  //     name: "Tiến Đạt",
+  //     lastMessage: "Hello",
+  //     numberOfUnReadMess: "20",
+  //   },
+  //   {
+  //     id: "5",
+  //     url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
+  //     name: "Tiến",
+  //     lastMessage: "Goodbye",
+  //     numberOfUnReadMess: "1",
+  //   },
+  //   {
+  //     id: "3",
+  //     url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
+  //     name: "Test1",
+  //     lastMessage: "He",
+  //     numberOfUnReadMess: "0",
+  //   },
+  //   {
+  //     id: "4",
+  //     url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
+  //     name: "2001",
+  //     lastMessage: "báo nhà",
+  //     numberOfUnReadMess: "1",
+  //   },
+  // ]);'
+  const { state, depatch } = React.useContext(Contex);
+  const { user, userSearched, idConversation, userChatting } = state;
+  const [conversations, setConversations] = useState([]);
+  // React.useEffect(() => {
+  //   //get api set list conversation
+  //   //fetch product in wishlist
+  //   const fetchConversations = async () => {
+  //     try {
+  //       const response = await conversationApi.getConversations(user.uid);
+
+  //       const { data, page, size, totalPages } = response;
+  //       console.log(data);
+  //       if (response) {
+  //         setConversations(data);
+  //       }
+  //     } catch (error) {
+  //       console.log("Failed to fetch conversation list: ", error);
+  //     }
+  //   };
+
+  //   fetchConversations();
+  // }, [user]);
 
   return (
     <SafeAreaView>
@@ -66,9 +90,10 @@ export default ChatApp = function ({navigation}) {
         {/* button back */}
         <View style={styles.topTag}>
           <TouchableOpacity
-            style={{alignItems: 'center', marginLeft: 10}}
+            style={{ alignItems: "center", marginLeft: 10 }}
             // onPress={() => {
-            //   navigation.goBack();
+            //   // navigation.goBack();
+            //   console.log(users);
             // }}
           >
             <AntDesign name="search1" size={24} color="white" />
@@ -78,7 +103,8 @@ export default ChatApp = function ({navigation}) {
             <TextInput
               style={styles.textTopTag}
               placeholder="Tìm kiếm"
-              placeholderTextColor="white"></TextInput>
+              placeholderTextColor="white"
+            ></TextInput>
           </View>
 
           <View style={styles.moreTag}>
@@ -92,7 +118,7 @@ export default ChatApp = function ({navigation}) {
 
             <TouchableOpacity>
               <Ionicons
-                style={{marginLeft: 15, marginRight: 5}}
+                style={{ marginLeft: 15, marginRight: 5 }}
                 name="add-sharp"
                 size={28}
                 color="white"
@@ -116,13 +142,14 @@ export default ChatApp = function ({navigation}) {
         </View>
         {/* List chat */}
         <View style={styles.bodyListChat}>
-          <FlatList
+          {/* <FlatList
             style={styles.bodyList}
             data={users}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <ChatItem item={item} navigation={navigation}></ChatItem>
             )}
-            keyExtractor={item => item.id}></FlatList>
+            keyExtractor={(item) => item.id}
+          ></FlatList> */}
         </View>
       </View>
     </SafeAreaView>
@@ -131,38 +158,38 @@ export default ChatApp = function ({navigation}) {
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
-    width: '100%',
-    backgroundColor: 'white',
+    height: "100%",
+    width: "100%",
+    backgroundColor: "white",
   },
 
   sreach: {
     marginLeft: 10,
-    width: '60%',
+    width: "60%",
   },
 
   moreTag: {
     marginLeft: 10,
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    alignItems: 'center',
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center",
   },
 
   notification: {
     paddingRight: 10,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
     borderBottomWidth: 1,
   },
 
   topTag: {
-    width: '100%',
+    width: "100%",
     height: 50,
-    backgroundColor: '#66B2FF',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    backgroundColor: "#66B2FF",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
   },
 
   textTopTag: {
@@ -170,29 +197,29 @@ const styles = StyleSheet.create({
   },
 
   bodyListChat: {
-    width: '100%',
-    alignItems: 'center',
+    width: "100%",
+    alignItems: "center",
   },
 
   topTagMenu: {
-    width: '100%',
+    width: "100%",
     height: 50,
     borderBottomWidth: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
   },
 
   viewOne: {
-    width: '100%',
+    width: "100%",
     height: 90,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   imaContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   imaAvatar: {
@@ -203,14 +230,14 @@ const styles = StyleSheet.create({
 
   bodyContainer: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     borderBottomWidth: 1,
   },
 
   textName: {
     marginLeft: 10,
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 
   textLastMes: {
@@ -219,21 +246,21 @@ const styles = StyleSheet.create({
   },
 
   chatBox: {
-    width: '100%',
+    width: "100%",
     height: 90,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
 
   textNoti: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'gray',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "gray",
     width: 25,
     borderRadius: 10,
   },
 
   bodyList: {
-    width: '100%',
+    width: "100%",
   },
   text1: {
     fontSize: 20,

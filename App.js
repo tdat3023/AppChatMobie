@@ -6,8 +6,9 @@
  * @flow strict-local
  */
 
-import React from 'react';
-import type {Node} from 'react';
+import React from "react";
+import type { Node } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -16,7 +17,7 @@ import {
   Text,
   useColorScheme,
   View,
-} from 'react-native';
+} from "react-native";
 
 import {
   Colors,
@@ -24,13 +25,14 @@ import {
   Header,
   LearnMoreLinks,
   ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-import RootComponent from './src/views/index';
+} from "react-native/Libraries/NewAppScreen";
+import RootComponent from "./src/views/index";
+import Provider from "./store/Provider";
 
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
+const Section = ({ children, title }): Node => {
+  const isDarkMode = useColorScheme() === "dark";
   return (
     <View style={styles.sectionContainer}>
       <Text
@@ -39,7 +41,8 @@ const Section = ({children, title}): Node => {
           {
             color: isDarkMode ? Colors.white : Colors.black,
           },
-        ]}>
+        ]}
+      >
         {title}
       </Text>
       <Text
@@ -48,7 +51,8 @@ const Section = ({children, title}): Node => {
           {
             color: isDarkMode ? Colors.light : Colors.dark,
           },
-        ]}>
+        ]}
+      >
         {children}
       </Text>
     </View>
@@ -56,13 +60,32 @@ const Section = ({children, title}): Node => {
 };
 
 const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
+  const isDarkMode = useColorScheme() === "dark";
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
-  return <RootComponent />;
+  // // // Listen to the Firebase Auth state and set the local state.
+  // useEffect(() => {
+  //   const unregisterAuthObserver = firebase.auth().onAuthStateChanged((u) => {
+  //     if (!u) {
+  //       console.log("not user");
+  //     } else {
+  //       console.log(user);
+  //       //da dang nhap
+  //       //redict home page
+
+  //     }
+  //   });
+
+  //   return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
+  // }, []);
+  return (
+    <Provider>
+      <RootComponent />
+    </Provider>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -72,15 +95,15 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 24,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   sectionDescription: {
     marginTop: 8,
     fontSize: 18,
-    fontWeight: '400',
+    fontWeight: "400",
   },
   highlight: {
-    fontWeight: '700',
+    fontWeight: "700",
   },
 });
 
