@@ -1,5 +1,4 @@
-import React, { Component } from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import React from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useState, useEffect, useRef, useContext } from "react";
@@ -8,19 +7,16 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  ImageBackground,
   SafeAreaView,
-  Image,
   TextInput,
   Dimensions,
-  Platform,
-  StatusBar,
 } from "react-native";
 import { firebase } from "../../firebase/firebaseDB";
 import "firebase/compat/auth";
 import { isValidEmail, isValidPassword } from "../../utilies/Validations";
 
 import Contex from "../../store/Context";
+import { SetUser } from "../../store/Actions";
 
 // const fdb = firebase.firestore().collection('users');
 const WinWidth = Dimensions.get("window").width;
@@ -28,6 +24,7 @@ const WinHeight = Dimensions.get("window").height;
 
 export default Login = function ({ navigation }) {
   const { state, depatch } = useContext(Contex);
+  const { user } = state;
   // console.log("context", Contex);
   // const user = auth().currentUser;
   const [getPassWordVisible, setPassWordVisible] = useState(false);
@@ -35,8 +32,8 @@ export default Login = function ({ navigation }) {
   const [errorEmail, setErrorEmail] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
   //states to store email/password
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("h@gmail.com");
+  const [password, setPassword] = useState("123456789");
   const isValidationOK = () => {
     email.length > 0 &&
       password.length > 0 &&
@@ -44,6 +41,7 @@ export default Login = function ({ navigation }) {
       isValidPassword(password) == true;
   };
 
+  // console.log("userLogin: ", user);
   const handleLogin = () => {
     //send email, pass to server
     const loginFunc = (mail, pass) => {
@@ -52,7 +50,8 @@ export default Login = function ({ navigation }) {
         .signInWithEmailAndPassword(mail, pass)
         .then((userCredential) => {
           //set user
-          // console.log("userLogin: " + state);
+          depatch(SetUser(userCredential));
+
           //redict homepage
           navigation.navigate("HomeTabs");
         })
@@ -113,8 +112,7 @@ export default Login = function ({ navigation }) {
                 setPassword(text);
               }}
               placeholder="Enter your password"
-              secureTextEntry={true}
-              //secureTextEntry={getPassWordVisible ? false : true}
+              secureTextEntry={getPassWordVisible ? false : true}
             ></TextInput>
             <TouchableOpacity
               onPress={() => {
@@ -157,7 +155,7 @@ export default Login = function ({ navigation }) {
         <View style={styles.ask}>
           <TouchableOpacity>
             <Text style={{ fontSize: 15, color: "gray" }}>
-              Câu hỏi thường gặp 
+              Câu hỏi thường gặp
             </Text>
           </TouchableOpacity>
 
@@ -250,6 +248,7 @@ const styles = StyleSheet.create({
     width: 40,
     position: "absolute",
     right: 0,
+    marginTop: 15,
   },
 
   recoverPassword: {

@@ -23,26 +23,26 @@ const WinHeight = Dimensions.get("window").height;
 
 export default Home = ({ navigation }) => {
   // // Listen to the Firebase Auth state and set the local state.
-  useEffect(() => {
-    const unregisterAuthObserver = firebase.auth().onAuthStateChanged((u) => {
-      if (!u) {
-        console.log("not user");
-      } else {
-        //login
-        //navigation.navigate("HomeTabs");
-        console.log(u);
-        UserService.getById(u.uid).then(function (snapshot) {
-          console.log("d" + snapshot.data().first_name);
-          const userTemp = { uid: u.uid, ...snapshot.data() };
-          console.log(snapshot.data());
-          depatch(SetUset(userTemp));
-        });
-        navigation.navigate("HomeTabs");
-      }
-    });
+  // useEffect(() => {
+  //   const unregisterAuthObserver = firebase.auth().onAuthStateChanged((u) => {
+  //     if (!u) {
+  //       console.log("not user");
+  //     } else {
+  //       //login
+  //       //navigation.navigate("HomeTabs");
+  //       console.log(u);
+  //       UserService.getById(u.uid).then(function (snapshot) {
+  //         console.log("d" + snapshot.data().first_name);
+  //         const userTemp = { uid: u.uid, ...snapshot.data() };
+  //         console.log(snapshot.data());
+  //         depatch(SetUset(userTemp));
+  //       });
+  //       navigation.navigate("HomeTabs");
+  //     }
+  //   });
 
-    return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
-  }, []);
+  //   return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
+  // }, []);
   return (
     <SafeAreaView>
       {/* Text Zalo */}

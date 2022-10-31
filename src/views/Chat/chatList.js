@@ -8,23 +8,20 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
-  ImageBackground,
   SafeAreaView,
   Image,
   TextInput,
   ScrollView,
   Dimensions,
-  Platform,
-  StatusBar,
-  RefreshControl,
 } from "react-native";
+import axios from "axios";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import ChatItem from "./chatItem";
 import ChatScreen from "./chatScreen";
-// import "../../api/conversationApi";
+import { getConversations } from "../../api/conversationApi";
 import Contex from "../../store/Context";
 
 const WinWidth = Dimensions.get("window").width;
@@ -64,25 +61,40 @@ export default ChatApp = function ({ navigation }) {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
   const [conversations, setConversations] = useState([]);
-  // React.useEffect(() => {
-  //   //get api set list conversation
-  //   //fetch product in wishlist
-  //   const fetchConversations = async () => {
-  //     try {
-  //       const response = await conversationApi.getConversations(user.uid);
+  // console.log("user:", user.user.uid);
+  // console.log(typeof conversationApi);
+  React.useEffect(() => {
+    // //get api set list conversation
+    // //fetch product in wishlist
+    // const fetchConversations = async () => {
+    //   // console.log("user:", user.user.uid);
+    //   try {
+    //     const response = await getConversations(user.user.uid);
+    //     const { data, page, size, totalPages } = response;
+    //     console.log(data);
+    //     if (response) {
+    //       setConversations(data);
+    //     }
+    //   } catch (error) {
+    //     console.log("Failed to fetch conversation list: ", error);
+    //   }
+    // };
 
-  //       const { data, page, size, totalPages } = response;
-  //       console.log(data);
-  //       if (response) {
-  //         setConversations(data);
-  //       }
-  //     } catch (error) {
-  //       console.log("Failed to fetch conversation list: ", error);
-  //     }
-  //   };
+    // fetchConversations();
 
-  //   fetchConversations();
-  // }, [user]);
+    const fetchUser = async () => {
+      try {
+        const url = `https://13.228.206.211/conversation/user/HiIaKOEh8qTzOfTF1Va0Z6z61Qz2?page=0&size=20`;
+        console.log(url);
+        const response = await axios.get(url);
+
+        console.log(response);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+    fetchUser();
+  }, [user.user]);
 
   return (
     <SafeAreaView>
