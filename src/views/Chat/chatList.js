@@ -88,7 +88,7 @@ export default ChatApp = function ({ navigation }) {
         console.log(url);
         const response = await axios.get(url);
 
-        console.log(response);
+        console.log(JSON.parse(response.data));
       } catch (error) {
         console.log(error.message);
       }
