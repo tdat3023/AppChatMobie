@@ -21,43 +21,13 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import ChatItem from "./chatItem";
 import ChatScreen from "./chatScreen";
-import { getConversations } from "../../api/conversationApi";
+import conversationApi from "../../api/conversationApi";
 import Contex from "../../store/Context";
 
 const WinWidth = Dimensions.get("window").width;
 const WinHeight = Dimensions.get("window").height;
 
 export default ChatApp = function ({ navigation }) {
-  // const [users, setUsers] = useState([
-  //   {
-  //     id: "1",
-  //     url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
-  //     name: "Tiến Đạt",
-  //     lastMessage: "Hello",
-  //     numberOfUnReadMess: "20",
-  //   },
-  //   {
-  //     id: "5",
-  //     url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
-  //     name: "Tiến",
-  //     lastMessage: "Goodbye",
-  //     numberOfUnReadMess: "1",
-  //   },
-  //   {
-  //     id: "3",
-  //     url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
-  //     name: "Test1",
-  //     lastMessage: "He",
-  //     numberOfUnReadMess: "0",
-  //   },
-  //   {
-  //     id: "4",
-  //     url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
-  //     name: "2001",
-  //     lastMessage: "báo nhà",
-  //     numberOfUnReadMess: "1",
-  //   },
-  // ]);'
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
   const [conversations, setConversations] = useState([]);
@@ -66,35 +36,28 @@ export default ChatApp = function ({ navigation }) {
   React.useEffect(() => {
     // //get api set list conversation
     // //fetch product in wishlist
-    // const fetchConversations = async () => {
-    //   // console.log("user:", user.user.uid);
-    //   try {
-    //     const response = await getConversations(user.user.uid);
-    //     const { data, page, size, totalPages } = response;
-    //     console.log(data);
-    //     if (response) {
-    //       setConversations(data);
-    //     }
-    //   } catch (error) {
-    //     console.log("Failed to fetch conversation list: ", error);
-    //   }
-    // };
 
-    // fetchConversations();
-
-    const fetchUser = async () => {
+    const fetchConversations = async () => {
+      // console.log("user:", user.user.uid);
       try {
-        const url = `https://13.228.206.211/conversation/user/HiIaKOEh8qTzOfTF1Va0Z6z61Qz2?page=0&size=20`;
-        console.log(url);
-        const response = await axios.get(url);
-
-        console.log(JSON.parse(response.data));
+        // user.uid,page,size
+        const response = await conversationApi.getConversations(
+          "HiIaKOEh8qTzOfTF1Va0Z6z61Qz2",
+          0,
+          20
+        );
+        const { data, page, size, totalPages } = response;
+        console.log(data);
+        if (response) {
+          setConversations(data);
+        }
       } catch (error) {
-        console.log(error.message);
+        console.log("Failed to fetch conversation list: ", error);
       }
     };
-    fetchUser();
-  }, [user.user]);
+
+    fetchConversations();
+  }, [user]);
 
   return (
     <SafeAreaView>
@@ -115,8 +78,7 @@ export default ChatApp = function ({ navigation }) {
             <TextInput
               style={styles.textTopTag}
               placeholder="Tìm kiếm"
-              placeholderTextColor="white"
-            ></TextInput>
+              placeholderTextColor="white"></TextInput>
           </View>
 
           <View style={styles.moreTag}>
@@ -154,14 +116,14 @@ export default ChatApp = function ({ navigation }) {
         </View>
         {/* List chat */}
         <View style={styles.bodyListChat}>
-          {/* <FlatList
+          <FlatList
+            contentContainerStyle={{ paddingBottom: 100 }}
             style={styles.bodyList}
-            data={users}
+            data={conversations}
             renderItem={({ item }) => (
               <ChatItem item={item} navigation={navigation}></ChatItem>
             )}
-            keyExtractor={(item) => item.id}
-          ></FlatList> */}
+            keyExtractor={(item) => item.conversations._id}></FlatList>
         </View>
       </View>
     </SafeAreaView>

@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {useState, useEffect, useRef} from 'react';
+import React, { Component } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -17,16 +17,23 @@ import {
   Platform,
   StatusBar,
   RefreshControl,
-} from 'react-native';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import ChatScreen from './chatScreen';
+} from "react-native";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import ChatScreen from "./chatScreen";
 
-function ChatItem({item, navigation}) {
+function ChatItem({ item, navigation }) {
   const onPress = () => {
-    navigation.navigate('ChatScreen', {item: item});
+    navigation.navigate("ChatScreen", { item: item });
   };
+
+  const content = item.conversations.lastMessage.map((x) => {
+    return x;
+  });
+  const test = { ...content };
+
+  console.log("lasst name", test);
 
   return (
     <View style={styles.viewOne}>
@@ -34,18 +41,28 @@ function ChatItem({item, navigation}) {
         <View style={styles.chatBox}>
           {/* ảnh đại diện */}
           <View style={styles.imaContainer}>
-            <Image style={styles.imaAvatar} source={{uri: item?.url}}></Image>
+            <Image
+              style={styles.imaAvatar}
+              source={{
+                uri: "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
+              }}></Image>
           </View>
 
           <View style={styles.bodyContainer}>
             {/* tên */}
-            <Text style={styles.textName}>{item.name}</Text>
-            <Text style={styles.textLastMes}>{item.lastMessage}</Text>
+            <Text style={styles.textName}>
+              {item.inFo.firstName + " " + item.inFo.lastName}
+            </Text>
+            <Text style={styles.textLastMes}>
+              {item.conversations.lastMessage.map((x) => {
+                return x.content;
+              })}
+            </Text>
           </View>
 
           <View style={styles.notification}>
             <Ionicons name="notifications-outline" size={24} color="black" />
-            {item.numberOfUnReadMess > 0 && (
+            {item.conversations.mb.numberUnread > 0 && (
               <View
                 style={styles.textNoti}
                 // style={[
@@ -55,7 +72,7 @@ function ChatItem({item, navigation}) {
                 //   },
                 // ]}
               >
-                <Text>{item.numberOfUnReadMess}</Text>
+                <Text>{item.conversations.mb.numberUnread}</Text>
               </View>
             )}
           </View>
@@ -67,35 +84,35 @@ function ChatItem({item, navigation}) {
 
 const styles = StyleSheet.create({
   imaContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   notification: {
     width: 40,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
     borderBottomWidth: 1,
   },
 
   bodyListChat: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
   },
 
   viewOne: {
-    width: '100%',
+    width: "100%",
     height: 90,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   imaContainer: {
     marginLeft: 10,
     marginRight: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   imaAvatar: {
@@ -106,14 +123,14 @@ const styles = StyleSheet.create({
 
   bodyContainer: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     borderBottomWidth: 1,
   },
 
   textName: {
     marginLeft: 10,
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 
   textLastMes: {
@@ -123,16 +140,16 @@ const styles = StyleSheet.create({
   },
 
   chatBox: {
-    width: '100%',
+    width: "100%",
     height: 90,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
 
   textNoti: {
     marginTop: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'red',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "red",
     width: 20,
     borderRadius: 10,
   },
