@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {useState, useEffect, useRef} from 'react';
+import React, { Component } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -10,68 +10,40 @@ import {
   TouchableOpacity,
   TextInput,
   SafeAreaView,
-} from 'react-native';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Feather from 'react-native-vector-icons/Feather';
-import MessengerItem from './MessengerItem';
-import CreateAboutScreen from './about.js';
+} from "react-native";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import Feather from "react-native-vector-icons/Feather";
+import MessengerItem from "./MessengerItem";
+import CreateAboutScreen from "./about.js";
+import Contex from "../../store/Context";
+import messageApi from "../../api/messageApi";
 
-export default ChatScreen = ({props, navigation, route}) => {
-  const {item} = route.params;
+export default ChatScreen = ({ props, navigation, route }) => {
+  // const {item} = route.params;
+  const { state, depatch } = React.useContext(Contex);
+  const { user, userSearched, idConversation, userChatting } = state;
+  const [listMessgae, setListMessage] = useState([]);
+  React.useEffect(() => {
+    const fetchMessages = async () => {
+      // console.log("user:", user.user.uid);
+      try {
+        // user.uid,page,size
+        const response = await messageApi.getMess(idConversation, user, 0, 20);
+        const { data, page, size, totalPages } = response;
+        console.log("listMess ", data[0].messages);
+        if (response) {
+          setListMessage(data[0].messages);
+        }
+      } catch (error) {
+        console.log("Failed to fetch conversation list: ", error);
+      }
+    };
 
-  const [chatHistory, setChatHistory] = useState([
-    {
-      url: 'https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg',
-      isSender: true,
-      timestamp: 1665542100,
-      messengers: 'hello world',
-    },
-    {
-      url: 'https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg',
-      isSender: true,
-      timestamp: 1665542119,
-      messengers:
-        'For stretch to have an effect, children must not have a fixed dimension along the secondary axis. In the following example, setting alignItems: stretch does nothing until the width: 50 is removed from the children.',
-    },
-    {
-      url: 'https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg',
-      isSender: false,
-      timestamp: 1665542125,
-      messengers: 'yes',
-    },
-    {
-      url: 'https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg',
-      isSender: true,
-      timestamp: 1665542300,
-      messengers: 'how about that?',
-    },
-    {
-      url: 'https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg',
-      isSender: false,
-      timestamp: 1665542301,
-      messengers: 'yes',
-    },
-    {
-      url: 'https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg',
-      isSender: true,
-      timestamp: 1665542302,
-      messengers: 'how about that?',
-    },
-    {
-      url: 'https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg',
-      isSender: false,
-      timestamp: 1665542303,
-      messengers: 'yes',
-    },
-    {
-      url: 'https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg',
-      isSender: true,
-      timestamp: 1665542304,
-      messengers: 'how about that?',
-    },
-  ]);
+    fetchMessages();
+  }, [listMessgae]);
+
   // console.log(item);
   return (
     <SafeAreaView>
@@ -79,14 +51,16 @@ export default ChatScreen = ({props, navigation, route}) => {
         {/* Top tag */}
         <View style={styles.headerContainer}>
           <TouchableOpacity
-            style={{alignItems: 'center', marginLeft: 10}}
+            style={{ alignItems: "center", marginLeft: 10 }}
             onPress={() => {
               navigation.goBack();
             }}>
             <Ionicons name="arrow-back" size={28} color="black" />
           </TouchableOpacity>
           <View style={styles.nameFriend}>
-            <Text style={{fontSize: 20, fontWeight: 'bold'}}>{item.name}</Text>
+            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+              {userChatting.firstName + " " + userChatting.lastName}
+            </Text>
           </View>
 
           <View style={styles.moreTag}>
@@ -99,9 +73,9 @@ export default ChatScreen = ({props, navigation, route}) => {
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={{alignItems: 'center', marginLeft: 10}}
+              style={{ alignItems: "center", marginLeft: 10 }}
               onPress={() => {
-                navigation.navigate('CreateAboutScreen');
+                navigation.navigate("CreateAboutScreen");
               }}>
               <Ionicons name="menu" size={24} color="black" />
             </TouchableOpacity>
@@ -113,11 +87,12 @@ export default ChatScreen = ({props, navigation, route}) => {
           <View style={styles.bodyListChat}>
             <FlatList
               style={styles.bodyList}
-              data={chatHistory}
-              renderItem={({item}) => (
+              data={listMessgae}
+              renderItem={({ item }) => (
                 <MessengerItem messend={item}></MessengerItem>
               )}
-              key={'&{item.}timestamp'}></FlatList>
+              //</View>key={"&{item.}timestamp"}
+            ></FlatList>
           </View>
         </View>
 
@@ -155,43 +130,44 @@ export default ChatScreen = ({props, navigation, route}) => {
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
-    width: '100%',
+    height: "100%",
+    width: "100%",
   },
 
   headerContainer: {
     height: 60,
-    backgroundColor: '#66B2FF',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    backgroundColor: "#66B2FF",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
     marginBottom: 10,
   },
 
   bodyContainer: {
     flex: 1,
+    // backgroundColor: "red",
   },
 
   footerContainer: {
     height: 60,
 
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
     borderWidth: 1,
   },
 
   nameFriend: {
     marginLeft: 10,
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
 
   moreTag: {
     marginLeft: 25,
     flex: 1,
-    justifyContent: 'space-evenly',
-    flexDirection: 'row',
+    justifyContent: "space-evenly",
+    flexDirection: "row",
   },
 
   moreAction: {
@@ -200,15 +176,15 @@ const styles = StyleSheet.create({
 
   textChat: {
     height: 50,
-    width: '120%',
+    width: "120%",
   },
 
   bodyListChat: {
     flex: 1,
-    width: '100%',
-    alignItems: 'center',
+    width: "100%",
+    alignItems: "center",
   },
   bodyList: {
-    width: '100%',
+    width: "100%",
   },
 });

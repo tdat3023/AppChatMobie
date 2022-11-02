@@ -22,10 +22,21 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import ChatScreen from "./chatScreen";
+import {
+  SetUser,
+  SetIdConversation,
+  SetUserChatting,
+} from "../../store/Actions";
+import Contex from "../../store/Context";
 
 function ChatItem({ item, navigation }) {
+  const { state, depatch } = React.useContext(Contex);
+  const { user, userSearched, idConversation, userChatting } = state;
   const onPress = () => {
-    navigation.navigate("ChatScreen", { item: item });
+    navigation.navigate("ChatScreen");
+    console.log("userChatting", item.inFo);
+    depatch(SetIdConversation(item.conversations._id));
+    depatch(SetUserChatting(item.inFo));
   };
 
   const content = item.conversations.lastMessage.map((x) => {
@@ -41,7 +52,7 @@ function ChatItem({ item, navigation }) {
         <View style={styles.chatBox}>
           {/* ảnh đại diện */}
           <View style={styles.imaContainer}>
-            {item.conversations}
+            {/* {item.conversations} */}
             <Image
               style={styles.imaAvatar}
               source={{

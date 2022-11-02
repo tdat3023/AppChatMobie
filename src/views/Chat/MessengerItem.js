@@ -23,33 +23,38 @@ import {
   Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
+import Contex from "../../store/Context";
 
 function MessengerItem({ messend, props, route }) {
-  // console.log(messend);
+  const { state, depatch } = React.useContext(Contex);
+  const { user, userSearched, idConversation, userChatting } = state;
+  console.log("list t va db", messend);
   return (
     <View style={styles.viewOne}>
       <TouchableOpacity>
         <View style={styles.chatBox}>
           <View style={styles.bodyContainer}>
-            {messend.isSender ? (
+            {user === messend.userId ? (
               <View style={styles.yourMess}>
                 <Image
                   style={styles.imaAvatar}
-                  source={{ uri: messend.url }}
-                ></Image>
+                  source={{
+                    uri: "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
+                  }}></Image>
 
                 <Text
                   style={[
                     styles.textyourMes,
-                    { width: messend.messengers.length > 20 ? "70%" : "auto" },
-                  ]}
-                >
-                  {messend.messengers}
+                    {
+                      width: messend.content.length > 20 ? "70%" : "auto",
+                    },
+                  ]}>
+                  {messend.content}
                 </Text>
               </View>
             ) : (
               <View style={styles.myMess}>
-                <Text style={styles.textmyMes}>{messend.messengers}</Text>
+                <Text style={styles.textmyMes}>{messend.content}</Text>
               </View>
             )}
           </View>
@@ -89,6 +94,7 @@ const styles = StyleSheet.create({
   bodyContainer: {
     flex: 1,
     justifyContent: "center",
+    // backgroundColor: "blue",
   },
 
   textyourMes: {
@@ -113,12 +119,14 @@ const styles = StyleSheet.create({
     fontSize: 15,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "blue",
+    // borderColor: "blue",
   },
 
   chatBox: {
     width: "100%",
     flexDirection: "row",
+    // flex: 1,
+    //backgroundColor: "red",
   },
 });
 
