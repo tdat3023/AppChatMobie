@@ -20,12 +20,14 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import ChatItem from "./chatItem";
+import ChatGroupItem from "./chatGroupItem";
 import ChatScreen from "./chatScreen";
 import conversationApi from "../../api/conversationApi";
 import Contex from "../../store/Context";
 
 const WinWidth = Dimensions.get("window").width;
 const WinHeight = Dimensions.get("window").height;
+import { SetUser } from "../../store/Actions";
 
 export default ChatApp = function ({ navigation }) {
   const { state, depatch } = React.useContext(Contex);
@@ -37,6 +39,7 @@ export default ChatApp = function ({ navigation }) {
     // //get api set list conversation
     // //fetch product in wishlist
 
+    depatch(SetUser("HiIaKOEh8qTzOfTF1Va0Z6z61Qz2"));
     const fetchConversations = async () => {
       // console.log("user:", user.user.uid);
       try {
@@ -58,6 +61,17 @@ export default ChatApp = function ({ navigation }) {
 
     fetchConversations();
   }, [user]);
+
+  const renderItem = ({ item }) => {
+    // <Items item={item} onPressRemove={() => deleteBook(item.id)} />
+
+    if (item.conversations.type) {
+      // console.log("type", con.conversations.type);
+      return <ChatGroupItem item={item} navigation={navigation} />;
+    } else {
+      return <ChatItem item={item} navigation={navigation}></ChatItem>;
+    }
+  };
 
   return (
     <SafeAreaView>
@@ -120,9 +134,7 @@ export default ChatApp = function ({ navigation }) {
             contentContainerStyle={{ paddingBottom: 100 }}
             style={styles.bodyList}
             data={conversations}
-            renderItem={({ item }) => (
-              <ChatItem item={item} navigation={navigation}></ChatItem>
-            )}
+            renderItem={renderItem}
             keyExtractor={(item) => item.conversations._id}></FlatList>
         </View>
       </View>

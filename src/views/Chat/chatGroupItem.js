@@ -22,8 +22,11 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import ChatScreen from "./chatScreen";
+import Contex from "../../store/Context";
 
 function ChatItem({ item, navigation }) {
+  const { state, depatch } = React.useContext(Contex);
+  const { user, userSearched, idConversation, userChatting } = state;
   const onPress = () => {
     navigation.navigate("ChatScreen", { item: item });
   };
@@ -33,7 +36,7 @@ function ChatItem({ item, navigation }) {
   });
   const test = { ...content };
 
-  console.log("lasst name", test);
+  //console.log("lasst name", test);
 
   return (
     <View style={styles.viewOne}>
@@ -41,7 +44,6 @@ function ChatItem({ item, navigation }) {
         <View style={styles.chatBox}>
           {/* ảnh đại diện */}
           <View style={styles.imaContainer}>
-            {item.conversations}
             <Image
               style={styles.imaAvatar}
               source={{
@@ -51,10 +53,24 @@ function ChatItem({ item, navigation }) {
 
           <View style={styles.bodyContainer}>
             {/* tên */}
-            <Text style={styles.textName}>
-              {item.inFo.firstName + " " + item.inFo.lastName}
-            </Text>
+            <Text style={styles.textName}>{item.inFo.name}</Text>
             <Text style={styles.textLastMes}>
+              {item.conversations?.lastMessage[0].content.endsWith(
+                "Đã rời khỏi nhóm"
+              ) ||
+              item.conversations?.lastMessage[0].content.endsWith("khỏi nhóm")
+                ? ""
+                : item.conversations?.lastMessage[0]?.userId === user
+                ? "Bạn: "
+                : item.inFo?.userInfo?.map((u) => {
+                    if (
+                      item.conversations?.lastMessage[0]?.userId === u?.userId
+                    ) {
+                      console.log(u);
+                      return u?.userFistName + " " + u?.userLastName + ": ";
+                    }
+                  })}
+
               {item.conversations.lastMessage.map((x) => {
                 return x.content;
               })}

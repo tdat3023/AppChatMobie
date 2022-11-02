@@ -1,5 +1,5 @@
 import React, { Component, useEffect, useState } from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { View, SafeAreaView, Text } from "react-native";
@@ -18,43 +18,73 @@ import { firebase } from "../firebase/firebaseDB";
 import "firebase/compat/auth";
 
 const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator();
+const Tab = createMaterialBottomTabNavigator();
 
-function MyTabs() {
+function MyTabs({ route }) {
   return (
-    <Tab.Navigator screenOptions={{ headerShown: false }}>
-      {/* <Tab.Screen name="Home" component={Home}/> */}
+    <Tab.Navigator
+    //screenOptions={{ headerShown: false }}
+    //  barStyle={{ backgroundColor: "#694fad" }}
+    //initialRouteName="HomeTabs"
+    >
       <Tab.Screen
-        name="Tin nhắn"
+        name="Chats"
         component={ChatApp}
+        // options={{headerShown: false,
+        //tapBarColor: 'bule',
+        // }}
+        //name="Feed"
+        // component={Feed}
+
         options={{
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons
-              name="message-text-outline"
-              size={24}
-              color="black"
-            />
+          tabBarLabel: "Chats",
+          tabBarColor: "red",
+          tabBarStyle: {
+            backgroundColor: "red",
+          },
+
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="chatbubbles" color={color} size={25} />
           ),
         }}
       />
       <Tab.Screen
-        name="Danh bạ"
+        name="Contacts"
         component={Contact}
+        //options={{headerShown: false,
+        // }}
+
         options={{
-          tabBarIcon: ({ focused }) => (
-            <MaterialCommunityIcons name="contacts" size={24} color="black" />
+          tabBarLabel: "Contacts",
+          tabBarColor: "#009387",
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="people" color={color} size={25} />
           ),
         }}
       />
       <Tab.Screen
-        name="Cá nhân"
+        name="Me"
         component={ProFile}
+        //  options={{headerShown: false, }}
         options={{
-          tabBarIcon: ({ focused }) => (
-            <Ionicons name="person-circle-outline" size={24} color="black" />
+          tabBarLabel: "Profile",
+          tabBarColor: "#694fad",
+          tabBarIcon: ({ color }) => (
+            <Ionicons name="person" color={color} size={25} />
           ),
         }}
       />
+      {/* <Tab.Screen name="Settings" component={SettingScreen}
+        //  options={{headerShown: false, }}
+        options={{
+          tabBarLabel: 'Settings',
+          tabBarColor:'#C282D8',
+          tabBarIcon: ({ color }) => (
+            <Ionicons name = 'list' color={color} size={25}/>
+          ),
+        }}
+
+        /> */}
     </Tab.Navigator>
   );
 }
@@ -80,8 +110,7 @@ export default RootComponent = function () {
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="Home"
-        screenOptions={{ headerShown: false }}
-      >
+        screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen
