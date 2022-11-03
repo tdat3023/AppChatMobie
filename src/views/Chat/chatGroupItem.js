@@ -28,7 +28,7 @@ import {
   SetIdConversation,
   SetUserChatting,
 } from "../../store/Actions";
-import { checkUrlIsImage } from "../../utilies/Validations";
+import { checkUrlIsImage, checkUrlIsSticker } from "../../utilies/Validations";
 
 function ChatItem({ item, navigation }) {
   const { state, depatch } = React.useContext(Contex);
@@ -72,7 +72,9 @@ function ChatItem({ item, navigation }) {
                   })}
 
               {checkUrlIsImage(item.conversations.lastMessage[0].content)
-                ? "da goi mot hinh anh"
+                ? "[Image]"
+                : checkUrlIsSticker(item.conversations.lastMessage[0].content)
+                ? "[Sticker]"
                 : item.conversations.lastMessage.map((x) => {
                     return x.content;
                   })}
