@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useState, useEffect, useRef } from "react";
+import AutoHeightImage from "react-native-auto-height-image";
+
 import {
   View,
   Text,
@@ -24,7 +26,7 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import Contex from "../../store/Context";
-import useCheckFile from "../../utilies/Validations";
+import { checkUrlIsImage, checkUrlIsSticker } from "../../utilies/Validations";
 
 function MessengerItem({ messend, props, route }) {
   const { state, depatch } = React.useContext(Contex);
@@ -52,7 +54,13 @@ function MessengerItem({ messend, props, route }) {
                 <View>
                   <View
                     style={[
-                      styles.textyourMes,
+                      checkUrlIsImage(messend.content) ||
+                      checkUrlIsSticker(messend.content)
+                        ? {
+                            marginLeft: 10,
+                          }
+                        : styles.textyourMes,
+
                       {
                         width: messend.content.length > 40 ? "80%" : "auto",
                       },
@@ -69,21 +77,43 @@ function MessengerItem({ messend, props, route }) {
                       )}
                     </Text>
 
-                    <Text>{messend.content}</Text>
+                    <View>
+                      {checkUrlIsImage(messend.content) ||
+                      checkUrlIsSticker(messend.content) ? (
+                        <AutoHeightImage
+                          width={200}
+                          source={{
+                            uri: messend.content,
+                          }}
+                        />
+                      ) : (
+                        <Text>{messend.content}</Text>
+                      )}
+                    </View>
                   </View>
                 </View>
               </View>
             ) : (
               <View style={styles.myMess}>
-                <Text
-                  style={[
-                    styles.textmyMes,
-                    {
-                      width: messend.content.length > 20 ? "60%" : "auto",
-                    },
-                  ]}>
-                  {messend.content}
-                </Text>
+                {checkUrlIsImage(messend.content) ||
+                checkUrlIsSticker(messend.content) ? (
+                  <AutoHeightImage
+                    width={200}
+                    source={{
+                      uri: messend.content,
+                    }}
+                  />
+                ) : (
+                  <Text
+                    style={[
+                      styles.textmyMes,
+                      {
+                        width: messend.content.length > 20 ? "60%" : "auto",
+                      },
+                    ]}>
+                    {messend.content}
+                  </Text>
+                )}
               </View>
             )}
           </View>
@@ -126,18 +156,21 @@ const styles = StyleSheet.create({
     // backgroundColor: "blue",
   },
 
-  textyourMes: {
-    padding: 10,
-    marginLeft: 10,
-    fontSize: 15,
-    borderRadius: 10,
-    width: "60%",
-    borderWidth: 1,
-    borderColor: "red",
-  },
+  textyourMes: [
+    {
+      padding: 10,
+      marginLeft: 10,
+      fontSize: 15,
+      borderRadius: 10,
+      //width: "60%",
 
+      borderWidth: 1,
+      borderColor: "red",
+    },
+  ],
   myMess: {
     marginRight: 10,
+    // display: "flex",
     justifyContent: "flex-end",
     alignItems: "flex-end",
   },
