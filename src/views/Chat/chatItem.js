@@ -35,7 +35,7 @@ function ChatItem({ item, navigation }) {
   const onPress = () => {
     navigation.navigate("ChatScreen");
     console.log("userChatting", item.inFo);
-    depatch(SetIdConversation(item.conversations._id));
+    depatch(SetIdConversation(item.conversations));
     depatch(SetUserChatting(item.inFo));
   };
 
@@ -44,7 +44,7 @@ function ChatItem({ item, navigation }) {
   });
   const test = { ...content };
 
-  console.log("lasst name", test);
+  // console.log("lasst name", test);
 
   return (
     <View style={styles.viewOne}>

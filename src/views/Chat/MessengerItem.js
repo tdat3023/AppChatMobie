@@ -24,17 +24,19 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import Contex from "../../store/Context";
+import useCheckFile from "../../utilies/Validations";
 
 function MessengerItem({ messend, props, route }) {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
-  console.log("list t va db", messend);
+  // console.log("list t va db", messend);
+  //console.log("check", useCheckFile);
   return (
     <View style={styles.viewOne}>
       <TouchableOpacity>
         <View style={styles.chatBox}>
           <View style={styles.bodyContainer}>
-            {user === messend.userId ? (
+            {user.uid === messend.userId ? (
               <View style={styles.yourMess}>
                 <Image
                   style={styles.imaAvatar}
@@ -42,11 +44,21 @@ function MessengerItem({ messend, props, route }) {
                     uri: "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
                   }}></Image>
 
+                <Text>
+                  {idConversation.type
+                    ? userChatting.userInfo.map((user) => {
+                        if (messend.userId === user.userId) {
+                          return user.userFistName + " " + user.userLastName;
+                        }
+                      })
+                    : userChatting.firstName + " " + userChatting.lastName}
+                </Text>
+
                 <Text
                   style={[
                     styles.textyourMes,
                     {
-                      width: messend.content.length > 20 ? "70%" : "auto",
+                      width: messend.content.length > 20 ? "60%" : "auto",
                     },
                   ]}>
                   {messend.content}
@@ -54,7 +66,15 @@ function MessengerItem({ messend, props, route }) {
               </View>
             ) : (
               <View style={styles.myMess}>
-                <Text style={styles.textmyMes}>{messend.content}</Text>
+                <Text
+                  style={[
+                    styles.textmyMes,
+                    {
+                      width: messend.content.length > 20 ? "60%" : "auto",
+                    },
+                  ]}>
+                  {messend.content}
+                </Text>
               </View>
             )}
           </View>

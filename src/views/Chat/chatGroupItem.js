@@ -23,18 +23,20 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import ChatScreen from "./chatScreen";
 import Contex from "../../store/Context";
+import {
+  SetUser,
+  SetIdConversation,
+  SetUserChatting,
+} from "../../store/Actions";
 
 function ChatItem({ item, navigation }) {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
   const onPress = () => {
     navigation.navigate("ChatScreen", { item: item });
+    depatch(SetIdConversation(item.conversations));
+    depatch(SetUserChatting(item.inFo));
   };
-
-  const content = item.conversations.lastMessage.map((x) => {
-    return x;
-  });
-  const test = { ...content };
 
   //console.log("lasst name", test);
 
@@ -60,7 +62,7 @@ function ChatItem({ item, navigation }) {
               ) ||
               item.conversations?.lastMessage[0].content.endsWith("khỏi nhóm")
                 ? ""
-                : item.conversations?.lastMessage[0]?.userId === user
+                : item.conversations?.lastMessage[0]?.userId === user.uid
                 ? "Bạn: "
                 : item.inFo?.userInfo?.map((u) => {
                     if (

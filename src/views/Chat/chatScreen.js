@@ -30,9 +30,14 @@ export default ChatScreen = ({ props, navigation, route }) => {
       // console.log("user:", user.user.uid);
       try {
         // user.uid,page,size
-        const response = await messageApi.getMess(idConversation, user, 0, 20);
+        const response = await messageApi.getMess(
+          idConversation._id,
+          user.uid,
+          0,
+          20
+        );
         const { data, page, size, totalPages } = response;
-        console.log("listMess ", data[0].messages);
+        // console.log("listMess ", data[0].messages);
         if (response) {
           setListMessage(data[0].messages);
         }
@@ -59,7 +64,9 @@ export default ChatScreen = ({ props, navigation, route }) => {
           </TouchableOpacity>
           <View style={styles.nameFriend}>
             <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-              {userChatting.firstName + " " + userChatting.lastName}
+              {idConversation.type
+                ? userChatting.name
+                : userChatting.firstName + " " + userChatting.lastName}
             </Text>
           </View>
 

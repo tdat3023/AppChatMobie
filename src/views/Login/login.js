@@ -32,8 +32,8 @@ export default Login = function ({ navigation }) {
   const [errorEmail, setErrorEmail] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
   //states to store email/password
-  const [email, setEmail] = useState("h@gmail.com");
-  const [password, setPassword] = useState("123456789");
+  const [email, setEmail] = useState("1@gmail.com");
+  const [password, setPassword] = useState("12345678");
   const isValidationOK = () => {
     email.length > 0 &&
       password.length > 0 &&

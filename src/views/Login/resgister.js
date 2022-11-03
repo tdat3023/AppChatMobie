@@ -52,8 +52,7 @@ export default Resgister = function ({ navigation, route }) {
             style={{ alignItems: "center", marginLeft: 5, marginRight: 10 }}
             onPress={() => {
               navigation.goBack();
-            }}
-          >
+            }}>
             <Ionicons name="arrow-back" size={30} color="white" />
           </TouchableOpacity>
 
@@ -130,8 +129,7 @@ export default Resgister = function ({ navigation, route }) {
               style={{
                 color: "red",
                 fontSize: 20,
-              }}
-            >
+              }}>
               {errorEmail}
             </Text>
           </View>
@@ -221,9 +219,9 @@ export default Resgister = function ({ navigation, route }) {
                 })
                 .catch((error) => {
                   alert(`Cannot signin, error: ${error.message}`);
+                  console.log(error);
                 });
-            }}
-          >
+            }}>
             <AntDesign name="login" size={24} color="white" />
           </TouchableOpacity>
         </View>

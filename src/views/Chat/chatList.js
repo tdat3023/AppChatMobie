@@ -39,18 +39,18 @@ export default ChatApp = function ({ navigation }) {
     // //get api set list conversation
     // //fetch product in wishlist
 
-    depatch(SetUser("HiIaKOEh8qTzOfTF1Va0Z6z61Qz2"));
+    // depatch(SetUser("HiIaKOEh8qTzOfTF1Va0Z6z61Qz2"));
     const fetchConversations = async () => {
       // console.log("user:", user.user.uid);
       try {
         // user.uid,page,size
         const response = await conversationApi.getConversations(
-          "HiIaKOEh8qTzOfTF1Va0Z6z61Qz2",
+          user.uid,
           0,
           20
         );
         const { data, page, size, totalPages } = response;
-        console.log(data);
+        //console.log("data", data);
         if (response) {
           setConversations(data);
         }
@@ -60,7 +60,7 @@ export default ChatApp = function ({ navigation }) {
     };
 
     fetchConversations();
-  }, [user]);
+  }, [conversations]);
 
   const renderItem = ({ item }) => {
     // <Items item={item} onPressRemove={() => deleteBook(item.id)} />
