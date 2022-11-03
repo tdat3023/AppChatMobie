@@ -28,6 +28,7 @@ import {
   SetIdConversation,
   SetUserChatting,
 } from "../../store/Actions";
+import { checkUrlIsImage } from "../../utilies/Validations";
 
 function ChatItem({ item, navigation }) {
   const { state, depatch } = React.useContext(Contex);
@@ -57,10 +58,7 @@ function ChatItem({ item, navigation }) {
             {/* tên */}
             <Text style={styles.textName}>{item.inFo.name}</Text>
             <Text style={styles.textLastMes}>
-              {item.conversations?.lastMessage[0].content.endsWith(
-                "Đã rời khỏi nhóm"
-              ) ||
-              item.conversations?.lastMessage[0].content.endsWith("khỏi nhóm")
+              {item.conversations?.lastMessage[0].type.endsWith("NOTIFY")
                 ? ""
                 : item.conversations?.lastMessage[0]?.userId === user.uid
                 ? "Bạn: "
@@ -68,14 +66,16 @@ function ChatItem({ item, navigation }) {
                     if (
                       item.conversations?.lastMessage[0]?.userId === u?.userId
                     ) {
-                      console.log(u);
+                      //console.log(u);
                       return u?.userFistName + " " + u?.userLastName + ": ";
                     }
                   })}
 
-              {item.conversations.lastMessage.map((x) => {
-                return x.content;
-              })}
+              {checkUrlIsImage(item.conversations.lastMessage[0].content)
+                ? "da goi mot hinh anh"
+                : item.conversations.lastMessage.map((x) => {
+                    return x.content;
+                  })}
             </Text>
           </View>
 

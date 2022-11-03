@@ -25,6 +25,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
   const [listMessgae, setListMessage] = useState([]);
+  //console.log("id", user.uid);
   React.useEffect(() => {
     const fetchMessages = async () => {
       // console.log("user:", user.user.uid);
@@ -34,7 +35,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
           idConversation._id,
           user.uid,
           0,
-          20
+          200
         );
         const { data, page, size, totalPages } = response;
         // console.log("listMess ", data[0].messages);

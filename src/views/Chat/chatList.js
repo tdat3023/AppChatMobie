@@ -135,7 +135,8 @@ export default ChatApp = function ({ navigation }) {
             style={styles.bodyList}
             data={conversations}
             renderItem={renderItem}
-            keyExtractor={(item) => item.conversations._id}></FlatList>
+            // keyExtractor={(item) => item.conversations._id}
+          ></FlatList>
         </View>
       </View>
     </SafeAreaView>

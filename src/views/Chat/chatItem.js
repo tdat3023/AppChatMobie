@@ -28,13 +28,14 @@ import {
   SetUserChatting,
 } from "../../store/Actions";
 import Contex from "../../store/Context";
+import { checkUrlIsImage, checkUrlIsSticker } from "../../utilies/Validations";
 
 function ChatItem({ item, navigation }) {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
   const onPress = () => {
     navigation.navigate("ChatScreen");
-    console.log("userChatting", item.inFo);
+    //console.log("userChatting", item.inFo);
     depatch(SetIdConversation(item.conversations));
     depatch(SetUserChatting(item.inFo));
   };
@@ -66,9 +67,16 @@ function ChatItem({ item, navigation }) {
               {item.inFo.firstName + " " + item.inFo.lastName}
             </Text>
             <Text style={styles.textLastMes}>
-              {item.conversations.lastMessage.map((x) => {
-                return x.content;
-              })}
+              {item.conversations?.lastMessage[0].type === "NOTIFY" ||
+              typeof item.conversations?.lastMessage[0].type === "undefined"
+                ? item.conversations?.lastMessage[0].content
+                : checkUrlIsImage(item.conversations.lastMessage[0].content)
+                ? "[Image]"
+                : checkUrlIsSticker(item.conversations.lastMessage[0].content)
+                ? "[Sticker]"
+                : item.conversations.lastMessage.map((x) => {
+                    return x.content;
+                  })}
             </Text>
           </View>
 
