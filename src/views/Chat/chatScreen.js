@@ -140,6 +140,7 @@ const styles = StyleSheet.create({
   container: {
     height: "100%",
     width: "100%",
+    backgroundColor: "white",
   },
 
   headerContainer: {
@@ -153,7 +154,8 @@ const styles = StyleSheet.create({
 
   bodyContainer: {
     flex: 1,
-    // backgroundColor: "red",
+
+    backgroundColor: "white",
   },
 
   footerContainer: {

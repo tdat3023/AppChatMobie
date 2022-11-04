@@ -29,6 +29,7 @@ import {
 } from "../../store/Actions";
 import Contex from "../../store/Context";
 import { checkUrlIsImage, checkUrlIsSticker } from "../../utilies/Validations";
+import { convertDateTimeToString, handleDate } from "../../utilies/DateTime";
 
 function ChatItem({ item, navigation }) {
   const { state, depatch } = React.useContext(Contex);
@@ -66,18 +67,39 @@ function ChatItem({ item, navigation }) {
             <Text style={styles.textName}>
               {item.inFo.firstName + " " + item.inFo.lastName}
             </Text>
-            <Text style={styles.textLastMes}>
-              {item.conversations?.lastMessage[0].type === "NOTIFY" ||
-              typeof item.conversations?.lastMessage[0].type === "undefined"
-                ? item.conversations?.lastMessage[0].content
-                : checkUrlIsImage(item.conversations.lastMessage[0].content)
-                ? "[Image]"
-                : checkUrlIsSticker(item.conversations.lastMessage[0].content)
-                ? "[Sticker]"
-                : item.conversations.lastMessage.map((x) => {
-                    return x.content;
-                  })}
-            </Text>
+            <View
+              style={{
+                justifyContent: "space-between",
+                flexDirection: "row",
+                alignItems: "center",
+              }}>
+              <Text style={styles.textLastMes}>
+                {item.conversations?.lastMessage[0].type === "NOTIFY" ||
+                typeof item.conversations?.lastMessage[0].type === "undefined"
+                  ? item.conversations?.lastMessage[0].content
+                  : checkUrlIsImage(item.conversations.lastMessage[0].content)
+                  ? "[Image]"
+                  : checkUrlIsSticker(item.conversations.lastMessage[0].content)
+                  ? "[Sticker]"
+                  : item.conversations.lastMessage[0].content.length > 15
+                  ? item.conversations.lastMessage[0].content.slice(0, 20) +
+                    " ..."
+                  : item.conversations.lastMessage.map((x) => {
+                      return x.content;
+                    })}
+              </Text>
+              <Text style={styles.textLastMes}>
+                {handleDate(
+                  new Date(),
+                  new Date(
+                    `${item.conversations.lastMessage[0].updatedAt}`.toLocaleString(
+                      "en-US",
+                      { timeZone: "Asia/Ho_Chi_Minh" }
+                    )
+                  )
+                )}
+              </Text>
+            </View>
           </View>
 
           <View style={styles.notification}>

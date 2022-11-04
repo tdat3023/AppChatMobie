@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useState, useEffect, useRef } from "react";
+//import { formatInTimeZone } from "date-fns-tz";
 import {
   View,
   Text,
@@ -29,7 +30,7 @@ import {
   SetUserChatting,
 } from "../../store/Actions";
 import { checkUrlIsImage, checkUrlIsSticker } from "../../utilies/Validations";
-
+import { convertDateTimeToString, handleDate } from "../../utilies/DateTime";
 function ChatItem({ item, navigation }) {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
@@ -57,28 +58,45 @@ function ChatItem({ item, navigation }) {
           <View style={styles.bodyContainer}>
             {/* tên */}
             <Text style={styles.textName}>{item.inFo.name}</Text>
-            <Text style={styles.textLastMes}>
-              {item.conversations?.lastMessage[0].type.endsWith("NOTIFY")
-                ? ""
-                : item.conversations?.lastMessage[0]?.userId === user.uid
-                ? "Bạn: "
-                : item.inFo?.userInfo?.map((u) => {
-                    if (
-                      item.conversations?.lastMessage[0]?.userId === u?.userId
-                    ) {
-                      //console.log(u);
-                      return u?.userFistName + " " + u?.userLastName + ": ";
-                    }
-                  })}
-
-              {checkUrlIsImage(item.conversations.lastMessage[0].content)
-                ? "[Image]"
-                : checkUrlIsSticker(item.conversations.lastMessage[0].content)
-                ? "[Sticker]"
-                : item.conversations.lastMessage.map((x) => {
-                    return x.content;
-                  })}
-            </Text>
+            <View
+              style={{
+                justifyContent: "space-between",
+                flexDirection: "row",
+                alignItems: "center",
+              }}>
+              <Text style={styles.textLastMes}>
+                {item.conversations?.lastMessage[0].type.endsWith("NOTIFY")
+                  ? ""
+                  : item.conversations?.lastMessage[0]?.userId === user.uid
+                  ? "Bạn: "
+                  : item.inFo?.userInfo?.map((u) => {
+                      if (
+                        item.conversations?.lastMessage[0]?.userId === u?.userId
+                      ) {
+                        return u?.userFistName + " " + u?.userLastName + ": ";
+                      }
+                    })}
+                {checkUrlIsImage(item.conversations.lastMessage[0].content)
+                  ? "[Image]"
+                  : checkUrlIsSticker(item.conversations.lastMessage[0].content)
+                  ? "[Sticker]"
+                  : item.conversations.lastMessage[0].content.length > 15
+                  ? item.conversations.lastMessage[0].content.slice(0, 20) +
+                    " ..."
+                  : item.conversations.lastMessage[0].content + " "}
+              </Text>
+              <Text style={styles.textLastMes}>
+                {handleDate(
+                  new Date(),
+                  new Date(
+                    `${item.conversations.lastMessage[0].updatedAt}`.toLocaleString(
+                      "en-US",
+                      { timeZone: "Asia/Ho_Chi_Minh" }
+                    )
+                  )
+                )}
+              </Text>
+            </View>
           </View>
 
           <View style={styles.notification}>
@@ -160,6 +178,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginLeft: 10,
     fontSize: 15,
+    // justifyContent: "space-evenly",
     //color: "red",
   },
 

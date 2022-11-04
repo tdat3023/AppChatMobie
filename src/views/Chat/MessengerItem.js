@@ -27,16 +27,20 @@ import {
 } from "@expo/vector-icons";
 import Contex from "../../store/Context";
 import { checkUrlIsImage, checkUrlIsSticker } from "../../utilies/Validations";
-
+import { convertDateTimeToString, handleDate } from "../../utilies/DateTime";
 function MessengerItem({ messend, props, route }) {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
+  const [pressOn, setPressOnPin] = useState(false);
   // console.log("list t va db", messend);
   //console.log("check", useCheckFile);
   //console.log("type", messend.type);
+  const onPressRenderTime = () => {
+    setPressOnPin(!pressOn);
+  };
   return (
     <View style={styles.viewOne}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={onPressRenderTime}>
         <View style={styles.chatBox}>
           <View style={styles.bodyContainer}>
             {messend.type === "NOTIFY" ||
@@ -58,6 +62,18 @@ function MessengerItem({ messend, props, route }) {
                       checkUrlIsSticker(messend.content)
                         ? {
                             marginLeft: 10,
+                          }
+                        : pressOn
+                        ? {
+                            padding: 10,
+                            marginLeft: 10,
+                            fontSize: 15,
+                            borderRadius: 15,
+                            //width: "60%",
+
+                            // borderWidth: 1.5,
+                            borderColor: "white",
+                            backgroundColor: "gray",
                           }
                         : styles.textyourMes,
 
@@ -91,6 +107,22 @@ function MessengerItem({ messend, props, route }) {
                       )}
                     </View>
                   </View>
+
+                  <Text style={{ marginLeft: 20, marginTop: 10 }}>
+                    {pressOn ? (
+                      convertDateTimeToString(
+                        new Date(
+                          `${messend.createdAt}`.toLocaleString("en-US", {
+                            timeZone: "Asia/Ho_Chi_Minh",
+                          })
+                        ),
+                        "HH:mm:ss"
+                      )
+                    ) : (
+                      <View
+                        style={{ marginTop: -100, marginBottom: -50 }}></View>
+                    )}
+                  </Text>
                 </View>
               </View>
             ) : (
@@ -161,11 +193,11 @@ const styles = StyleSheet.create({
       padding: 10,
       marginLeft: 10,
       fontSize: 15,
-      borderRadius: 10,
+      borderRadius: 15,
       //width: "60%",
 
-      borderWidth: 1,
-      borderColor: "red",
+      borderWidth: 1.5,
+      borderColor: "#A0A0A0",
     },
   ],
   myMess: {
@@ -179,9 +211,11 @@ const styles = StyleSheet.create({
     padding: 10,
     marginLeft: 10,
     fontSize: 15,
-    borderRadius: 10,
-    borderWidth: 1,
+    borderRadius: 15,
+    //borderWidth: 1,
     // borderColor: "blue",
+    backgroundColor: "#CCCCCC",
+    //color: "black",
   },
 
   chatBox: {
