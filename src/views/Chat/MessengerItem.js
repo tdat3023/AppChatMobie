@@ -130,7 +130,7 @@ function MessengerItem({ messend, props, route }) {
                             timeZone: "Asia/Ho_Chi_Minh",
                           })
                         )
-                      ) > 1 ? (
+                      ) >= 1 ? (
                         convertDateTimeToString(
                           new Date(
                             `${messend.createdAt}`.toLocaleString("en-US", {
@@ -214,7 +214,7 @@ function MessengerItem({ messend, props, route }) {
                           timeZone: "Asia/Ho_Chi_Minh",
                         })
                       )
-                    ) > 1 ? (
+                    ) >= 1 ? (
                       convertDateTimeToString(
                         new Date(
                           `${messend.createdAt}`.toLocaleString("en-US", {
