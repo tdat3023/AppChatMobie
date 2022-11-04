@@ -62,9 +62,8 @@ export default ChatApp = function ({ navigation }) {
     fetchConversations();
   }, [conversations]);
 
+  //  check type conversation ? render groupChatItem : render ChatItem
   const renderItem = ({ item }) => {
-    // <Items item={item} onPressRemove={() => deleteBook(item.id)} />
-
     if (item.conversations.type) {
       // console.log("type", con.conversations.type);
       return <ChatGroupItem item={item} navigation={navigation} />;

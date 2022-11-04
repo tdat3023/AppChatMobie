@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useState, useEffect, useRef } from "react";
 import AutoHeightImage from "react-native-auto-height-image";
+import { differenceInCalendarDays } from "date-fns";
 
 import {
   View,
@@ -32,9 +33,7 @@ function MessengerItem({ messend, props, route }) {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
   const [pressOn, setPressOnPin] = useState(false);
-  // console.log("list t va db", messend);
-  //console.log("check", useCheckFile);
-  //console.log("type", messend.type);
+
   const onPressRenderTime = () => {
     setPressOnPin(!pressOn);
   };
@@ -58,6 +57,7 @@ function MessengerItem({ messend, props, route }) {
                 <View>
                   <View
                     style={[
+                      //check type message when press and change view  message receive
                       checkUrlIsImage(messend.content) ||
                       checkUrlIsSticker(messend.content)
                         ? {
@@ -69,11 +69,17 @@ function MessengerItem({ messend, props, route }) {
                             marginLeft: 10,
                             fontSize: 15,
                             borderRadius: 15,
-                            //width: "60%",
 
-                            // borderWidth: 1.5,
                             borderColor: "white",
-                            backgroundColor: "gray",
+                            backgroundColor: "#A0A0A0",
+                            shadowOffset: {
+                              width: 0,
+                              height: 6,
+                            },
+                            shadowOpacity: 0.37,
+                            shadowRadius: 7.49,
+
+                            elevation: 8,
                           }
                         : styles.textyourMes,
 
@@ -94,6 +100,7 @@ function MessengerItem({ messend, props, route }) {
                     </Text>
 
                     <View>
+                      {/* check is image, sticker changes view */}
                       {checkUrlIsImage(messend.content) ||
                       checkUrlIsSticker(messend.content) ? (
                         <AutoHeightImage
@@ -108,25 +115,49 @@ function MessengerItem({ messend, props, route }) {
                     </View>
                   </View>
 
-                  <Text style={{ marginLeft: 20, marginTop: 10 }}>
+                  <Text
+                    style={[
+                      pressOn
+                        ? { marginLeft: 20, marginTop: 10 }
+                        : { margin: 0 },
+                    ]}>
+                    {/* check time mess  receive with current time ? set time is hours or date */}
                     {pressOn ? (
-                      convertDateTimeToString(
+                      differenceInCalendarDays(
+                        new Date(),
                         new Date(
                           `${messend.createdAt}`.toLocaleString("en-US", {
                             timeZone: "Asia/Ho_Chi_Minh",
                           })
-                        ),
-                        "HH:mm:ss"
+                        )
+                      ) > 1 ? (
+                        convertDateTimeToString(
+                          new Date(
+                            `${messend.createdAt}`.toLocaleString("en-US", {
+                              timeZone: "Asia/Ho_Chi_Minh",
+                            })
+                          ),
+                          "DD-MM-YYYY"
+                        )
+                      ) : (
+                        convertDateTimeToString(
+                          new Date(
+                            `${messend.createdAt}`.toLocaleString("en-US", {
+                              timeZone: "Asia/Ho_Chi_Minh",
+                            })
+                          ),
+                          "HH:mm:ss"
+                        )
                       )
                     ) : (
-                      <View
-                        style={{ marginTop: -100, marginBottom: -50 }}></View>
+                      <View style={{ marginTop: -20 }}></View>
                     )}
                   </Text>
                 </View>
               </View>
             ) : (
-              <View style={styles.myMess}>
+              <View style={[styles.myMess]}>
+                {/* check is image, sticker ? changes view */}
                 {checkUrlIsImage(messend.content) ||
                 checkUrlIsSticker(messend.content) ? (
                   <AutoHeightImage
@@ -138,14 +169,74 @@ function MessengerItem({ messend, props, route }) {
                 ) : (
                   <Text
                     style={[
-                      styles.textmyMes,
+                      // change view  message send when press
+                      pressOn
+                        ? {
+                            padding: 10,
+                            marginLeft: 10,
+                            fontSize: 15,
+                            borderRadius: 15,
+
+                            backgroundColor: "#CCCCCC",
+
+                            borderColor: "white",
+                            borderWidth: 0.5,
+                            shadowOffset: {
+                              width: 0,
+                              height: 3,
+                            },
+                            shadowOpacity: 0.29,
+                            shadowRadius: 4.65,
+
+                            elevation: 7,
+                          }
+                        : styles.textmyMes,
                       {
-                        width: messend.content.length > 20 ? "60%" : "auto",
+                        width: messend.content.length > 20 ? "80%" : "auto",
                       },
                     ]}>
                     {messend.content}
                   </Text>
                 )}
+                <Text
+                  style={[
+                    pressOn
+                      ? { marginRight: 20, marginTop: 10 }
+                      : { margin: 0 },
+                  ]}>
+                  {/* check time mess send  with current time ? set time is hours or date */}
+                  {pressOn ? (
+                    // >1 is date
+                    differenceInCalendarDays(
+                      new Date(),
+                      new Date(
+                        `${messend.createdAt}`.toLocaleString("en-US", {
+                          timeZone: "Asia/Ho_Chi_Minh",
+                        })
+                      )
+                    ) > 1 ? (
+                      convertDateTimeToString(
+                        new Date(
+                          `${messend.createdAt}`.toLocaleString("en-US", {
+                            timeZone: "Asia/Ho_Chi_Minh",
+                          })
+                        ),
+                        "DD-MM-YYYY"
+                      )
+                    ) : (
+                      convertDateTimeToString(
+                        new Date(
+                          `${messend.createdAt}`.toLocaleString("en-US", {
+                            timeZone: "Asia/Ho_Chi_Minh",
+                          })
+                        ),
+                        "HH:mm:ss"
+                      )
+                    )
+                  ) : (
+                    <View style={{ marginTop: -20 }}></View>
+                  )}
+                </Text>
               </View>
             )}
           </View>
@@ -212,17 +303,13 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 15,
     borderRadius: 15,
-    //borderWidth: 1,
-    // borderColor: "blue",
+
     backgroundColor: "#CCCCCC",
-    //color: "black",
   },
 
   chatBox: {
     width: "100%",
     flexDirection: "row",
-    // flex: 1,
-    //backgroundColor: "red",
   },
 });
 

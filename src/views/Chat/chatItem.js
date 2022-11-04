@@ -36,7 +36,8 @@ function ChatItem({ item, navigation }) {
   const { user, userSearched, idConversation, userChatting } = state;
   const onPress = () => {
     navigation.navigate("ChatScreen");
-    //console.log("userChatting", item.inFo);
+
+    // type conversation is false set conversation= conversation, chatUser= userInfo
     depatch(SetIdConversation(item.conversations));
     depatch(SetUserChatting(item.inFo));
   };
@@ -74,6 +75,7 @@ function ChatItem({ item, navigation }) {
                 alignItems: "center",
               }}>
               <Text style={styles.textLastMes}>
+                {/* check lastmess is image , sticker ? render lastmess [image, sticker], check length >10 ? .... */}
                 {item.conversations?.lastMessage[0].type === "NOTIFY" ||
                 typeof item.conversations?.lastMessage[0].type === "undefined"
                   ? item.conversations?.lastMessage[0].content

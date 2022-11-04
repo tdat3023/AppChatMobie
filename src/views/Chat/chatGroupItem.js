@@ -36,6 +36,7 @@ function ChatItem({ item, navigation }) {
   const { user, userSearched, idConversation, userChatting } = state;
   const onPress = () => {
     navigation.navigate("ChatScreen", { item: item });
+    // type conversation is true set conversation= conversation, chatUser= GroupInfo
     depatch(SetIdConversation(item.conversations));
     depatch(SetUserChatting(item.inFo));
   };
@@ -65,6 +66,7 @@ function ChatItem({ item, navigation }) {
                 alignItems: "center",
               }}>
               <Text style={styles.textLastMes}>
+                {/* check name user send mess */}
                 {item.conversations?.lastMessage[0].type.endsWith("NOTIFY")
                   ? ""
                   : item.conversations?.lastMessage[0]?.userId === user.uid
@@ -76,6 +78,7 @@ function ChatItem({ item, navigation }) {
                         return u?.userFistName + " " + u?.userLastName + ": ";
                       }
                     })}
+                {/* check  type lastmess */}
                 {checkUrlIsImage(item.conversations.lastMessage[0].content)
                   ? "[Image]"
                   : checkUrlIsSticker(item.conversations.lastMessage[0].content)

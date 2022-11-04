@@ -65,6 +65,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
           </TouchableOpacity>
           <View style={styles.nameFriend}>
             <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+              {/* check type conversations ? set name group : set name user chat */}
               {idConversation.type
                 ? userChatting.name
                 : userChatting.firstName + " " + userChatting.lastName}
