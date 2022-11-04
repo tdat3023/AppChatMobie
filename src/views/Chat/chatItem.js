@@ -1,27 +1,9 @@
-import React, { Component } from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useState, useEffect, useRef } from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  TouchableOpacity,
-  ImageBackground,
-  SafeAreaView,
-  Image,
-  TextInput,
-  ScrollView,
-  Dimensions,
-  Platform,
-  StatusBar,
-  RefreshControl,
-} from "react-native";
-import AntDesign from "react-native-vector-icons/AntDesign";
+import React from "react";
+
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+
 import Ionicons from "react-native-vector-icons/Ionicons";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import ChatScreen from "./chatScreen";
+
 import {
   SetUser,
   SetIdConversation,
@@ -57,8 +39,12 @@ function ChatItem({ item, navigation }) {
             <Image
               style={styles.imaAvatar}
               source={{
-                uri: "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
-              }}></Image>
+                uri:
+                  item.inFo.avatar.length >= 0
+                    ? item.inFo.avatar[0]
+                    : "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
+              }}
+            ></Image>
           </View>
 
           <View style={styles.bodyContainer}>
@@ -137,9 +123,10 @@ const styles = StyleSheet.create({
   },
 
   imaAvatar: {
-    height: 70,
-    width: 70,
+    height: 60,
+    width: 60,
     borderRadius: 100,
+    backgroundColor: "yellow",
   },
 
   bodyContainer: {
