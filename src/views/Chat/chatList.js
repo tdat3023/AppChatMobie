@@ -1,6 +1,5 @@
-import React, { Component } from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import React from "react";
+
 import { useState, useEffect, useRef } from "react";
 import {
   View,
@@ -9,9 +8,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   SafeAreaView,
-  Image,
   TextInput,
-  ScrollView,
   Dimensions,
 } from "react-native";
 import axios from "axios";
@@ -21,12 +18,10 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import ChatItem from "./chatItem";
 import ChatGroupItem from "./chatGroupItem";
-import ChatScreen from "./chatScreen";
+
 import conversationApi from "../../api/conversationApi";
 import Contex from "../../store/Context";
 
-const WinWidth = Dimensions.get("window").width;
-const WinHeight = Dimensions.get("window").height;
 import { SetUser } from "../../store/Actions";
 
 export default ChatApp = function ({ navigation }) {
@@ -206,12 +201,6 @@ const styles = StyleSheet.create({
   imaContainer: {
     justifyContent: "center",
     alignItems: "center",
-  },
-
-  imaAvatar: {
-    height: 70,
-    width: 70,
-    borderRadius: 100,
   },
 
   bodyContainer: {

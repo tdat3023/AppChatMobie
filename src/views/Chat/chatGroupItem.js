@@ -18,6 +18,7 @@ import {
   Platform,
   StatusBar,
   RefreshControl,
+  ImageEditor,
 } from "react-native";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -30,8 +31,10 @@ import {
   SetUserChatting,
 } from "../../store/Actions";
 import { checkUrlIsImage, checkUrlIsSticker } from "../../utilies/Validations";
+
 import { convertDateTimeToString, handleDate } from "../../utilies/DateTime";
-function ChatItem({ item, navigation }) {
+
+function ChatGroupItem({ item, navigation }) {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
   const onPress = () => {
@@ -43,18 +46,73 @@ function ChatItem({ item, navigation }) {
 
   //console.log("lasst name", test);
 
+  function renderImaAvatar() {
+    if (item.inFo.avatar.length == 1) {
+      return (
+        <Image
+          style={styles.imaAvatarOne}
+          source={{
+            uri: item.inFo.avatar[0],
+          }}></Image>
+      );
+    }
+
+    return (
+      <View style={styles.imaGroupAvata}>
+        <View style={styles.imaGroup}>
+          <Image
+            style={styles.imaAvatar}
+            source={{
+              uri: item.inFo.avatar[0].avaUser
+                ? item.inFo.avatar[0].avaUser
+                : "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
+            }}></Image>
+          <Image
+            style={styles.imaAvatar}
+            source={{
+              uri: item.inFo.avatar[1].avaUser
+                ? item.inFo.avatar[1].avaUser
+                : "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
+            }}></Image>
+        </View>
+        <View style={styles.imaGroup}>
+          <Image
+            style={styles.imaAvatar}
+            source={{
+              uri:
+                item.inFo.avatar.length > 3
+                  ? item.inFo.avatar[2].avaUser
+                  : "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
+            }}></Image>
+
+          {item.inFo.avatar.length == 3 && null}
+
+          {item.inFo.avatar.length == 4 && (
+            <Image
+              style={styles.imaAvatar}
+              source={{
+                uri: item.inFo.avatar[3].avaUser
+                  ? item.inFo.avatar[3].avaUser
+                  : "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
+              }}></Image>
+          )}
+
+          {item.inFo.avatar.length > 4 && (
+            <View style={styles.imaAvatar}>
+              <Text style={styles.numberOfMember}>3</Text>
+            </View>
+          )}
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.viewOne}>
       <TouchableOpacity onPress={onPress}>
         <View style={styles.chatBox}>
           {/* ảnh đại diện */}
-          <View style={styles.imaContainer}>
-            <Image
-              style={styles.imaAvatar}
-              source={{
-                uri: "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
-              }}></Image>
-          </View>
+          <View style={styles.imaContainer}>{renderImaAvatar()}</View>
 
           <View style={styles.bodyContainer}>
             {/* tên */}
@@ -135,12 +193,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    borderBottomWidth: 0.2,
-  },
-
-  bodyListChat: {
-    flex: 1,
-    alignItems: "center",
+    borderBottomWidth: 0.8,
   },
 
   viewOne: {
@@ -151,23 +204,41 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  imaContainer: {
-    marginLeft: 10,
-    marginRight: 10,
+  imaGroupAvata: {
+    height: 70,
+    width: 70,
+    flexDirection: "row",
+    padding: 10,
+    paddingTop: 13,
     justifyContent: "center",
     alignItems: "center",
   },
+  imaContainer: {
+    flexDirection: "row",
+    width: 70,
+    height: 30,
+    paddingLeft: 10,
+    paddingTop: 13,
+  },
 
   imaAvatar: {
-    height: 70,
-    width: 70,
+    height: 30,
+    width: 30,
     borderRadius: 100,
+  },
+
+  imaAvatarOne: {
+    height: 60,
+    width: 60,
+    borderRadius: 100,
+    backgroundColor: "red",
   },
 
   bodyContainer: {
     flex: 1,
     justifyContent: "center",
-    borderBottomWidth: 0.2,
+    borderBottomWidth: 0.8,
+    marginLeft: 10,
   },
 
   textName: {
@@ -201,4 +272,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ChatItem;
+export default ChatGroupItem;

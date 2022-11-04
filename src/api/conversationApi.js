@@ -13,11 +13,8 @@ const conversationApi = {
   getConversations: (id, page, size) => {
     //console.log(id);
     const url = `/conversation/user/${id}?page=${page}&size=${size}`;
+    // console.log(url);
     return axiosClient.get(url);
-    // return axiosClient.get(
-    //   `http://13.228.206.211:3005/conversation/user/${id}`
-    // );
-    //http://13.228.206.211:3005/conversation/634c48221a479239b4810cb6
   },
 
   //[POST] /individuals/:userId`: Tạo cuộc trò chuyện cá nhân

@@ -100,7 +100,7 @@ function MessengerItem({ messend, props, route }) {
                     </Text>
 
                     <View>
-                      {/* check is image, sticker changes view */}
+                      {/* check is image, sticker ? changes view */}
                       {checkUrlIsImage(messend.content) ||
                       checkUrlIsSticker(messend.content) ? (
                         <AutoHeightImage
@@ -157,7 +157,7 @@ function MessengerItem({ messend, props, route }) {
               </View>
             ) : (
               <View style={[styles.myMess]}>
-                {/* check is image, sticker ? changes view */}
+                {/* check is image, sticker ? changes view mess send */}
                 {checkUrlIsImage(messend.content) ||
                 checkUrlIsSticker(messend.content) ? (
                   <AutoHeightImage
