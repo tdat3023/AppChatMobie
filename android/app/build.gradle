@@ -130,9 +130,12 @@ def reactNativeArchitectures() {
 }
 
 android {
-    packagingOptions {
-        pickFirst '**/libc++_shared.so'
-        pickFirst '**/libfbjni.so'
+   allprojects {
+        configurations.all {
+        resolutionStrategy {
+        force 'com.facebook.react:react-native:0.70.3' //select Version you used
+        }
+        }
     }
     ndkVersion rootProject.ext.ndkVersion
 

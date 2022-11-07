@@ -36,6 +36,7 @@ function MessengerItem({ messend, props, route }) {
 
   const onPressRenderTime = () => {
     setPressOnPin(!pressOn);
+    console.log("type", messend.content);
   };
   return (
     <View style={styles.viewOne}>
@@ -101,10 +102,17 @@ function MessengerItem({ messend, props, route }) {
 
                     <View>
                       {/* check is image, sticker ? changes view */}
-                      {checkUrlIsImage(messend.content) ||
-                      checkUrlIsSticker(messend.content) ? (
+                      {checkUrlIsImage(messend.content) &&
+                      messend.type === "IMAGE" ? (
                         <AutoHeightImage
                           width={200}
+                          source={{
+                            uri: messend.content,
+                          }}
+                        />
+                      ) : checkUrlIsSticker(messend.content) ? (
+                        <AutoHeightImage
+                          width={100}
                           source={{
                             uri: messend.content,
                           }}
@@ -158,10 +166,17 @@ function MessengerItem({ messend, props, route }) {
             ) : (
               <View style={[styles.myMess]}>
                 {/* check is image, sticker ? changes view mess send */}
-                {checkUrlIsImage(messend.content) ||
-                checkUrlIsSticker(messend.content) ? (
+                {checkUrlIsImage(messend.content) &&
+                messend.type === "IMAGE" ? (
                   <AutoHeightImage
                     width={200}
+                    source={{
+                      uri: messend.content,
+                    }}
+                  />
+                ) : checkUrlIsSticker(messend.content) ? (
+                  <AutoHeightImage
+                    width={100}
                     source={{
                       uri: messend.content,
                     }}

@@ -10,7 +10,7 @@ export const checkUrlIsImage = (url) => {
   return /\.(jpg|jpeg|png|webp|avif|svg)$/.test(url);
 };
 export const checkUrlIsSticker = (url) => {
-  return /\.(gif)$/.test(url);
+  return /\.(gif|avif|jpg|png)$/.test(url);
 };
 
 export const checkUrlIsDocx = (url) => {
