@@ -3,7 +3,7 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
-
+import avatar from '../../images/angel_care_linear_gradient.png'
 import {
   SetUser,
   SetIdConversation,
@@ -37,15 +37,17 @@ function ChatItem({ item, navigation }) {
         <View style={styles.chatBox}>
           {/* ảnh đại diện */}
           <View style={styles.imaContainer}>
+            <Text style={styles.imaContainer_text}>A</Text>
             {/* {item.conversations} */}
-            <Image
+            {/* <Image
               style={styles.imaAvatar}
               source={{
                 uri:
                   item.inFo.avatar.length >= 0
                     ? item.inFo.avatar[0]
                     : "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
-              }}></Image>
+              }}>{item.inFo.avatar[0]}</Image> */}
+              <Image   style={styles.imaAvatar} source={avatar}></Image>
           </View>
 
           <View style={styles.bodyContainer}>
@@ -89,7 +91,7 @@ function ChatItem({ item, navigation }) {
             </View>
           </View>
 
-          <View style={styles.notification}>
+          {/* <View style={styles.notification}>
             <Ionicons name="notifications-outline" size={24} color="black" />
             {item.conversations.mb.numberUnread > 0 && (
               <View
@@ -104,7 +106,7 @@ function ChatItem({ item, navigation }) {
                 <Text>{item.conversations.mb.numberUnread}</Text>
               </View>
             )}
-          </View>
+          </View> */}
         </View>
       </TouchableOpacity>
     </View>
@@ -115,6 +117,7 @@ const styles = StyleSheet.create({
   imaContainer: {
     justifyContent: "center",
     alignItems: "center",
+    position:"relative"
   },
 
   notification: {
@@ -131,11 +134,15 @@ const styles = StyleSheet.create({
   },
 
   viewOne: {
+    marginTop:12,
     display: "flex",
     width: "100%",
-    height: 90,
+    height: 60,
     justifyContent: "center",
     alignItems: "center",
+    paddingRight:14,
+    //backgroundColor:"blue"
+   
   },
 
   imaContainer: {
@@ -146,8 +153,8 @@ const styles = StyleSheet.create({
   },
 
   imaAvatar: {
-    height: 60,
-    width: 60,
+    height: 54,
+    width: 54,
     borderRadius: 100,
     backgroundColor: "yellow",
   },
@@ -155,27 +162,36 @@ const styles = StyleSheet.create({
   bodyContainer: {
     flex: 1,
     justifyContent: "center",
-    borderBottomWidth: 0.2,
+   // borderBottomWidth: 0.2,
+ 
+  
   },
 
   textName: {
+    textTransform: 'capitalize',
     marginLeft: 10,
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "blod",
     color: "black",
+    
+
   },
 
   textLastMes: {
     marginTop: 5,
     marginLeft: 10,
     fontSize: 15,
+    
+    fontSize:12
+
     //color: "red",
   },
 
   chatBox: {
     width: "100%",
-    height: 90,
+   
     flexDirection: "row",
+  
   },
 
   textNoti: {
@@ -186,6 +202,12 @@ const styles = StyleSheet.create({
     width: 20,
     borderRadius: 10,
   },
+  maContainer_text : {
+    position:"absolute",
+    top:"50%",
+    left:"50%",
+    transform: [{ translateX: -50 }, { translateY: -50 }],
+  }
 });
 
 export default ChatItem;

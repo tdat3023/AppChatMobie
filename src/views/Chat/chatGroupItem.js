@@ -160,7 +160,7 @@ function ChatGroupItem({ item, navigation }) {
             </View>
           </View>
 
-          <View style={styles.notification}>
+          {/* <View style={styles.notification}>
             <Ionicons name="notifications-outline" size={24} color="black" />
             {item.conversations.mb.numberUnread > 0 && (
               <View
@@ -175,7 +175,7 @@ function ChatGroupItem({ item, navigation }) {
                 <Text>{item.conversations.mb.numberUnread}</Text>
               </View>
             )}
-          </View>
+          </View> */}
         </View>
       </TouchableOpacity>
     </View>
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
   bodyContainer: {
     flex: 1,
     justifyContent: "center",
-    borderBottomWidth: 0.8,
+   
     marginLeft: 10,
   },
 

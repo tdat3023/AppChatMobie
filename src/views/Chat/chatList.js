@@ -180,6 +180,8 @@ const styles = StyleSheet.create({
   bodyListChat: {
     width: "100%",
     alignItems: "center",
+    //backgroundColor:"blue",
+ 
   },
 
   topTagMenu: {
@@ -217,7 +219,7 @@ const styles = StyleSheet.create({
 
   textLastMes: {
     marginLeft: 10,
-    fontSize: 15,
+    fontSize: 14,
   },
 
   chatBox: {
@@ -238,6 +240,6 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   text1: {
-    fontSize: 20,
+    fontSize: 14,
   },
 });

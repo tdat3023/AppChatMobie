@@ -130,6 +130,26 @@ def reactNativeArchitectures() {
 }
 
 android {
+
+    allprojects {
+        configurations.all {
+        resolutionStrategy {
+        force 'com.facebook.react:react-native:0.70.3' //select Version you used
+        }
+        }
+    }
+    // packagingOptions {
+    //     // pickFirst '**/libc++_shared.so'
+    //     // pickFirst '**/libfbjni.so'
+        
+    //     pickFirst 'lib/x86/libc++_shared.so'
+    // pickFirst 'lib/x86_64/libjsc.so'
+    // pickFirst 'lib/arm64-v8a/libjsc.so'
+    // pickFirst 'lib/arm64-v8a/libc++_shared.so'
+    // pickFirst 'lib/x86_64/libc++_shared.so'
+    // pickFirst 'lib/armeabi-v7a/libc++_shared.so'
+    // pickFirst 'lib/armeabi-v7a/libfbjni.so'
+    // }
     ndkVersion rootProject.ext.ndkVersion
 
     compileSdkVersion rootProject.ext.compileSdkVersion
