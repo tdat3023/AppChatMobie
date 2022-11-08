@@ -14,7 +14,7 @@ export const handleDate = (currentDate, passDate) => {
   const minus = differenceInMinutes(currentDate, passDate);
   //check duoi 1p -> tinh giay
 
-  if (minus <= 1) return "just now";
+  if (minus <= 1) return " now";
   if (minus < 61) return minus + " minutes ";
   const resultTime = differenceInHours(currentDate, passDate);
   if (resultTime < 25) return resultTime + " hours";

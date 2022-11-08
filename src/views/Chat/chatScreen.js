@@ -10,21 +10,39 @@ import {
   TouchableOpacity,
   TextInput,
   SafeAreaView,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
-import AntDesign from "react-native-vector-icons/AntDesign";
+
 import Ionicons from "react-native-vector-icons/Ionicons";
+import AntDesign from "react-native-vector-icons/AntDesign";
+
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Feather from "react-native-vector-icons/Feather";
 import MessengerItem from "./MessengerItem";
 import CreateAboutScreen from "./about.js";
 import Contex from "../../store/Context";
 import messageApi from "../../api/messageApi";
+import { Dimensions } from "react-native";
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 export default ChatScreen = ({ props, navigation, route }) => {
+  const [onFocus, setOnFocus] = useState(false);
   // const {item} = route.params;
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
   const [listMessgae, setListMessage] = useState([]);
+
+  const onFoucsInPut = () => {
+    setOnFocus(!onFocus);
+  };
+  const onDismiss = () => {
+    Keyboard.dismiss;
+    setOnFocus(!onFocus);
+  };
+
   //console.log("id", user.uid);
   React.useEffect(() => {
     const fetchMessages = async () => {
@@ -41,6 +59,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
         // console.log("listMess ", data[0].messages);
         if (response) {
           setListMessage(data[0].messages);
+          //  console.log("listMess", data[0].messages);
         }
       } catch (error) {
         console.log("Failed to fetch conversation list: ", error);
@@ -52,24 +71,27 @@ export default ChatScreen = ({ props, navigation, route }) => {
 
   // console.log(item);
   return (
-    <SafeAreaView>
-      <View style={styles.container}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <SafeAreaView style={styles.container}>
         {/* Top tag */}
+
         <View style={styles.headerContainer}>
-          <TouchableOpacity
-            style={{ alignItems: "center", marginLeft: 10 }}
-            onPress={() => {
-              navigation.goBack();
-            }}>
-            <Ionicons name="arrow-back" size={28} color="black" />
-          </TouchableOpacity>
-          <View style={styles.nameFriend}>
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-              {/* check type conversations ? set name group : set name user chat */}
-              {idConversation.type
-                ? userChatting.name
-                : userChatting.firstName + " " + userChatting.lastName}
-            </Text>
+          <View style={{ flexDirection: "row" }}>
+            <TouchableOpacity
+              style={{ alignItems: "center", marginLeft: 10 }}
+              onPress={() => {
+                navigation.goBack();
+              }}>
+              <Ionicons name="arrow-back" size={28} color="black" />
+            </TouchableOpacity>
+            <View style={styles.nameFriend}>
+              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                {/* check type conversations ? set name group : set name user chat */}
+                {idConversation.type
+                  ? userChatting.name
+                  : userChatting.firstName + " " + userChatting.lastName}
+              </Text>
+            </View>
           </View>
 
           <View style={styles.moreTag}>
@@ -77,12 +99,16 @@ export default ChatScreen = ({ props, navigation, route }) => {
               <Ionicons name="call-outline" size={24} color="black" />
             </TouchableOpacity>
 
-            <TouchableOpacity>
+            <TouchableOpacity style={{ marginLeft: 10 }}>
               <Ionicons name="videocam-outline" size={24} color="black" />
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={{ alignItems: "center", marginLeft: 10 }}
+              style={{
+                alignItems: "center",
+                marginLeft: 10,
+                marginRight: 10,
+              }}
               onPress={() => {
                 navigation.navigate("CreateAboutScreen");
               }}>
@@ -92,110 +118,129 @@ export default ChatScreen = ({ props, navigation, route }) => {
         </View>
 
         {/* Body */}
-        <View style={styles.bodyContainer}>
-          <View style={styles.bodyListChat}>
-            <FlatList
-              style={styles.bodyList}
-              data={listMessgae}
-              renderItem={({ item }) => (
-                <MessengerItem messend={item}></MessengerItem>
-              )}
-              //</View>key={"&{item.}timestamp"}
-            ></FlatList>
-          </View>
-        </View>
+        {/* <KeyboardAwareScrollView> */}
 
-        {/*Footer */}
-        <View style={styles.footerContainer}>
-          <TouchableOpacity style={styles.moreAction}>
-            <MaterialCommunityIcons
-              name="sticker-emoji"
-              size={30}
-              color="black"
-            />
-          </TouchableOpacity>
-          <View style={styles.nameFriend}>
-            <TextInput
-              style={styles.textChat}
-              placeholder="Tin nhắn"></TextInput>
+        <KeyboardAvoidingView behavior="padding">
+          <View
+            style={[
+              !onFocus
+                ? { height: windowHeight - 140 }
+                : { height: windowHeight - 400 },
+            ]}>
+            <View style={styles.bodyListChat}>
+              <FlatList
+                style={styles.bodyList}
+                data={listMessgae}
+                renderItem={({ item }) => (
+                  <MessengerItem messend={item}></MessengerItem>
+                )}
+
+                //</View>key={"&{item.}timestamp"}
+              ></FlatList>
+            </View>
           </View>
 
-          <View style={styles.moreTag}>
-            <TouchableOpacity>
-              <Feather name="more-horizontal" size={27} color="black" />
+          {/*Footer */}
+          <View style={styles.footerContainer}>
+            <TouchableOpacity style={styles.moreAction}>
+              <Ionicons name="happy-outline" size={30} />
             </TouchableOpacity>
-            <TouchableOpacity>
-              <Feather name="mic" size={27} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Feather name="image" size={27} color="black" />
-            </TouchableOpacity>
+            <View style={styles.nameFriend}>
+              <TextInput
+                style={styles.textChat}
+                placeholder="Tin nhắn"
+                onFocus={onFoucsInPut}
+                onBlur={onFoucsInPut}></TextInput>
+            </View>
+
+            <View style={styles.moreTag}>
+              <TouchableOpacity>
+                <Feather name="more-horizontal" size={27} />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Ionicons name="mic-outline" size={30} />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Ionicons name="image-outline" size={30} />
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </View>
-    </SafeAreaView>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    height: "100%",
-    width: "100%",
-    backgroundColor: "white",
+    flex: 1,
+    // backgroundColor: "blue",
+    justifyContent: "space-between",
   },
 
   headerContainer: {
+    //display: "flex",
     height: 60,
     backgroundColor: "#66B2FF",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-around",
-    marginBottom: 10,
+    justifyContent: "space-between",
+    //marginBottom: 10,
+    // marginTop: 20,
   },
 
   bodyContainer: {
-    flex: 1,
+    // display: "flex",
 
-    backgroundColor: "white",
+    backgroundColor: "yellow",
+    height: windowHeight - 400,
+    // height: 500,
   },
 
   footerContainer: {
     height: 60,
-
+    display: "flex",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",
-    borderWidth: 1,
+    //borderWidth: 0.2,
   },
 
   nameFriend: {
     marginLeft: 10,
-    flex: 1,
-    justifyContent: "center",
+    // flex: 1,
+    // justifyContent: "center",
   },
 
   moreTag: {
-    marginLeft: 25,
-    flex: 1,
+    display: "flex",
+    marginLeft: 10,
+    // padding: 10,
+    // flex: 1,
     justifyContent: "space-evenly",
     flexDirection: "row",
   },
 
   moreAction: {
-    marginLeft: 10,
+    marginLeft: 5,
   },
 
   textChat: {
-    height: 50,
-    width: "120%",
+    height: 40,
+    width: 200,
+
+    borderRadius: 30,
+    paddingLeft: 20,
+    backgroundColor: "#E4E4E4",
   },
 
   bodyListChat: {
-    flex: 1,
+    //flex: 1,
     width: "100%",
     alignItems: "center",
   },
   bodyList: {
     width: "100%",
+    //backgroundColor: "blue",
   },
 });
