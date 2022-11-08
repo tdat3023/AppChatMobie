@@ -43,6 +43,9 @@ export default ChatScreen = ({ props, navigation, route }) => {
     setOnFocus(!onFocus);
   };
 
+  const [newMess, setNewMess] = useState("");
+  //console.log(listMessgae);
+
   //console.log("id", user.uid);
   React.useEffect(() => {
     const fetchMessages = async () => {
@@ -67,7 +70,46 @@ export default ChatScreen = ({ props, navigation, route }) => {
     };
 
     fetchMessages();
-  }, [listMessgae]);
+  }, [userChatting]);
+  const handleKeyPress = async () => {
+    console.log("handleKeyPress");
+    const newMessSend = {
+      userId: user.uid,
+      content: newMess,
+      conversationId: idConversation._id,
+      type: "TEXT",
+    };
+    console.log(newMessSend);
+
+    //call api
+    const messSave = await messageApi.addTextMess(newMessSend);
+
+    console.log("mess send", messSave);
+    setListMessage((prev) => [...prev, { ...messSave }]);
+
+    setNewMess("");
+  };
+  const handSendMess = async () => {
+    //create new message
+    const newMessSend = {
+      userId: user.uid,
+      content: newMess,
+      conversationId: idConversation._id,
+      type: "TEXT",
+    };
+    console.log(newMessSend);
+    setListMessage((prev) => [
+      ...prev,
+      { ...newMessSend, _id: Math.random() + "1", createdAt: new Date() },
+    ]);
+
+    //call api
+    const messSave = await messageApi.addTextMess(newMessSend);
+
+    setNewMess("");
+
+    //call soket in here
+  };
 
   // console.log(item);
   return (
@@ -118,6 +160,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
         </View>
 
         {/* Body */}
+
         {/* <KeyboardAwareScrollView> */}
 
         <KeyboardAvoidingView behavior="padding">
@@ -148,24 +191,31 @@ export default ChatScreen = ({ props, navigation, route }) => {
             <View style={styles.nameFriend}>
               <TextInput
                 style={styles.textChat}
-                placeholder="Tin nhắn"
+                value={newMess}
+                onChangeText={(text) => {
+                  setNewMess(text);
+                }}
                 onFocus={onFoucsInPut}
-                onBlur={onFoucsInPut}></TextInput>
+                onBlur={onFoucsInPut}
+                onSubmitEditing={handleKeyPress}
+                placeholder="Tin nhắn"></TextInput>
             </View>
 
             <View style={styles.moreTag}>
-              <TouchableOpacity>
-                <Feather name="more-horizontal" size={27} />
+              <TouchableOpacity
+                onPress={() => {
+                  alert(newMess);
+                }}>
+                <Feather name="more-horizontal" size={27} color="black" />
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={handSendMess}>
                 <Ionicons name="mic-outline" size={30} />
               </TouchableOpacity>
               <TouchableOpacity>
                 <Ionicons name="image-outline" size={30} />
               </TouchableOpacity>
-              <TouchableOpacity>
-                <Ionicons name="image-outline" size={30} />
-              </TouchableOpacity>
+
+              {/* sadfsdfasf          */}
             </View>
           </View>
         </KeyboardAvoidingView>
@@ -222,6 +272,11 @@ const styles = StyleSheet.create({
     // flex: 1,
     justifyContent: "space-evenly",
     flexDirection: "row",
+  },
+
+  send: {
+    flex: 1,
+    justifyContent: "rtl",
   },
 
   moreAction: {
