@@ -25,6 +25,8 @@ export default ChatScreen = ({ props, navigation, route }) => {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
   const [listMessgae, setListMessage] = useState([]);
+  const [newMess, setNewMess] = useState("");
+  console.log(listMessgae);
   //console.log("id", user.uid);
   React.useEffect(() => {
     const fetchMessages = async () => {
@@ -35,7 +37,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
           idConversation._id,
           user.uid,
           0,
-          200
+          10
         );
         const { data, page, size, totalPages } = response;
         // console.log("listMess ", data[0].messages);
@@ -48,7 +50,27 @@ export default ChatScreen = ({ props, navigation, route }) => {
     };
 
     fetchMessages();
-  }, [listMessgae]);
+  }, [userChatting]);
+
+  const handSendMess = async () => {
+    //create new message
+    const newMessSend = {
+      userId: user.uid,
+      content: newMess,
+      conversationId: idConversation._id,
+      type: "TEXT",
+    };
+    console.log(newMessSend);
+    setListMessage((prev) => [
+      ...prev,
+      { ...newMessSend, _id: Math.random() + "1", createdAt: new Date() },
+    ]);
+
+    //call api
+    const messSave = await messageApi.addTextMess(newMessSend);
+
+    //call soket in here
+  };
 
   // console.log(item);
   return (
@@ -60,7 +82,8 @@ export default ChatScreen = ({ props, navigation, route }) => {
             style={{ alignItems: "center", marginLeft: 10 }}
             onPress={() => {
               navigation.goBack();
-            }}>
+            }}
+          >
             <Ionicons name="arrow-back" size={28} color="black" />
           </TouchableOpacity>
           <View style={styles.nameFriend}>
@@ -85,7 +108,8 @@ export default ChatScreen = ({ props, navigation, route }) => {
               style={{ alignItems: "center", marginLeft: 10 }}
               onPress={() => {
                 navigation.navigate("CreateAboutScreen");
-              }}>
+              }}
+            >
               <Ionicons name="menu" size={24} color="black" />
             </TouchableOpacity>
           </View>
@@ -117,20 +141,39 @@ export default ChatScreen = ({ props, navigation, route }) => {
           <View style={styles.nameFriend}>
             <TextInput
               style={styles.textChat}
-              placeholder="Tin nhắn"></TextInput>
+              value={newMess}
+              onChangeText={(text) => {
+                setNewMess(text);
+              }}
+              placeholder="Tin nhắn"
+            ></TextInput>
           </View>
 
           <View style={styles.moreTag}>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                alert(newMess);
+              }}
+            >
               <Feather name="more-horizontal" size={27} color="black" />
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handSendMess}>
               <Feather name="mic" size={27} color="black" />
             </TouchableOpacity>
             <TouchableOpacity>
               <Feather name="image" size={27} color="black" />
             </TouchableOpacity>
           </View>
+          {/* 
+          <View style={styles.send}>
+            <TouchableOpacity
+              onPress={() => {
+                handSendMess;
+              }}
+            >
+              <Feather name="send" size={27} color="black" />
+            </TouchableOpacity>
+          </View> */}
         </View>
       </View>
     </SafeAreaView>
@@ -179,6 +222,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-evenly",
     flexDirection: "row",
+  },
+
+  send: {
+    flex: 1,
+    justifyContent: "rtl",
   },
 
   moreAction: {
