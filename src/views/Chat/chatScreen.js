@@ -71,24 +71,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
 
     fetchMessages();
   }, [userChatting]);
-  const handleKeyPress = async () => {
-    console.log("handleKeyPress");
-    const newMessSend = {
-      userId: user.uid,
-      content: newMess,
-      conversationId: idConversation._id,
-      type: "TEXT",
-    };
-    console.log(newMessSend);
 
-    //call api
-    const messSave = await messageApi.addTextMess(newMessSend);
-
-    console.log("mess send", messSave);
-    setListMessage((prev) => [...prev, { ...messSave }]);
-
-    setNewMess("");
-  };
   const handSendMess = async () => {
     //create new message
     const newMessSend = {
@@ -98,13 +81,10 @@ export default ChatScreen = ({ props, navigation, route }) => {
       type: "TEXT",
     };
     console.log(newMessSend);
-    setListMessage((prev) => [
-      ...prev,
-      { ...newMessSend, _id: Math.random() + "1", createdAt: new Date() },
-    ]);
-
-    //call api
     const messSave = await messageApi.addTextMess(newMessSend);
+
+    console.log("mess send", messSave);
+    setListMessage((prev) => [...prev, { ...messSave }]);
 
     setNewMess("");
 
@@ -197,7 +177,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
                 }}
                 onFocus={onFoucsInPut}
                 onBlur={onFoucsInPut}
-                onSubmitEditing={handleKeyPress}
+                onSubmitEditing={handSendMess}
                 placeholder="Tin nhắn"></TextInput>
             </View>
 
