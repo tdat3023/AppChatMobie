@@ -207,7 +207,7 @@ function MessengerItem({ messend, props, route }) {
                           }
                         : styles.textmyMes,
                       {
-                        width: messend.content.length > 20 ? "80%" : "auto",
+                        width: messend.content.length > 40 ? "80%" : "auto",
                       },
                     ]}>
                     {messend.content}

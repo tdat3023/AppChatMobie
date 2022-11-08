@@ -163,6 +163,9 @@ export default ChatScreen = ({ props, navigation, route }) => {
               <TouchableOpacity>
                 <Ionicons name="image-outline" size={30} />
               </TouchableOpacity>
+              <TouchableOpacity>
+                <Ionicons name="image-outline" size={30} />
+              </TouchableOpacity>
             </View>
           </View>
         </KeyboardAvoidingView>
