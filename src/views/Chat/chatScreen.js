@@ -31,6 +31,7 @@ const windowHeight = Dimensions.get("window").height;
 export default ChatScreen = ({ props, navigation, route }) => {
   const [onFocus, setOnFocus] = useState(false);
   // const {item} = route.params;
+  const [typing, setTyping] = useState(false);
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
   const [listMessgae, setListMessage] = useState([]);
@@ -83,12 +84,21 @@ export default ChatScreen = ({ props, navigation, route }) => {
     console.log(newMessSend);
     const messSave = await messageApi.addTextMess(newMessSend);
 
-    console.log("mess send", messSave);
+    // console.log("mess send", messSave);
     setListMessage((prev) => [...prev, { ...messSave }]);
 
     setNewMess("");
 
     //call soket in here
+  };
+
+  const handleChangText = (text) => {
+    if (text.length > 0) {
+      setTyping(true);
+    } else if (text.length === 0) {
+      setTyping(false);
+    }
+    setNewMess(text);
   };
 
   // console.log(item);
@@ -103,7 +113,8 @@ export default ChatScreen = ({ props, navigation, route }) => {
               style={{ alignItems: "center", marginLeft: 10 }}
               onPress={() => {
                 navigation.goBack();
-              }}>
+              }}
+            >
               <Ionicons name="arrow-back" size={28} color="black" />
             </TouchableOpacity>
             <View style={styles.nameFriend}>
@@ -133,7 +144,8 @@ export default ChatScreen = ({ props, navigation, route }) => {
               }}
               onPress={() => {
                 navigation.navigate("CreateAboutScreen");
-              }}>
+              }}
+            >
               <Ionicons name="menu" size={24} color="black" />
             </TouchableOpacity>
           </View>
@@ -149,7 +161,8 @@ export default ChatScreen = ({ props, navigation, route }) => {
               !onFocus
                 ? { height: windowHeight - 140 }
                 : { height: windowHeight - 400 },
-            ]}>
+            ]}
+          >
             <View style={styles.bodyListChat}>
               <FlatList
                 style={styles.bodyList}
@@ -172,31 +185,34 @@ export default ChatScreen = ({ props, navigation, route }) => {
               <TextInput
                 style={styles.textChat}
                 value={newMess}
-                onChangeText={(text) => {
-                  setNewMess(text);
-                }}
+                onChangeText={(text) => handleChangText(text)}
                 onFocus={onFoucsInPut}
                 onBlur={onFoucsInPut}
                 onSubmitEditing={handSendMess}
-                placeholder="Tin nhắn"></TextInput>
+                placeholder="Tin nhắn"
+              ></TextInput>
             </View>
 
-            <View style={styles.moreTag}>
-              <TouchableOpacity
-                onPress={() => {
-                  alert(newMess);
-                }}>
-                <Feather name="more-horizontal" size={27} color="black" />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={handSendMess}>
-                <Ionicons name="mic-outline" size={30} />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Ionicons name="image-outline" size={30} />
-              </TouchableOpacity>
-
-              {/* sadfsdfasf          */}
-            </View>
+            {/* input */}
+            {typing ? (
+              <View style={styles.send}>
+                <TouchableOpacity onPress={handSendMess}>
+                  <Feather name="send" size={27} color="black" />
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <View style={styles.moreTag}>
+                <TouchableOpacity>
+                  <Feather name="more-horizontal" size={27} color="black" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handSendMess}>
+                  <Feather name="mic" size={27} color="black" />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Feather name="image" size={27} color="black" />
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
         </KeyboardAvoidingView>
       </SafeAreaView>
@@ -255,8 +271,7 @@ const styles = StyleSheet.create({
   },
 
   send: {
-    flex: 1,
-    justifyContent: "rtl",
+    paddingRight: 10,
   },
 
   moreAction: {

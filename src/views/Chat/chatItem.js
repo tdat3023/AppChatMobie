@@ -11,7 +11,7 @@ import {
 } from "../../store/Actions";
 import Contex from "../../store/Context";
 import { checkUrlIsImage, checkUrlIsSticker } from "../../utilies/Validations";
-import { convertDateTimeToString, handleDate } from "../../utilies/DateTime";
+// import { convertDateTimeToString, handleDate } from "../../utilies/DateTime";
 
 function ChatItem({ item, navigation }) {
   const { state, depatch } = React.useContext(Contex);
@@ -29,6 +29,14 @@ function ChatItem({ item, navigation }) {
   });
   const test = { ...content };
 
+  const handleChangText = (text) => {
+    if (text.length > 0) {
+      setTyping(true);
+    } else if (text.length === 0) {
+      setTyping(false);
+    }
+    setNewMess(text);
+  };
   // console.log("lasst name", test);
 
   return (
@@ -45,7 +53,8 @@ function ChatItem({ item, navigation }) {
                   item.inFo.avatar.length >= 0
                     ? item.inFo.avatar[0]
                     : "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
-              }}></Image>
+              }}
+            ></Image>
           </View>
 
           <View style={styles.bodyContainer}>
@@ -58,7 +67,8 @@ function ChatItem({ item, navigation }) {
                 justifyContent: "space-between",
                 flexDirection: "row",
                 alignItems: "center",
-              }}>
+              }}
+            >
               <Text style={styles.textLastMes}>
                 {/* check lastmess is image , sticker ? render lastmess [image, sticker], check length >10 ? .... */}
                 {item.conversations?.lastMessage[0].type === "NOTIFY" ||
@@ -76,7 +86,7 @@ function ChatItem({ item, navigation }) {
                     })}
               </Text>
               <Text style={styles.textLastMes}>
-                {handleDate(
+                {/* {handleDate(
                   new Date(),
                   new Date(
                     `${item.conversations.lastMessage[0].updatedAt}`.toLocaleString(
@@ -84,7 +94,7 @@ function ChatItem({ item, navigation }) {
                       { timeZone: "Asia/Ho_Chi_Minh" }
                     )
                   )
-                )}
+                )} */}
               </Text>
             </View>
           </View>
