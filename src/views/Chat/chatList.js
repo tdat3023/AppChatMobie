@@ -23,6 +23,7 @@ import conversationApi from "../../api/conversationApi";
 import Contex from "../../store/Context";
 
 import { SetUser } from "../../store/Actions";
+import { each } from "immer/dist/internal";
 
 export default ChatApp = function ({ navigation }) {
   const { state, depatch } = React.useContext(Contex);
@@ -67,26 +68,39 @@ export default ChatApp = function ({ navigation }) {
     }
   };
 
+  // sreach
+  const [typing, setTyping] = useState(false);
+  const [sreachText, setSreachText] = useState("");
+  const handleChangText = (text) => {
+    if (text.length > 0) {
+      setTyping(true);
+    } else if (text.length === 0) {
+      setTyping(false);
+    }
+    setSreachText(text);
+  };
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
-        {/* button back */}
+        {/* header */}
         <View style={styles.topTag}>
-          <TouchableOpacity
-            style={{ alignItems: "center", marginLeft: 10 }}
-            // onPress={() => {
-            //   // navigation.goBack();
-            //   console.log(users);
-            // }}
-          >
-            <AntDesign name="search1" size={24} color="white" />
-          </TouchableOpacity>
-          {/* sreach */}
           <View style={styles.sreach}>
+            <TouchableOpacity
+              style={{ alignItems: "center", marginLeft: 10 }}
+              onPress={() => {
+                alert(sreachText);
+              }}
+            >
+              <AntDesign name="search1" size={24} color="white" />
+            </TouchableOpacity>
+            {/* sreach input */}
             <TextInput
               style={styles.textTopTag}
+              value={sreachText}
+              onChangeText={(text) => handleChangText(text)}
               placeholder="Tìm kiếm"
-              placeholderTextColor="white"></TextInput>
+            ></TextInput>
           </View>
 
           <View style={styles.moreTag}>
@@ -109,29 +123,48 @@ export default ChatApp = function ({ navigation }) {
           </View>
         </View>
 
-        {/* classìy */}
-        <View style={styles.topTagMenu}>
-          <View>
-            <TouchableOpacity>
-              <Text style={styles.text1}>TIN NHẮN</Text>
-            </TouchableOpacity>
+        {/* sửa code tim trong cái list sreach */}
+        {/* body */}
+        {typing ? (
+          <View style={styles.listSreach}>
+            {/* List sreach */}
+            <View style={styles.bodyListSreach}>
+              <FlatList
+                contentContainerStyle={{ paddingBottom: 100 }}
+                style={styles.bodyList}
+                data={conversations}
+                renderItem={renderItem}
+                // keyExtractor={(item) => item.conversations._id}
+              ></FlatList>
+            </View>
           </View>
-          <View>
-            <TouchableOpacity>
-              <Text style={styles.text1}>TIN CHỜ</Text>
-            </TouchableOpacity>
+        ) : (
+          <View style={styles.listConversation}>
+            {/* phan loai */}
+            <View style={styles.topTagMenu}>
+              <View>
+                <TouchableOpacity>
+                  <Text style={styles.text1}>TIN NHẮN</Text>
+                </TouchableOpacity>
+              </View>
+              <View>
+                <TouchableOpacity>
+                  <Text style={styles.text1}>TIN CHỜ</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+            {/* list chat */}
+            <View style={styles.bodyListChat}>
+              <FlatList
+                contentContainerStyle={{ paddingBottom: 100 }}
+                style={styles.bodyList}
+                data={conversations}
+                renderItem={renderItem}
+                // keyExtractor={(item) => item.conversations._id}
+              ></FlatList>
+            </View>
           </View>
-        </View>
-        {/* List chat */}
-        <View style={styles.bodyListChat}>
-          <FlatList
-            contentContainerStyle={{ paddingBottom: 100 }}
-            style={styles.bodyList}
-            data={conversations}
-            renderItem={renderItem}
-            // keyExtractor={(item) => item.conversations._id}
-          ></FlatList>
-        </View>
+        )}
       </View>
     </SafeAreaView>
   );
@@ -145,8 +178,10 @@ const styles = StyleSheet.create({
   },
 
   sreach: {
-    marginLeft: 10,
-    width: "60%",
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   moreTag: {
@@ -174,7 +209,12 @@ const styles = StyleSheet.create({
   },
 
   textTopTag: {
-    fontSize: 20,
+    height: 40,
+    flex: 1,
+    borderRadius: 30,
+    paddingLeft: 20,
+    marginHorizontal: 5,
+    backgroundColor: "#E4E4E4",
   },
 
   bodyListChat: {
@@ -184,7 +224,7 @@ const styles = StyleSheet.create({
 
   topTagMenu: {
     width: "100%",
-    height: 50,
+    height: 60,
     borderBottomWidth: 1,
     flexDirection: "row",
     alignItems: "center",
@@ -239,5 +279,18 @@ const styles = StyleSheet.create({
   },
   text1: {
     fontSize: 20,
+  },
+
+  listSreach: {
+    backgroundColor: "red",
+    flex: 1,
+  },
+  listConversation: {
+    flex: 1,
+  },
+
+  bodyListSreach: {
+    width: "100%",
+    alignItems: "center",
   },
 });

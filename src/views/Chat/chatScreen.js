@@ -46,7 +46,6 @@ export default ChatScreen = ({ props, navigation, route }) => {
 
   const [newMess, setNewMess] = useState("");
   //console.log(listMessgae);
-
   //console.log("id", user.uid);
   React.useEffect(() => {
     const fetchMessages = async () => {
@@ -92,6 +91,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
     //call soket in here
   };
 
+  // UI send mes
   const handleChangText = (text) => {
     if (text.length > 0) {
       setTyping(true);
@@ -178,10 +178,10 @@ export default ChatScreen = ({ props, navigation, route }) => {
 
           {/*Footer */}
           <View style={styles.footerContainer}>
-            <TouchableOpacity style={styles.moreAction}>
-              <Ionicons name="happy-outline" size={30} />
-            </TouchableOpacity>
-            <View style={styles.nameFriend}>
+            <View style={styles.inputMess}>
+              <TouchableOpacity style={styles.moreAction}>
+                <Ionicons name="happy-outline" size={30} />
+              </TouchableOpacity>
               <TextInput
                 style={styles.textChat}
                 value={newMess}
@@ -255,18 +255,16 @@ const styles = StyleSheet.create({
     //borderWidth: 0.2,
   },
 
-  nameFriend: {
-    marginLeft: 10,
-    // flex: 1,
-    // justifyContent: "center",
+  inputMess: {
+    flex: 1,
+    alignItems: "center",
+    flexDirection: "row",
   },
 
   moreTag: {
     display: "flex",
-    marginLeft: 10,
-    // padding: 10,
-    // flex: 1,
-    justifyContent: "space-evenly",
+    marginRight: 10,
+    justifyContent: "space-between",
     flexDirection: "row",
   },
 
@@ -280,10 +278,10 @@ const styles = StyleSheet.create({
 
   textChat: {
     height: 40,
-    width: 200,
-
+    flex: 1,
     borderRadius: 30,
     paddingLeft: 20,
+    marginHorizontal: 5,
     backgroundColor: "#E4E4E4",
   },
 
