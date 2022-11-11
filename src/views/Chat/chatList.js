@@ -12,6 +12,7 @@ import {
   Dimensions,
 } from "react-native";
 import axios from "axios";
+import io from "socket.io-client";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -28,8 +29,30 @@ export default ChatApp = function ({ navigation }) {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
   const [conversations, setConversations] = useState([]);
+  const socket = React.useRef();
   // console.log("user:", user.user.uid);
   // console.log(typeof conversationApi);
+  useEffect(() => {
+    // setA("b");
+    if (user) {
+      socket.current = io("https://13.228.206.211");
+      // socket.current = io("http://localhost:5005");
+      // console.log(socket);
+      socket.current.emit("start", user);
+
+      //console.log("dau buoi");
+      //socket.current.emit("start", user);
+    }
+  }, [user]);
+  useEffect(() => {
+    // setA("b");
+    if (socket.current) {
+      // console.log(conversations);
+      const ids = conversations?.map((ele) => ele.conversations._id);
+      socket.current.emit("join-conversations", ids);
+    }
+  }, [user, conversations]);
+  // console.log("socket", user);
   React.useEffect(() => {
     // //get api set list conversation
     // //fetch product in wishlist
@@ -61,9 +84,16 @@ export default ChatApp = function ({ navigation }) {
   const renderItem = ({ item }) => {
     if (item.conversations.type) {
       // console.log("type", con.conversations.type);
-      return <ChatGroupItem item={item} navigation={navigation} />;
+      return (
+        <ChatGroupItem item={item} navigation={navigation} socket={socket} />
+      );
     } else {
-      return <ChatItem item={item} navigation={navigation}></ChatItem>;
+      return (
+        <ChatItem
+          item={item}
+          navigation={navigation}
+          socket={socket}></ChatItem>
+      );
     }
   };
 

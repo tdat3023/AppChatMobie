@@ -34,7 +34,7 @@ import { checkUrlIsImage, checkUrlIsSticker } from "../../utilies/Validations";
 
 import { convertDateTimeToString, handleDate } from "../../utilies/DateTime";
 
-function ChatGroupItem({ item, navigation }) {
+function ChatGroupItem({ item, navigation, socket }) {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
   const onPress = () => {
@@ -147,7 +147,7 @@ function ChatGroupItem({ item, navigation }) {
                   : item.conversations.lastMessage[0].content + " "}
               </Text>
               <Text style={styles.textLastMes}>
-                {handleDate(
+                {/* {handleDate(
                   new Date(),
                   new Date(
                     `${item.conversations.lastMessage[0].updatedAt}`.toLocaleString(
@@ -155,7 +155,7 @@ function ChatGroupItem({ item, navigation }) {
                       { timeZone: "Asia/Ho_Chi_Minh" }
                     )
                   )
-                )}
+                )} */}
               </Text>
             </View>
           </View>

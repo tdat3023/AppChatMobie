@@ -25,16 +25,21 @@ import CreateAboutScreen from "./about.js";
 import Contex from "../../store/Context";
 import messageApi from "../../api/messageApi";
 import { Dimensions } from "react-native";
+import socket from "../../socket/socketClient";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default ChatScreen = ({ props, navigation, route }) => {
+  const socket = route.params;
+
   const [onFocus, setOnFocus] = useState(false);
   // const {item} = route.params;
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
   const [listMessgae, setListMessage] = useState([]);
-
+  // if (socket) {
+  //   console.log("socket", socket);
+  // }
   const onFoucsInPut = () => {
     setOnFocus(!onFocus);
   };
@@ -72,6 +77,25 @@ export default ChatScreen = ({ props, navigation, route }) => {
     fetchMessages();
   }, [userChatting]);
 
+  useEffect(() => {
+    socket.current?.emit("join-room", {
+      idCon: idConversation._id,
+      // isNew:false
+    });
+
+    socket.current?.on("get-message", ({ senderId, message }) => {
+      //console.log("get");
+      if (senderId === user.uid) {
+        console.log("send nhung k them vao list ---> ");
+      } else {
+        console.log("mess nhan dc ---> ");
+
+        // console.log(message);
+        setListMessage((prev) => [...prev, { ...message }]);
+      }
+    });
+  }, []);
+
   const handSendMess = async () => {
     //create new message
     const newMessSend = {
@@ -83,13 +107,28 @@ export default ChatScreen = ({ props, navigation, route }) => {
     console.log(newMessSend);
     const messSave = await messageApi.addTextMess(newMessSend);
 
-    console.log("mess send", messSave);
+    //  console.log("mess send", messSave);
     setListMessage((prev) => [...prev, { ...messSave }]);
 
     setNewMess("");
 
     //call soket in here
+
+    if (socket) {
+      if (socket.current) {
+        socket.current.emit("send-message", {
+          senderId: user.uid,
+          receiverId: userChatting.uid,
+          message: messSave,
+          idCon: idConversation._id,
+        });
+        console.log("send");
+      }
+    }
   };
+  // if (socket) {
+  //   console.log("socket connected", socket);
+  // }
 
   // console.log(item);
   return (
@@ -178,6 +217,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
                 onFocus={onFoucsInPut}
                 onBlur={onFoucsInPut}
                 onSubmitEditing={handSendMess}
+                blurOnSubmit={false}
                 placeholder="Tin nhắn"></TextInput>
             </View>
 

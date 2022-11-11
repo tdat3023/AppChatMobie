@@ -13,11 +13,11 @@ import Contex from "../../store/Context";
 import { checkUrlIsImage, checkUrlIsSticker } from "../../utilies/Validations";
 import { convertDateTimeToString, handleDate } from "../../utilies/DateTime";
 
-function ChatItem({ item, navigation }) {
+function ChatItem({ item, navigation, socket }) {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
   const onPress = () => {
-    navigation.navigate("ChatScreen");
+    navigation.navigate("ChatScreen", socket);
 
     // type conversation is false set conversation= conversation, chatUser= userInfo
     depatch(SetIdConversation(item.conversations));
@@ -71,12 +71,10 @@ function ChatItem({ item, navigation }) {
                   : item.conversations.lastMessage[0].content.length > 15
                   ? item.conversations.lastMessage[0].content.slice(0, 20) +
                     " ..."
-                  : item.conversations.lastMessage.map((x) => {
-                      return x.content;
-                    })}
+                  : item.conversations.lastMessage[0].content}
               </Text>
               <Text style={styles.textLastMes}>
-                {handleDate(
+                {/* {handleDate(
                   new Date(),
                   new Date(
                     `${item.conversations.lastMessage[0].updatedAt}`.toLocaleString(
@@ -84,7 +82,7 @@ function ChatItem({ item, navigation }) {
                       { timeZone: "Asia/Ho_Chi_Minh" }
                     )
                   )
-                )}
+                )} */}
               </Text>
             </View>
           </View>

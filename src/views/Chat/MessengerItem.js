@@ -2,8 +2,11 @@ import React, { Component } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useState, useEffect, useRef } from "react";
-import AutoHeightImage from "react-native-auto-height-image";
+// import AutoHeightImage from "react-native-auto-height-image";
 import { differenceInCalendarDays } from "date-fns";
+import AutoDimensionImage, {
+  imageDimensionTypes,
+} from "react-native-auto-dimensions-image";
 
 import {
   View,
@@ -104,18 +107,22 @@ function MessengerItem({ messend, props, route }) {
                       {/* check is image, sticker ? changes view */}
                       {checkUrlIsImage(messend.content) &&
                       messend.type === "IMAGE" ? (
-                        <AutoHeightImage
-                          width={200}
+                        <AutoDimensionImage
                           source={{
                             uri: messend.content,
+                            cache: "default", //  default || reload || force-cache || only-if-cached
                           }}
+                          dimensionType={imageDimensionTypes.HEIGHT}
+                          dimensionValue={200}
                         />
                       ) : checkUrlIsSticker(messend.content) ? (
-                        <AutoHeightImage
-                          width={100}
+                        <AutoDimensionImage
                           source={{
                             uri: messend.content,
+                            cache: "default", //  default || reload || force-cache || only-if-cached
                           }}
+                          dimensionType={imageDimensionTypes.HEIGHT}
+                          dimensionValue={100}
                         />
                       ) : (
                         <Text>{messend.content}</Text>
@@ -168,18 +175,22 @@ function MessengerItem({ messend, props, route }) {
                 {/* check is image, sticker ? changes view mess send */}
                 {checkUrlIsImage(messend.content) &&
                 messend.type === "IMAGE" ? (
-                  <AutoHeightImage
-                    width={200}
+                  <AutoDimensionImage
                     source={{
                       uri: messend.content,
+                      cache: "default", //  default || reload || force-cache || only-if-cached
                     }}
+                    dimensionType={imageDimensionTypes.HEIGHT}
+                    dimensionValue={200}
                   />
                 ) : checkUrlIsSticker(messend.content) ? (
-                  <AutoHeightImage
-                    width={100}
+                  <AutoDimensionImage
                     source={{
                       uri: messend.content,
+                      cache: "default", //  default || reload || force-cache || only-if-cached
                     }}
+                    dimensionType={imageDimensionTypes.HEIGHT}
+                    dimensionValue={100}
                   />
                 ) : (
                   <Text
