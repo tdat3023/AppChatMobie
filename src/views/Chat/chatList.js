@@ -29,7 +29,7 @@ export default ChatApp = function ({ navigation }) {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
   const [conversations, setConversations] = useState([]);
-  // console.log("user:", user.user.uid);
+  console.log("user:", user.uid);
   // console.log(typeof conversationApi);
   React.useEffect(() => {
     // //get api set list conversation
@@ -56,7 +56,7 @@ export default ChatApp = function ({ navigation }) {
     };
 
     fetchConversations();
-  }, [conversations]);
+  }, [user]);
 
   //  check type conversation ? render groupChatItem : render ChatItem
   const renderItem = ({ item }) => {

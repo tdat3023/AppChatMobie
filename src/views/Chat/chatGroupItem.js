@@ -1,7 +1,5 @@
 import React, { Component } from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useState, useEffect, useRef } from "react";
+
 //import { formatInTimeZone } from "date-fns-tz";
 import {
   View,
@@ -9,21 +7,11 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
-  ImageBackground,
-  SafeAreaView,
   Image,
-  TextInput,
-  ScrollView,
-  Dimensions,
-  Platform,
-  StatusBar,
-  RefreshControl,
-  ImageEditor,
 } from "react-native";
-import AntDesign from "react-native-vector-icons/AntDesign";
+
 import Ionicons from "react-native-vector-icons/Ionicons";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import ChatScreen from "./chatScreen";
+
 import Contex from "../../store/Context";
 import {
   SetUser,
@@ -44,10 +32,10 @@ function ChatGroupItem({ item, navigation }) {
     depatch(SetUserChatting(item.inFo));
   };
 
-  //console.log("lasst name", test);
+  console.log("image", item.inFo.avatar);
 
   function renderImaAvatar() {
-    if (item.inFo.avatar.length == 1) {
+    if (item.inFo.avatar.length == 2) {
       return (
         <Image
           style={styles.imaAvatarOne}
@@ -57,7 +45,6 @@ function ChatGroupItem({ item, navigation }) {
         ></Image>
       );
     }
-
     return (
       <View style={styles.imaGroupAvata}>
         <View style={styles.imaGroup}>
@@ -72,7 +59,7 @@ function ChatGroupItem({ item, navigation }) {
           <Image
             style={styles.imaAvatar}
             source={{
-              uri: item.inFo.avatar[1].avaUser
+              uri: item.inFo.avatar[1]
                 ? item.inFo.avatar[1].avaUser
                 : "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
             }}

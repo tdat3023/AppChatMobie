@@ -25,6 +25,8 @@ import CreateAboutScreen from "./about.js";
 import Contex from "../../store/Context";
 import messageApi from "../../api/messageApi";
 import { Dimensions } from "react-native";
+import { launchCamera, launchImageLibrary } from "react-native-image-picker";
+import ImagePicker from "react-native-image-picker";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
@@ -96,9 +98,32 @@ export default ChatScreen = ({ props, navigation, route }) => {
     if (text.length > 0) {
       setTyping(true);
     } else if (text.length === 0) {
-      setTyping(false);
+      setTyping(false); 
     }
     setNewMess(text);
+  };
+
+  // UI send image
+  // const [galleryPhoto, setGalleryPhoto] = useState();
+  const options = {
+    title: "Select Image",
+    storageOptions: {
+      skipBackup: true,
+      path: "images",
+    },
+  };
+
+  const openGallery = () => {
+    ImagePicker.showImagePicker(options, (response) => {
+      if (response.didCancle) {
+        console.log("User cancelled image picker");
+      } else if (response.error) {
+        console.log("ImagePicker error: " + response.error);
+      } else {
+        const source = { uri: response.uri };
+        console.log(source);
+      }
+    });
   };
 
   // console.log(item);
@@ -205,10 +230,10 @@ export default ChatScreen = ({ props, navigation, route }) => {
                 <TouchableOpacity>
                   <Feather name="more-horizontal" size={27} color="black" />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={handSendMess}>
+                <TouchableOpacity onPress={openGallery}>
                   <Feather name="mic" size={27} color="black" />
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={handSendMess}>
                   <Feather name="image" size={27} color="black" />
                 </TouchableOpacity>
               </View>

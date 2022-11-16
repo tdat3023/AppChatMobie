@@ -37,7 +37,8 @@ function ChatItem({ item, navigation }) {
     }
     setNewMess(text);
   };
-  // console.log("lasst name", test);
+
+  // console.log("image", item.inFo);
 
   return (
     <View style={styles.viewOne}>
@@ -50,8 +51,8 @@ function ChatItem({ item, navigation }) {
               style={styles.imaAvatar}
               source={{
                 uri:
-                  item.inFo.avatar.length >= 0
-                    ? item.inFo.avatar[0]
+                  item.inFo.avatar.length > 0
+                    ? item.inFo.avatar
                     : "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
               }}
             ></Image>
@@ -102,15 +103,7 @@ function ChatItem({ item, navigation }) {
           <View style={styles.notification}>
             <Ionicons name="notifications-outline" size={24} color="black" />
             {item.conversations.mb.numberUnread > 0 && (
-              <View
-                style={styles.textNoti}
-                // style={[
-                //   styles.textNoti,
-                //   {
-                //     paddingHorizontal: item.numberOfUnReadMess > 9 ? 5 : 10,
-                //   },
-                // ]}
-              >
+              <View style={styles.textNoti}>
                 <Text>{item.conversations.mb.numberUnread}</Text>
               </View>
             )}
