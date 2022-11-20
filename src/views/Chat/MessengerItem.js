@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useState, useEffect, useRef } from "react";
-import AutoHeightImage from "react-native-auto-height-image";
 import { differenceInCalendarDays } from "date-fns";
 
 import {
@@ -54,7 +53,8 @@ function MessengerItem({ messend, props, route }) {
                   style={styles.imaAvatar}
                   source={{
                     uri: "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
-                  }}></Image>
+                  }}
+                ></Image>
                 <View>
                   <View
                     style={[
@@ -70,7 +70,6 @@ function MessengerItem({ messend, props, route }) {
                             marginLeft: 10,
                             fontSize: 15,
                             borderRadius: 15,
-
                             borderColor: "white",
                             backgroundColor: "#A0A0A0",
                             shadowOffset: {
@@ -87,7 +86,8 @@ function MessengerItem({ messend, props, route }) {
                       {
                         width: messend.content.length > 40 ? "80%" : "auto",
                       },
-                    ]}>
+                    ]}
+                  >
                     <Text style={{ fontWeight: "bold" }}>
                       {idConversation.type ? (
                         userChatting.userInfo.map((user) => {
@@ -104,14 +104,14 @@ function MessengerItem({ messend, props, route }) {
                       {/* check is image, sticker ? changes view */}
                       {checkUrlIsImage(messend.content) &&
                       messend.type === "IMAGE" ? (
-                        <AutoHeightImage
+                        <Image
                           width={200}
                           source={{
                             uri: messend.content,
                           }}
                         />
                       ) : checkUrlIsSticker(messend.content) ? (
-                        <AutoHeightImage
+                        <Image
                           width={100}
                           source={{
                             uri: messend.content,
@@ -128,7 +128,8 @@ function MessengerItem({ messend, props, route }) {
                       pressOn
                         ? { marginLeft: 20, marginTop: 10 }
                         : { margin: 0 },
-                    ]}>
+                    ]}
+                  >
                     {/* check time mess  receive with current time ? set time is hours or date */}
                     {pressOn ? (
                       differenceInCalendarDays(
@@ -168,14 +169,14 @@ function MessengerItem({ messend, props, route }) {
                 {/* check is image, sticker ? changes view mess send */}
                 {checkUrlIsImage(messend.content) &&
                 messend.type === "IMAGE" ? (
-                  <AutoHeightImage
+                  <Image
                     width={200}
                     source={{
                       uri: messend.content,
                     }}
                   />
                 ) : checkUrlIsSticker(messend.content) ? (
-                  <AutoHeightImage
+                  <Image
                     width={100}
                     source={{
                       uri: messend.content,
@@ -209,7 +210,8 @@ function MessengerItem({ messend, props, route }) {
                       {
                         width: messend.content.length > 40 ? "80%" : "auto",
                       },
-                    ]}>
+                    ]}
+                  >
                     {messend.content}
                   </Text>
                 )}
@@ -218,7 +220,8 @@ function MessengerItem({ messend, props, route }) {
                     pressOn
                       ? { marginRight: 20, marginTop: 10 }
                       : { margin: 0 },
-                  ]}>
+                  ]}
+                >
                   {/* check time mess send  with current time ? set time is hours or date */}
                   {pressOn ? (
                     // >1 is date

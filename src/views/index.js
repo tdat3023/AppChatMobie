@@ -2,15 +2,13 @@ import React, { Component, useEffect, useState } from "react";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { View, SafeAreaView, Text } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Home from "./Login/home";
 import Login from "./Login/login";
 import PasswordRes from "./Login/PassWordRes";
 import ChatApp from "./Chat/chatList";
 import ProFile from "./profile";
-import Contact from "./contacts";
+import Contact from "./Contacts/contacts";
 import ChatScreen from "./Chat/chatScreen";
 import Resgister from "./Login/resgister";
 import CreateAboutScreen from "./Chat/about";
@@ -110,7 +108,8 @@ export default RootComponent = function () {
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="Home"
-        screenOptions={{ headerShown: false }}>
+        screenOptions={{ headerShown: false }}
+      >
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen
