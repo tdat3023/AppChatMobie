@@ -34,7 +34,6 @@ export default ChatApp = function ({ navigation }) {
   React.useEffect(() => {
     // //get api set list conversation
     // //fetch product in wishlist
-
     // depatch(SetUser("HiIaKOEh8qTzOfTF1Va0Z6z61Qz2"));
     const fetchConversations = async () => {
       // console.log("user:", user.user.uid);

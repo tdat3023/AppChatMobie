@@ -4,27 +4,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useState, useEffect, useRef } from "react";
 import { differenceInCalendarDays } from "date-fns";
 
-import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  TouchableOpacity,
-  ImageBackground,
-  SafeAreaView,
-  Image,
-  TextInput,
-  ScrollView,
-  Dimensions,
-  Platform,
-  StatusBar,
-  RefreshControl,
-} from "react-native";
-import {
-  AntDesign,
-  Ionicons,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+
 import Contex from "../../store/Context";
 import { checkUrlIsImage, checkUrlIsSticker } from "../../utilies/Validations";
 import { convertDateTimeToString, handleDate } from "../../utilies/DateTime";
@@ -192,9 +173,7 @@ function MessengerItem({ messend, props, route }) {
                             marginLeft: 10,
                             fontSize: 15,
                             borderRadius: 15,
-
                             backgroundColor: "#CCCCCC",
-
                             borderColor: "white",
                             borderWidth: 0.5,
                             shadowOffset: {
@@ -294,7 +273,6 @@ const styles = StyleSheet.create({
   bodyContainer: {
     flex: 1,
     justifyContent: "center",
-    // backgroundColor: "blue",
   },
 
   textyourMes: [
@@ -303,15 +281,12 @@ const styles = StyleSheet.create({
       marginLeft: 10,
       fontSize: 15,
       borderRadius: 15,
-      //width: "60%",
-
       borderWidth: 1.5,
       borderColor: "#A0A0A0",
     },
   ],
   myMess: {
     marginRight: 10,
-    // display: "flex",
     justifyContent: "flex-end",
     alignItems: "flex-end",
   },
@@ -321,7 +296,6 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 15,
     borderRadius: 15,
-
     backgroundColor: "#CCCCCC",
   },
 

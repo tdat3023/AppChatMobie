@@ -25,10 +25,7 @@ import CreateAboutScreen from "./about.js";
 import Contex from "../../store/Context";
 import messageApi from "../../api/messageApi";
 import { Dimensions } from "react-native";
-import {
-  launchCamera,
-  launchImageLibrary,
-} from "react-native-image-picker";
+import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import ImagePicker from "react-native-image-picker";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -108,54 +105,53 @@ export default ChatScreen = ({ props, navigation, route }) => {
 
   // UI send image
   // const [galleryPhoto, setGalleryPhoto] = useState();
-  const options = {
-    title: "Select Image",
-    storageOptions: {
-      skipBackup: true,
-      path: "images",
-    },
-  };
+  // const options = {
+  //   title: "Select Image",
+  //   storageOptions: {
+  //     skipBackup: true,
+  //     path: "images",
+  //   },
+  // };
 
-  const openGallery = () => {
-    ImagePicker.showImagePicker(options, (response) => {
-      if (response.didCancle) {
-        console.log("User cancelled image picker");
-      } else if (response.error) {
-        console.log("ImagePicker error: " + response.error);
-      } else {
-        const source = { uri: response.uri };
-        console.log(source);
-      }
-    });
-  };
+  // const openGallery = () => {
+  //   ImagePicker.showImagePicker(options, (response) => {
+  //     if (response.didCancle) {
+  //       console.log("User cancelled image picker");
+  //     } else if (response.error) {
+  //       console.log("ImagePicker error: " + response.error);
+  //     } else {
+  //       const source = { uri: response.uri };
+  //       console.log(source);
+  //     }
+  //   });
+  // };
 
-  const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    let result = await ImagePicker.launchImageLibrary({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      quality: 1,
-    });
-    if (!result.cancelled) {
-      // console.log(result.uri);
-      let localUri = result.uri;
-      let filename = localUri.split("/").pop();
-      console.log("_______________________________________________________");
-      console.log("file name:" + filename);
-      let formData = new FormData();
-      formData.append("file", filename);
-      console.log(formData);
-    } else if (result.cancelled) {
-      console.log(result);
-    }
-  };
+  // const pickImage = async () => {
+  //   // No permissions request is necessary for launching the image library
+  //   let result = await ImagePicker.launchImageLibrary({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
+  //     allowsEditing: true,
+  //     quality: 1,
+  //   });
+  //   if (!result.cancelled) {
+  //     // console.log(result.uri);
+  //     let localUri = result.uri;
+  //     let filename = localUri.split("/").pop();
+  //     console.log("_______________________________________________________");
+  //     console.log("file name:" + filename);
+  //     let formData = new FormData();
+  //     formData.append("file", filename);
+  //     console.log(formData);
+  //   } else if (result.cancelled) {
+  //     console.log(result);
+  //   }
+  // };
 
   // console.log(item);
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.container}>
         {/* Top tag */}
-
         <View style={styles.headerContainer}>
           <View style={{ flexDirection: "row" }}>
             <TouchableOpacity
@@ -192,7 +188,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
                 marginRight: 10,
               }}
               onPress={() => {
-                navigation.navigate("CreateAboutScreen");
+                navigation.navigate("AboutGroupScreen");
               }}
             >
               <Ionicons name="menu" size={24} color="black" />
@@ -201,9 +197,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
         </View>
 
         {/* Body */}
-
         {/* <KeyboardAwareScrollView> */}
-
         <KeyboardAvoidingView behavior="padding">
           <View
             style={[
@@ -257,7 +251,9 @@ export default ChatScreen = ({ props, navigation, route }) => {
                 <TouchableOpacity>
                   <Feather name="mic" size={27} color="black" />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={pickImage}>
+                <TouchableOpacity
+                //onPress={pickImage}
+                >
                   <Feather name="image" size={27} color="black" />
                 </TouchableOpacity>
               </View>

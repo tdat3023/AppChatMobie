@@ -14,10 +14,7 @@ import {
   ImageBackground,
   SafeAreaView,
   Image,
-  TextInput,
   Dimensions,
-  Platform,
-  StatusBar,
 } from "react-native";
 import {
   Button,

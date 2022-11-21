@@ -27,10 +27,14 @@ export default function FriendRequest(item) {
 
         {/* nút */}
         <View style={styles.footerContainer}>
-          <TouchableOpacity style={styles.btn}>
+          <TouchableOpacity
+            style={[styles.btn, { backgroundColor: "#CCCCCC" }]}
+          >
             <Text>TỪ CHỐI</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btn}>
+          <TouchableOpacity
+            style={[styles.btn, { backgroundColor: "#66B2FF" }]}
+          >
             <Text>ĐỒNG Ý</Text>
           </TouchableOpacity>
         </View>
@@ -94,12 +98,10 @@ const styles = StyleSheet.create({
   },
 
   btn: {
-    height: 30,
-    width: 150,
+    paddingVertical: 8,
+    width: 130,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "red",
     borderRadius: 20,
-    borderWidth: 1,
   },
 });

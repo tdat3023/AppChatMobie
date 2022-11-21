@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+
 import {
   StyleSheet,
   Text,
@@ -10,10 +12,10 @@ import {
   TouchableOpacity,
 } from "react-native";
 import ToggleSwitch from "toggle-switch-react-native";
-const CreateAboutScreen = ({ navigation }) => {
+const AboutGroupScreen = ({ navigation }) => {
   const [switchOnPin, setSwitchOnPin] = useState(false);
   const [switchOn, setSwitchOn] = useState(false);
-  const [user, setUser] = useState("Tien Dat");
+  const [user, setUser] = useState("Tên");
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -71,7 +73,7 @@ const CreateAboutScreen = ({ navigation }) => {
                     fontWeight: "bold",
                   }}
                 >
-                  Trang cá nhân
+                  Thêm thành viên
                 </Text>
               </View>
             </TouchableOpacity>
@@ -143,7 +145,7 @@ const CreateAboutScreen = ({ navigation }) => {
             <View style={styles.viewItem}>
               <Ionicons name="pencil" size={23} />
               <View style={styles.viewCustomItem}>
-                <Text style={{ fontSize: 15 }}>Đổi tên gợi nhớ</Text>
+                <Text style={{ fontSize: 15 }}>Đổi tên nhóm</Text>
                 <Ionicons
                   style={{}}
                   color={"gray"}
@@ -188,9 +190,11 @@ const CreateAboutScreen = ({ navigation }) => {
 
           <TouchableOpacity>
             <View style={styles.viewItem}>
-              <Ionicons name="trash" size={23} />
+              <Ionicons name="trash" size={23} color="red" />
               <View style={styles.viewCustomItem}>
-                <Text style={{ fontSize: 15 }}>Xóa lịch sử trò chuyện</Text>
+                <Text style={{ fontSize: 15, color: "red" }}>
+                  Xóa lịch sử trò chuyện
+                </Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -229,11 +233,15 @@ const CreateAboutScreen = ({ navigation }) => {
               </View>
             </View>
           </TouchableOpacity>
+
+          {/* xóa thành viên */}
           <TouchableOpacity>
             <View style={styles.viewItem}>
-              <Ionicons name="people-circle" size={23} />
+              <Ionicons name="person-remove-outline" size={23} color="red" />
               <View style={styles.viewCustomItem}>
-                <Text style={{ fontSize: 15 }}>Tạo nhóm với {user}</Text>
+                <Text style={{ fontSize: 15, color: "red" }}>
+                  Xóa thành viên
+                </Text>
                 <Ionicons
                   style={{}}
                   color={"gray"}
@@ -243,11 +251,12 @@ const CreateAboutScreen = ({ navigation }) => {
               </View>
             </View>
           </TouchableOpacity>
+
           <TouchableOpacity>
             <View style={styles.viewItem}>
-              <Ionicons name="person-add" size={23} />
+              <Ionicons name="ios-key-outline" size={23} />
               <View style={styles.viewCustomItem}>
-                <Text style={{ fontSize: 15 }}>Thêm {user} vào nhóm</Text>
+                <Text style={{ fontSize: 15 }}>Chuyển quyền trưởng nhóm</Text>
                 <Ionicons
                   style={{}}
                   color={"gray"}
@@ -257,11 +266,12 @@ const CreateAboutScreen = ({ navigation }) => {
               </View>
             </View>
           </TouchableOpacity>
+
           <TouchableOpacity>
             <View style={styles.viewItem}>
-              <Ionicons name="person" size={23} />
+              <Ionicons name="link-outline" size={23} />
               <View style={styles.viewCustomItem}>
-                <Text style={{ fontSize: 15 }}>Xem nhóm chung</Text>
+                <Text style={{ fontSize: 15 }}>Link tham gia nhóm</Text>
                 <Ionicons
                   style={{}}
                   color={"gray"}
@@ -303,9 +313,10 @@ const CreateAboutScreen = ({ navigation }) => {
           </TouchableOpacity>
           <TouchableOpacity>
             <View style={styles.viewItem}>
-              <Ionicons name="remove-circle" size={23} />
+              <MaterialIcons name="logout" size={23} color="red" />
+
               <View style={styles.viewCustomItem}>
-                <Text style={{ fontSize: 15 }}>Chặn tin nhắn</Text>
+                <Text style={{ fontSize: 15, color: "red" }}>Rời nhớm</Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -316,7 +327,7 @@ const CreateAboutScreen = ({ navigation }) => {
   );
 };
 
-export default CreateAboutScreen;
+export default AboutGroupScreen;
 
 const styles = StyleSheet.create({
   container: {
