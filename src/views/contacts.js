@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {useState, useEffect, useRef} from 'react';
+import React, { Component } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useState, useEffect, useRef } from "react";
 import {
   View,
   FlatList,
@@ -17,29 +17,29 @@ import {
   Platform,
   StatusBar,
   RefreshControl,
-} from 'react-native';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Feather from 'react-native-vector-icons/Feather';
+} from "react-native";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import Feather from "react-native-vector-icons/Feather";
 
-const WinWidth = Dimensions.get('window').width;
-const WinHeight = Dimensions.get('window').height;
+const WinWidth = Dimensions.get("window").width;
+const WinHeight = Dimensions.get("window").height;
 
-export default Contact = ({navigation}) => {
+export default Contact = ({ navigation }) => {
   const [users, setUsers] = useState([
     {
-      id: '1',
-      url: 'https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg',
-      name: 'Tiến Đạt',
-      lastMessage: 'Hello',
+      id: "1",
+      url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
+      name: "Tiến Đạt",
+      lastMessage: "Hello",
     },
   ]);
 
   const [Refreshing, setRefreshing] = useState(false);
   const onRefresh = () => {
     setRefreshing(true);
-    setItems([...Items, {key: 100, item: 'Item100'}]);
+    setItems([...Items, { key: 100, item: "Item100" }]);
 
     setTimeout(() => {
       setRefreshing(false);
@@ -51,7 +51,7 @@ export default Contact = ({navigation}) => {
       <View style={styles.container}>
         {/* button back */}
         <View style={styles.topTag}>
-          <TouchableOpacity style={{alignItems: 'center', marginLeft: 10}}>
+          <TouchableOpacity style={{ alignItems: "center", marginLeft: 10 }}>
             <AntDesign name="search1" size={24} color="white" />
           </TouchableOpacity>
           <View style={styles.sreach}>
@@ -93,7 +93,7 @@ export default Contact = ({navigation}) => {
           <FlatList
             style={styles.bodyList}
             data={users}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <View style={styles.viewOne}>
                 <TouchableOpacity>
                   <View style={styles.chatBox}>
@@ -101,12 +101,12 @@ export default Contact = ({navigation}) => {
                     <View style={styles.imaContainer}>
                       <Image
                         style={styles.imaAvatar}
-                        source={{uri: item.url}}></Image>
+                        source={{ uri: item.url }}></Image>
                     </View>
 
                     <View style={styles.bodyContainer}>
                       {/* tên */}
-                      <Text style={styles.textName}>Ten o day</Text>
+                      <Text style={styles.textName}>Anh Nguyen</Text>
                     </View>
 
                     <View style={styles.notification}>
@@ -121,7 +121,7 @@ export default Contact = ({navigation}) => {
                 </TouchableOpacity>
               </View>
             )}
-            keyExtractor={item => item.id}></FlatList>
+            keyExtractor={(item) => item.id}></FlatList>
         </View>
       </View>
     </SafeAreaView>
@@ -130,9 +130,9 @@ export default Contact = ({navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'white',
+    width: "100%",
+    height: "100%",
+    backgroundColor: "white",
   },
 
   sreach: {
@@ -143,57 +143,57 @@ const styles = StyleSheet.create({
   moreTag: {
     marginRight: 10,
     marginLeft: 10,
-    justifyContent: 'space-between',
-    flexDirection: 'row',
+    justifyContent: "space-between",
+    flexDirection: "row",
   },
 
   notification: {
-    width: '20%',
+    width: "20%",
     paddingRight: 13,
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
     height: 90,
     borderBottomWidth: 1,
   },
 
   topTag: {
-    width: '100%',
+    width: "100%",
     height: 50,
-    backgroundColor: '#66B2FF',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    backgroundColor: "#66B2FF",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
   },
   textTopTag: {
     fontSize: 20,
   },
 
   topTagMenu: {
-    width: '100%',
+    width: "100%",
     height: 50,
     borderBottomWidth: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
   },
 
   viewOne: {
-    width: '100%',
+    width: "100%",
     height: 90,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   chatBox: {
-    width: '100%',
+    width: "100%",
     height: 90,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
 
   imaContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   imaAvatar: {
@@ -210,13 +210,13 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 90,
     borderBottomWidth: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
 
   textName: {
     paddingLeft: 15,
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 
   text1: {

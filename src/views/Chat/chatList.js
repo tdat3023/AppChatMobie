@@ -65,7 +65,7 @@ export default ChatApp = function ({ navigation }) {
         const response = await conversationApi.getConversations(
           user.uid,
           0,
-          20
+          200
         );
         const { data, page, size, totalPages } = response;
         //console.log("data", data);

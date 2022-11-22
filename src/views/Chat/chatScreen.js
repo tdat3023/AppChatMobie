@@ -118,12 +118,14 @@ export default ChatScreen = ({ props, navigation, route }) => {
       if (socket.current) {
         socket.current.emit("send-message", {
           senderId: user.uid,
-          receiverId: userChatting.uid,
+          receiverId: userChatting.userIdFriend,
           message: messSave,
           idCon: idConversation._id,
         });
-        console.log("send");
+        console.log("sender", user.uid);
+        console.log("rec", userChatting.userIdFriend);
       }
+      console.log("send");
     }
   };
   // if (socket) {
