@@ -22,6 +22,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import Feather from "react-native-vector-icons/Feather";
 import MessengerItem from "./MessengerItem";
 import CreateAboutScreen from "./about.js";
+import AboutGroupScreen from "./aboutGroup";
 import Contex from "../../store/Context";
 import messageApi from "../../api/messageApi";
 import { Dimensions } from "react-native";
@@ -30,10 +31,11 @@ import ImagePicker from "react-native-image-picker";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default ChatScreen = ({ props, navigation, route }) => {
+export default ChatScreen = ({ navigation }) => {
   const [onFocus, setOnFocus] = useState(false);
   // const {item} = route.params;
   const [typing, setTyping] = useState(false);
+
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
   const [listMessgae, setListMessage] = useState([]);
@@ -87,7 +89,6 @@ export default ChatScreen = ({ props, navigation, route }) => {
 
     // console.log("mess send", messSave);
     setListMessage((prev) => [...prev, { ...messSave }]);
-
     setNewMess("");
 
     //call soket in here
@@ -148,6 +149,15 @@ export default ChatScreen = ({ props, navigation, route }) => {
   // };
 
   // console.log(item);
+
+  const aboutScreen = () => {
+    if (idConversation.type) {
+      // console.log("type", con.conversations.type);
+      return navigation.navigate("AboutGroupScreen");
+    } else {
+      return navigation.navigate("CreateAboutScreen");
+    }
+  };
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.container}>
@@ -188,7 +198,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
                 marginRight: 10,
               }}
               onPress={() => {
-                navigation.navigate("AboutGroupScreen");
+                aboutScreen();
               }}
             >
               <Ionicons name="menu" size={24} color="black" />

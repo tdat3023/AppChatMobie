@@ -13,6 +13,7 @@ import ChatScreen from "./Chat/chatScreen";
 import Resgister from "./Login/resgister";
 import CreateAboutScreen from "./Chat/about";
 import AboutGroupScreen from "./Chat/aboutGroup";
+import AddFriend from "./Contacts/addGroup";
 import { firebase } from "../firebase/firebaseDB";
 import "firebase/compat/auth";
 
@@ -73,17 +74,6 @@ function MyTabs({ route }) {
           ),
         }}
       />
-      {/* <Tab.Screen name="Settings" component={SettingScreen}
-        //  options={{headerShown: false, }}
-        options={{
-          tabBarLabel: 'Settings',
-          tabBarColor:'#C282D8',
-          tabBarIcon: ({ color }) => (
-            <Ionicons name = 'list' color={color} size={25}/>
-          ),
-        }}
-
-        /> */}
     </Tab.Navigator>
   );
 }
@@ -122,11 +112,9 @@ export default RootComponent = function () {
         <Stack.Screen name="Resgister" component={Resgister} />
         <Stack.Screen name="CreateAboutScreen" component={CreateAboutScreen} />
         <Stack.Screen name="AboutGroupScreen" component={AboutGroupScreen} />
+        <Stack.Screen name="AddFriend" component={AddFriend} />
 
         <Stack.Screen name="Password" component={PasswordRes} />
-        {/* <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="ProFile" component={ProFile} />
-          <Stack.Screen name="Setting" component={Setting} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

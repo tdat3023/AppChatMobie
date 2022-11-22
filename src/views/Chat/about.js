@@ -229,7 +229,11 @@ const CreateAboutScreen = ({ navigation }) => {
               </View>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("AddFriend");
+            }}
+          >
             <View style={styles.viewItem}>
               <Ionicons name="people-circle" size={23} />
               <View style={styles.viewCustomItem}>

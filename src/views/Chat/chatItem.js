@@ -17,7 +17,7 @@ function ChatItem({ item, navigation }) {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
   const onPress = () => {
-    navigation.navigate("ChatScreen");
+    navigation.navigate("ChatScreen"), { item: item };
 
     // type conversation is false set conversation= conversation, chatUser= userInfo
     depatch(SetIdConversation(item.conversations));
