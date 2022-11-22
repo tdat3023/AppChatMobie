@@ -50,13 +50,12 @@ export default Home = ({ navigation }) => {
         <View style={styles.viewZalo}>
           <Text
             style={{
-              fontSize: 90,
+              fontSize: 60,
               fontWeight: "500",
-              color: "blue",
+              color: "#356C90",
               alignItems: "center",
-            }}
-          >
-            Zalo
+            }}>
+            ZenChat
           </Text>
         </View>
 
@@ -65,8 +64,7 @@ export default Home = ({ navigation }) => {
             style={styles.btnLogin}
             onPress={() => {
               navigation.navigate("Login");
-            }}
-          >
+            }}>
             <Text style={{ fontSize: 20, color: "white" }}> ĐĂNG NHẬP</Text>
           </TouchableOpacity>
 
@@ -74,8 +72,7 @@ export default Home = ({ navigation }) => {
             style={styles.btnRegister}
             onPress={() => {
               navigation.navigate("Resgister");
-            }}
-          >
+            }}>
             <Text style={{ fontSize: 20 }}> ĐĂNG KÝ</Text>
           </TouchableOpacity>
         </View>

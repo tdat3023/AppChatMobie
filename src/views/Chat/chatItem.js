@@ -13,11 +13,11 @@ import Contex from "../../store/Context";
 import { checkUrlIsImage, checkUrlIsSticker } from "../../utilies/Validations";
 // import { convertDateTimeToString, handleDate } from "../../utilies/DateTime";
 
-function ChatItem({ item, navigation }) {
+function ChatItem({ item, navigation, socket }) {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
   const onPress = () => {
-    navigation.navigate("ChatScreen"), { item: item };
+    navigation.navigate("ChatScreen", socket);
 
     // type conversation is false set conversation= conversation, chatUser= userInfo
     depatch(SetIdConversation(item.conversations));
@@ -54,8 +54,7 @@ function ChatItem({ item, navigation }) {
                   item.inFo.avatar.length > 0
                     ? item.inFo.avatar
                     : "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
-              }}
-            ></Image>
+              }}></Image>
           </View>
 
           <View style={styles.bodyContainer}>
@@ -68,8 +67,7 @@ function ChatItem({ item, navigation }) {
                 justifyContent: "space-between",
                 flexDirection: "row",
                 alignItems: "center",
-              }}
-            >
+              }}>
               <Text style={styles.textLastMes}>
                 {/* check lastmess is image , sticker ? render lastmess [image, sticker], check length >10 ? .... */}
                 {item.conversations?.lastMessage[0].type === "NOTIFY" ||
@@ -82,9 +80,7 @@ function ChatItem({ item, navigation }) {
                   : item.conversations.lastMessage[0].content.length > 15
                   ? item.conversations.lastMessage[0].content.slice(0, 20) +
                     " ..."
-                  : item.conversations.lastMessage.map((x) => {
-                      return x.content;
-                    })}
+                  : item.conversations.lastMessage[0].content}
               </Text>
               <Text style={styles.textLastMes}>
                 {/* {handleDate(

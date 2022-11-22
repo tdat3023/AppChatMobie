@@ -7,7 +7,7 @@
  */
 
 import React from "react";
-import  { Node } from "react";
+import { Node } from "react";
 import { useContext, useEffect, useState } from "react";
 import {
   SafeAreaView,
@@ -28,6 +28,7 @@ import {
 } from "react-native/Libraries/NewAppScreen";
 import RootComponent from "./src/views/index";
 import Provider from "./src/store/Provider";
+import { init } from "./src/socket/socketClient";
 
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
@@ -41,8 +42,7 @@ const Section = ({ children, title }) => {
           {
             color: isDarkMode ? Colors.white : Colors.black,
           },
-        ]}
-      >
+        ]}>
         {title}
       </Text>
       <Text
@@ -51,8 +51,7 @@ const Section = ({ children, title }) => {
           {
             color: isDarkMode ? Colors.light : Colors.dark,
           },
-        ]}
-      >
+        ]}>
         {children}
       </Text>
     </View>
@@ -60,6 +59,7 @@ const Section = ({ children, title }) => {
 };
 
 const App = () => {
+  init();
   const isDarkMode = useColorScheme() === "dark";
 
   const backgroundStyle = {

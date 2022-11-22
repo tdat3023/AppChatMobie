@@ -22,7 +22,7 @@ import { checkUrlIsImage, checkUrlIsSticker } from "../../utilies/Validations";
 
 import { convertDateTimeToString, handleDate } from "../../utilies/DateTime";
 
-function ChatGroupItem({ item, navigation }) {
+function ChatGroupItem({ item, navigation, socket }) {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
   const onPress = () => {

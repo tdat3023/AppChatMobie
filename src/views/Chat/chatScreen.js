@@ -26,12 +26,17 @@ import AboutGroupScreen from "./aboutGroup";
 import Contex from "../../store/Context";
 import messageApi from "../../api/messageApi";
 import { Dimensions } from "react-native";
-import { launchCamera, launchImageLibrary } from "react-native-image-picker";
-import ImagePicker from "react-native-image-picker";
+
+// import { launchCamera, launchImageLibrary } from "react-native-image-picker";
+// import ImagePicker from "react-native-image-picker";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default ChatScreen = ({ navigation }) => {
+import socket from "../../socket/socketClient";
+
+export default ChatScreen = ({ props, navigation, route }) => {
+  const socket = route.params;
+
   const [onFocus, setOnFocus] = useState(false);
   // const {item} = route.params;
   const [typing, setTyping] = useState(false);
@@ -39,7 +44,9 @@ export default ChatScreen = ({ navigation }) => {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
   const [listMessgae, setListMessage] = useState([]);
-
+  // if (socket) {
+  //   console.log("socket", socket);
+  // }
   const onFoucsInPut = () => {
     setOnFocus(!onFocus);
   };
@@ -76,6 +83,25 @@ export default ChatScreen = ({ navigation }) => {
     fetchMessages();
   }, [userChatting]);
 
+  useEffect(() => {
+    socket.current?.emit("join-room", {
+      idCon: idConversation._id,
+      // isNew:false
+    });
+
+    socket.current?.on("get-message", ({ senderId, message }) => {
+      //console.log("get");
+      if (senderId === user.uid) {
+        console.log("send nhung k them vao list ---> ");
+      } else {
+        console.log("mess nhan dc ---> ");
+
+        // console.log(message);
+        setListMessage((prev) => [...prev, { ...message }]);
+      }
+    });
+  }, []);
+
   const handSendMess = async () => {
     //create new message
     const newMessSend = {
@@ -87,12 +113,30 @@ export default ChatScreen = ({ navigation }) => {
     console.log(newMessSend);
     const messSave = await messageApi.addTextMess(newMessSend);
 
-    // console.log("mess send", messSave);
+    //  console.log("mess send", messSave);
+
     setListMessage((prev) => [...prev, { ...messSave }]);
     setNewMess("");
 
     //call soket in here
+
+    if (socket) {
+      if (socket.current) {
+        socket.current.emit("send-message", {
+          senderId: user.uid,
+          receiverId: userChatting.userIdFriend,
+          message: messSave,
+          idCon: idConversation._id,
+        });
+        console.log("sender", user.uid);
+        console.log("rec", userChatting.userIdFriend);
+      }
+      console.log("send");
+    }
   };
+  // if (socket) {
+  //   console.log("socket connected", socket);
+  // }
 
   // UI send mes
   const handleChangText = (text) => {
@@ -168,8 +212,7 @@ export default ChatScreen = ({ navigation }) => {
               style={{ alignItems: "center", marginLeft: 10 }}
               onPress={() => {
                 navigation.goBack();
-              }}
-            >
+              }}>
               <Ionicons name="arrow-back" size={28} color="black" />
             </TouchableOpacity>
             <View style={styles.nameFriend}>
@@ -199,8 +242,7 @@ export default ChatScreen = ({ navigation }) => {
               }}
               onPress={() => {
                 aboutScreen();
-              }}
-            >
+              }}>
               <Ionicons name="menu" size={24} color="black" />
             </TouchableOpacity>
           </View>
@@ -214,8 +256,7 @@ export default ChatScreen = ({ navigation }) => {
               !onFocus
                 ? { height: windowHeight - 140 }
                 : { height: windowHeight - 400 },
-            ]}
-          >
+            ]}>
             <View style={styles.bodyListChat}>
               <FlatList
                 // invertStickyHeaders={false}
@@ -242,8 +283,8 @@ export default ChatScreen = ({ navigation }) => {
                 onFocus={onFoucsInPut}
                 onBlur={onFoucsInPut}
                 onSubmitEditing={handSendMess}
-                placeholder="Tin nhắn"
-              ></TextInput>
+                blurOnSubmit={false}
+                placeholder="Tin nhắn"></TextInput>
             </View>
 
             {/* input */}
