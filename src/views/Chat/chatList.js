@@ -11,9 +11,7 @@ import {
   TextInput,
   Dimensions,
 } from "react-native";
-import axios from "axios";
 import io from "socket.io-client";
-
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -25,12 +23,27 @@ import Contex from "../../store/Context";
 
 import { SetUser } from "../../store/Actions";
 import { each } from "immer/dist/internal";
+import CardUser from "../component/CardUser";
+//import UserService from "../../services/UserService";
+
+import { db } from "../../firebase/firebaseDB";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  getDoc,
+  doc,
+  query,
+  where,
+} from "firebase/firestore/lite";
 
 export default ChatApp = function ({ navigation }) {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
+  const [userSearedList, setSearchedList] = useState([]);
   const [conversations, setConversations] = useState([]);
 
+  console.log(userSearedList);
   const socket = React.useRef();
   // console.log("user:", user.user.uid);
 
@@ -80,7 +93,7 @@ export default ChatApp = function ({ navigation }) {
     };
 
     fetchConversations();
-  }, [conversations]);
+  }, [user]);
 
   //  check type conversation ? render groupChatItem : render ChatItem
   const renderItem = ({ item }) => {
@@ -94,7 +107,8 @@ export default ChatApp = function ({ navigation }) {
         <ChatItem
           item={item}
           navigation={navigation}
-          socket={socket}></ChatItem>
+          socket={socket}
+        ></ChatItem>
       );
     }
   };
@@ -102,13 +116,47 @@ export default ChatApp = function ({ navigation }) {
   // sreach
   const [typing, setTyping] = useState(false);
   const [sreachText, setSreachText] = useState("");
-  const handleChangText = (text) => {
+  //tim kiem
+  const handleChangText = async (text) => {
     if (text.length > 0) {
       setTyping(true);
     } else if (text.length === 0) {
       setTyping(false);
     }
     setSreachText(text);
+    const q = query(collection(db, "users"), where("email", "==", text));
+    const newArr = [];
+
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc.id, " => ", doc.data());
+      newArr.push(doc.data());
+    });
+    setSearchedList(newArr);
+  };
+
+  const search = async () => {
+    // Get a list of cities from your database
+    // console.log("click");
+    // // UserService.getUserByEmail("h@gmail.com");
+    // const q = query(
+    //   collection(db, "users"),
+    //   where("email", "==", "h@gmail.com")
+    // );
+    // const querySnapshot = await getDocs(q);
+    // querySnapshot.forEach((doc) => {
+    //   // doc.data() is never undefined for query doc snapshots
+    //   console.log(doc.id, " => ", doc.data());
+    // });
+    // const docRef = doc(db, "users", "hoanganh1410tb@gmail.com");
+    // const docSnap = await getDoc(docRef);
+    // if (docSnap.exists()) {
+    //   console.log("Document data:", docSnap.data());
+    // } else {
+    //   // doc.data() will be undefined in this case
+    //   console.log("No such document!");
+    // }
   };
 
   return (
@@ -119,9 +167,8 @@ export default ChatApp = function ({ navigation }) {
           <View style={styles.sreach}>
             <TouchableOpacity
               style={{ alignItems: "center", marginLeft: 10 }}
-              onPress={() => {
-                alert(sreachText);
-              }}>
+              onPress={() => search()}
+            >
               <AntDesign name="search1" size={24} color="white" />
             </TouchableOpacity>
             {/* sreach input */}
@@ -129,7 +176,8 @@ export default ChatApp = function ({ navigation }) {
               style={styles.textTopTag}
               value={sreachText}
               onChangeText={(text) => handleChangText(text)}
-              placeholder="Tìm kiếm"></TextInput>
+              placeholder="Tìm kiếm"
+            ></TextInput>
           </View>
 
           <View style={styles.moreTag}>
@@ -158,19 +206,33 @@ export default ChatApp = function ({ navigation }) {
           <View style={styles.listSreach}>
             {/* List sreach */}
             <View style={styles.bodyListSreach}>
-              <FlatList
+              <Text
+                style={{
+                  textAlign: "left",
+                  fontSize: 14,
+                  marginHorizontal: 12,
+                  marginVertical: 12,
+                }}
+              >
+                Tìm qua email:
+              </Text>
+              {/* <Text style={{textAlign:"center", marginTop:40}}>Email chưa đăng ký tài khoản</Text> */}
+              {/* <FlatList
                 contentContainerStyle={{ paddingBottom: 100 }}
                 style={styles.bodyList}
                 data={conversations}
                 renderItem={renderItem}
                 // keyExtractor={(item) => item.conversations._id}
-              ></FlatList>
+              ></FlatList> */}
+              {userSearedList.map((val) => {
+                return <CardUser value={val} key={Math.random()} />;
+              })}
             </View>
           </View>
         ) : (
           <View style={styles.listConversation}>
             {/* phan loai */}
-            <View style={styles.topTagMenu}>
+            {/* <View style={styles.topTagMenu}>
               <View>
                 <TouchableOpacity>
                   <Text style={styles.text1}>TIN NHẮN</Text>
@@ -181,7 +243,7 @@ export default ChatApp = function ({ navigation }) {
                   <Text style={styles.text1}>TIN CHỜ</Text>
                 </TouchableOpacity>
               </View>
-            </View>
+            </View> */}
             {/* list chat */}
             <View style={styles.bodyListChat}>
               <FlatList
@@ -311,7 +373,7 @@ const styles = StyleSheet.create({
   },
 
   listSreach: {
-    backgroundColor: "red",
+    backgroundColor: "white",
     flex: 1,
   },
   listConversation: {
@@ -320,6 +382,5 @@ const styles = StyleSheet.create({
 
   bodyListSreach: {
     width: "100%",
-    alignItems: "center",
   },
 });

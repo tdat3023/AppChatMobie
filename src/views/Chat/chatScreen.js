@@ -35,6 +35,14 @@ const windowHeight = Dimensions.get("window").height;
 import socket from "../../socket/socketClient";
 
 export default ChatScreen = ({ props, navigation, route }) => {
+ 
+  // const [panigation, setPanigation] = React.useState({ page: 0, size: 50 });
+  // const [page, setPage] = React.useState(0);
+
+  // const scrollToBottom = () => {
+  //   // messagesEnd.current.scrollToEnd({ animated: true });
+  // };
+
   const socket = route.params;
 
   const [onFocus, setOnFocus] = useState(false);
@@ -54,6 +62,11 @@ export default ChatScreen = ({ props, navigation, route }) => {
     Keyboard.dismiss;
     setOnFocus(!onFocus);
   };
+
+  // useEffect(() => {
+  //   //scroll last message
+  //   scrollToBottom();
+  // });
 
   const [newMess, setNewMess] = useState("");
   //console.log(listMessgae);
@@ -212,7 +225,8 @@ export default ChatScreen = ({ props, navigation, route }) => {
               style={{ alignItems: "center", marginLeft: 10 }}
               onPress={() => {
                 navigation.goBack();
-              }}>
+              }}
+            >
               <Ionicons name="arrow-back" size={28} color="black" />
             </TouchableOpacity>
             <View style={styles.nameFriend}>
@@ -242,7 +256,8 @@ export default ChatScreen = ({ props, navigation, route }) => {
               }}
               onPress={() => {
                 aboutScreen();
-              }}>
+              }}
+            >
               <Ionicons name="menu" size={24} color="black" />
             </TouchableOpacity>
           </View>
@@ -256,12 +271,14 @@ export default ChatScreen = ({ props, navigation, route }) => {
               !onFocus
                 ? { height: windowHeight - 140 }
                 : { height: windowHeight - 400 },
-            ]}>
+            ]}
+          >
             <View style={styles.bodyListChat}>
               <FlatList
                 // invertStickyHeaders={false}
+                inverted={true}
                 style={styles.bodyList}
-                data={listMessgae}
+                data={(() => [...listMessgae].reverse())()}
                 renderItem={({ item }) => (
                   <MessengerItem messend={item}></MessengerItem>
                 )}
@@ -270,6 +287,10 @@ export default ChatScreen = ({ props, navigation, route }) => {
             </View>
           </View>
 
+          {/* <View
+            style={{ float: "left", clear: "both" }}
+            ref={messagesEnd}
+          ></View> */}
           {/*Footer */}
           <View style={styles.footerContainer}>
             <View style={styles.inputMess}>
@@ -284,7 +305,8 @@ export default ChatScreen = ({ props, navigation, route }) => {
                 onBlur={onFoucsInPut}
                 onSubmitEditing={handSendMess}
                 blurOnSubmit={false}
-                placeholder="Tin nhắn"></TextInput>
+                placeholder="Tin nhắn"
+              ></TextInput>
             </View>
 
             {/* input */}

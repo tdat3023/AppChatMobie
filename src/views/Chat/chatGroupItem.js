@@ -32,7 +32,7 @@ function ChatGroupItem({ item, navigation, socket }) {
     depatch(SetUserChatting(item.inFo));
   };
 
-  console.log("image", item.inFo.avatar);
+  //  console.log("image", item.inFo.avatar);
 
   function renderImaAvatar() {
     if (item.inFo.avatar.length == 2) {
@@ -104,7 +104,7 @@ function ChatGroupItem({ item, navigation, socket }) {
       <TouchableOpacity onPress={onPress}>
         <View style={styles.chatBox}>
           {/* ảnh đại diện */}
-          <View style={styles.imaContainer}>{renderImaAvatar()}</View>
+          {/* <View style={styles.imaContainer}>{renderImaAvatar()}</View> */}
 
           <View style={styles.bodyContainer}>
             {/* tên */}
@@ -153,7 +153,7 @@ function ChatGroupItem({ item, navigation, socket }) {
             </View>
           </View>
 
-          <View style={styles.notification}>
+          {/* <View style={styles.notification}>
             <Ionicons name="notifications-outline" size={24} color="black" />
             {item.conversations.mb.numberUnread > 0 && (
               <View
@@ -168,7 +168,7 @@ function ChatGroupItem({ item, navigation, socket }) {
                 <Text>{item.conversations.mb.numberUnread}</Text>
               </View>
             )}
-          </View>
+          </View> */}
         </View>
       </TouchableOpacity>
     </View>
@@ -230,7 +230,7 @@ const styles = StyleSheet.create({
   bodyContainer: {
     flex: 1,
     justifyContent: "center",
-    borderBottomWidth: 0.8,
+    // borderBottomWidth: 0.8,
     marginLeft: 10,
   },
 
