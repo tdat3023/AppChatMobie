@@ -231,7 +231,7 @@ const CreateAboutScreen = ({ navigation }) => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("AddFriend");
+              navigation.navigate("AddGroup");
             }}
           >
             <View style={styles.viewItem}>

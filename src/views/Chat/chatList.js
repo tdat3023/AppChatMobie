@@ -1,5 +1,4 @@
 import React from "react";
-
 import { useState, useEffect, useRef } from "react";
 import {
   View,
@@ -94,7 +93,8 @@ export default ChatApp = function ({ navigation }) {
         <ChatItem
           item={item}
           navigation={navigation}
-          socket={socket}></ChatItem>
+          socket={socket}
+        ></ChatItem>
       );
     }
   };
@@ -121,7 +121,8 @@ export default ChatApp = function ({ navigation }) {
               style={{ alignItems: "center", marginLeft: 10 }}
               onPress={() => {
                 alert(sreachText);
-              }}>
+              }}
+            >
               <AntDesign name="search1" size={24} color="white" />
             </TouchableOpacity>
             {/* sreach input */}
@@ -129,7 +130,8 @@ export default ChatApp = function ({ navigation }) {
               style={styles.textTopTag}
               value={sreachText}
               onChangeText={(text) => handleChangText(text)}
-              placeholder="Tìm kiếm"></TextInput>
+              placeholder="Tìm kiếm"
+            ></TextInput>
           </View>
 
           <View style={styles.moreTag}>
@@ -141,13 +143,12 @@ export default ChatApp = function ({ navigation }) {
               />
             </TouchableOpacity>
 
-            <TouchableOpacity>
-              <Ionicons
-                style={{ marginLeft: 15, marginRight: 5 }}
-                name="add-sharp"
-                size={28}
-                color="white"
-              />
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("AddGroup");
+              }}
+            >
+              <AntDesign name="addusergroup" size={24} color="white" />
             </TouchableOpacity>
           </View>
         </View>
@@ -214,7 +215,8 @@ const styles = StyleSheet.create({
   },
 
   moreTag: {
-    marginLeft: 10,
+    marginHorizontal: 10,
+    width: 60,
     justifyContent: "space-between",
     flexDirection: "row",
     alignItems: "center",

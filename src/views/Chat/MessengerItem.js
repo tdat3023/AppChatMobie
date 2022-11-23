@@ -12,6 +12,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import Contex from "../../store/Context";
 import { checkUrlIsImage, checkUrlIsSticker } from "../../utilies/Validations";
 import { convertDateTimeToString, handleDate } from "../../utilies/DateTime";
+// import ActionModal from "./actionmodal";
 function MessengerItem({ messend, props, route }) {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
@@ -20,7 +21,9 @@ function MessengerItem({ messend, props, route }) {
   const onPressRenderTime = () => {
     setPressOnPin(!pressOn);
     console.log("type", messend.content);
+    //showActionModal();
   };
+
   return (
     <View style={styles.viewOne}>
       <TouchableOpacity onPress={onPressRenderTime}>
@@ -37,7 +40,8 @@ function MessengerItem({ messend, props, route }) {
                   style={styles.imaAvatar}
                   source={{
                     uri: "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
-                  }}></Image>
+                  }}
+                ></Image>
                 <View>
                   <View
                     style={[
@@ -69,7 +73,8 @@ function MessengerItem({ messend, props, route }) {
                       {
                         width: messend.content.length > 40 ? "80%" : "auto",
                       },
-                    ]}>
+                    ]}
+                  >
                     <Text style={{ fontWeight: "bold" }}>
                       {idConversation.type ? (
                         userChatting.userInfo.map((user) => {
@@ -114,7 +119,8 @@ function MessengerItem({ messend, props, route }) {
                       pressOn
                         ? { marginLeft: 20, marginTop: 10 }
                         : { margin: 0 },
-                    ]}>
+                    ]}
+                  >
                     {/* check time mess  receive with current time ? set time is hours or date */}
                     {pressOn ? (
                       differenceInCalendarDays(
@@ -197,7 +203,8 @@ function MessengerItem({ messend, props, route }) {
                       {
                         width: messend.content.length > 40 ? "80%" : "auto",
                       },
-                    ]}>
+                    ]}
+                  >
                     {messend.content}
                   </Text>
                 )}
@@ -206,7 +213,8 @@ function MessengerItem({ messend, props, route }) {
                     pressOn
                       ? { marginRight: 20, marginTop: 10 }
                       : { margin: 0 },
-                  ]}>
+                  ]}
+                >
                   {/* check time mess send  with current time ? set time is hours or date */}
                   {pressOn ? (
                     // >1 is date
@@ -245,6 +253,7 @@ function MessengerItem({ messend, props, route }) {
           </View>
         </View>
       </TouchableOpacity>
+      {/* <ActionModal ref={"actionModal"}></ActionModal> */}
     </View>
   );
 }

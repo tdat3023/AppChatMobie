@@ -212,7 +212,8 @@ export default ChatScreen = ({ props, navigation, route }) => {
               style={{ alignItems: "center", marginLeft: 10 }}
               onPress={() => {
                 navigation.goBack();
-              }}>
+              }}
+            >
               <Ionicons name="arrow-back" size={28} color="black" />
             </TouchableOpacity>
             <View style={styles.nameFriend}>
@@ -242,7 +243,8 @@ export default ChatScreen = ({ props, navigation, route }) => {
               }}
               onPress={() => {
                 aboutScreen();
-              }}>
+              }}
+            >
               <Ionicons name="menu" size={24} color="black" />
             </TouchableOpacity>
           </View>
@@ -256,7 +258,8 @@ export default ChatScreen = ({ props, navigation, route }) => {
               !onFocus
                 ? { height: windowHeight - 140 }
                 : { height: windowHeight - 400 },
-            ]}>
+            ]}
+          >
             <View style={styles.bodyListChat}>
               <FlatList
                 // invertStickyHeaders={false}
@@ -284,7 +287,8 @@ export default ChatScreen = ({ props, navigation, route }) => {
                 onBlur={onFoucsInPut}
                 onSubmitEditing={handSendMess}
                 blurOnSubmit={false}
-                placeholder="Tin nhắn"></TextInput>
+                placeholder="Tin nhắn"
+              ></TextInput>
             </View>
 
             {/* input */}

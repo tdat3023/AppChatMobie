@@ -13,7 +13,7 @@ import ChatScreen from "./Chat/chatScreen";
 import Resgister from "./Login/resgister";
 import CreateAboutScreen from "./Chat/about";
 import AboutGroupScreen from "./Chat/aboutGroup";
-import AddFriend from "./Contacts/addGroup";
+import AddGroup from "./Contacts/addGroup";
 import { firebase } from "../firebase/firebaseDB";
 import "firebase/compat/auth";
 
@@ -112,7 +112,7 @@ export default RootComponent = function () {
         <Stack.Screen name="Resgister" component={Resgister} />
         <Stack.Screen name="CreateAboutScreen" component={CreateAboutScreen} />
         <Stack.Screen name="AboutGroupScreen" component={AboutGroupScreen} />
-        <Stack.Screen name="AddFriend" component={AddFriend} />
+        <Stack.Screen name="AddGroup" component={AddGroup} />
 
         <Stack.Screen name="Password" component={PasswordRes} />
       </Stack.Navigator>

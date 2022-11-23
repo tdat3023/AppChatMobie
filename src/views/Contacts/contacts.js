@@ -119,10 +119,7 @@ const Contact = ({ navigation }) => {
             <FlatList
               style={styles.bodyList}
               data={users}
-              renderItem={({ item }) => (
-                // <FriendItem item={item} />
-                <FriendRequest item={item} />
-              )}
+              renderItem={({ item }) => <FriendRequest />}
               // keyExtractor={(item) => item.id}
             ></FlatList>
           </View>

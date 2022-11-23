@@ -8,27 +8,20 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  ImageBackground,
   SafeAreaView,
   Image,
   TextInput,
-  ScrollView,
   Dimensions,
-  Platform,
-  StatusBar,
-  RefreshControl,
 } from "react-native";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Feather from "react-native-vector-icons/Feather";
-import FriendItem from "./FriendItem";
-import FriendRequest from "./friendRequest";
+import AddGroupItem from "./addGroupItem";
 
 const WinWidth = Dimensions.get("window").width;
 const WinHeight = Dimensions.get("window").height;
 
-const AddFriend = ({ navigation }) => {
+const AddGroup = ({ navigation }) => {
   const [users, setUsers] = useState([
     {
       id: "1",
@@ -36,87 +29,148 @@ const AddFriend = ({ navigation }) => {
       name: "Tiến Đạt",
       lastMessage: "Hello",
     },
+    {
+      id: "2",
+      url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
+      name: "Tiến Đạt",
+      lastMessage: "Hello",
+    },
+    {
+      id: "3",
+      url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
+      name: "Tiến Đạt",
+      lastMessage: "Hello",
+    },
+    {
+      id: "4",
+      url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
+      name: "Tiến Đạt",
+      lastMessage: "Hello",
+    },
+    {
+      id: "5",
+      url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
+      name: "Tiến Đạt",
+      lastMessage: "Hello",
+    },
+    {
+      id: "6",
+      url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
+      name: "Tiến Đạt",
+      lastMessage: "Hello",
+    },
+    {
+      id: "7",
+      url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
+      name: "Tiến Đạt",
+      lastMessage: "Hello",
+    },
+    {
+      id: "8",
+      url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
+      name: "Tiến Đạt",
+      lastMessage: "Hello",
+    },
+    {
+      id: "9",
+      url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
+      name: "Tiến Đạt",
+      lastMessage: "Hello",
+    },
   ]);
 
-  const [Refreshing, setRefreshing] = useState(false);
-  const onRefresh = () => {
-    setRefreshing(true);
-    setItems([...Items, { key: 100, item: "Item100" }]);
+  const [count, setCount] = useState(0);
 
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 3000);
-  };
-  const [typing, setTyping] = useState(false);
+  console.log(count);
 
   return (
     <SafeAreaView>
       <View style={styles.container}>
         {/* button back */}
+
         <View style={styles.topTag}>
           <TouchableOpacity style={{ alignItems: "center", marginLeft: 10 }}>
-            <AntDesign name="search1" size={24} color="white" />
+            <Ionicons name="arrow-back" size={30} color="gray" />
           </TouchableOpacity>
-          <View style={styles.sreach}>
-            <TextInput
-              style={styles.textTopTag}
-              placeholder="Tìm kiếm"
-              placeholderTextColor="white"
-            ></TextInput>
+          <View style={styles.topTag1}>
+            <Text style={{ fontSize: 20 }}>Nhóm mới</Text>
+            <Text>
+              Đã chọn:
+              <Text> {count} </Text>
+            </Text>
+          </View>
+        </View>
+
+        {/* tên nhóm */}
+        <View style={{ alignItems: "center" }}>
+          <View style={styles.topTag0}>
+            <TouchableOpacity style={{ alignItems: "center", marginLeft: 10 }}>
+              <AntDesign name="camera" size={28} color="gray" />
+            </TouchableOpacity>
+            <View style={styles.sreach}>
+              <TextInput
+                style={styles.textTopTag}
+                placeholder="Đặt tên nhóm"
+                placeholderTextColor="gray"
+              ></TextInput>
+            </View>
           </View>
 
-          <View style={styles.moreTag}>
-            <TouchableOpacity>
-              <Ionicons name="person-add" size={24} color="white" />
+          {/* sreach */}
+          <View style={styles.topTag2}>
+            <TouchableOpacity style={{ alignItems: "center", marginLeft: 10 }}>
+              <AntDesign name="search1" size={24} color="gray" />
             </TouchableOpacity>
+            <View style={styles.sreach}>
+              <TextInput
+                style={styles.textTopTag}
+                placeholder="Tìm kiếm"
+                placeholderTextColor="gray"
+              ></TextInput>
+            </View>
           </View>
         </View>
 
         {/* List */}
-
         <View style={styles.bodyListChat}>
           <FlatList
             style={styles.bodyList}
             data={users}
             renderItem={({ item }) => (
-              <View style={styles.viewOne}>
-                <View style={styles.chatBox}>
-                  {/* ảnh đại diện */}
-                  <View style={styles.imaContainer}>
-                    <Image
-                      style={styles.imaAvatar}
-                      source={{ uri: item.url }}
-                    ></Image>
-                    <View style={styles.status}></View>
-                  </View>
+              <AddGroupItem item={item} setCount={setCount} count={count} />
+            )}
+            keyExtractor={(item) => item.id}
+          ></FlatList>
+        </View>
 
-                  <View style={styles.bodyContainer}>
-                    {/* tên */}
-                    <Text style={styles.textName}>Ten o day</Text>
-                  </View>
+        <View style={styles.footer}>
+          <View style={styles.listChoose}>
+            <FlatList
+              horizontal
+              // style={{ justifyContent: "center" }}
+              data={users}
+              renderItem={({ item }) => (
+                <View style={styles.itemChoose}>
+                  <Image
+                    style={styles.imaAvatar}
+                    source={{ uri: item.url }}
+                  ></Image>
 
-                  <View style={styles.notification}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        setTyping(!typing);
-                      }}
-                    >
-                      {typing ? (
-                        <Ionicons name="checkbox" size={24} color="black" />
-                      ) : (
-                        <Ionicons
-                          name="checkbox-outline"
-                          size={24}
-                          color="black"
-                        />
-                      )}
+                  <View style={styles.status}>
+                    <TouchableOpacity>
+                      <AntDesign name="close" size={14} color="black" />
                     </TouchableOpacity>
                   </View>
                 </View>
-              </View>
-            )}
-            // keyExtractor={(item) => item.id}
-          ></FlatList>
+              )}
+              keyExtractor={(item) => item.id}
+            ></FlatList>
+          </View>
+          <View style={styles.viewbtn}>
+            <TouchableOpacity style={styles.btn}>
+              <Feather name="arrow-right" size={30} color="white" />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </SafeAreaView>
@@ -127,7 +181,7 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     height: "100%",
-    backgroundColor: "yellow",
+    // flex: 1,
   },
 
   sreach: {
@@ -144,23 +198,35 @@ const styles = StyleSheet.create({
 
   topTag: {
     width: "100%",
-    height: 50,
+    height: 55,
     backgroundColor: "#66B2FF",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-around",
-  },
-  textTopTag: {
-    fontSize: 20,
-  },
-
-  topTagMenu: {
-    width: "100%",
-    height: 50,
     borderBottomWidth: 1,
+  },
+  topTag0: {
+    width: "90%",
+    height: 50,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-around",
+  },
+
+  topTag2: {
+    width: "90%",
+    height: 50,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#D6E4E5",
+    borderRadius: 10,
+  },
+
+  topTag1: {
+    marginLeft: 10,
+    flexDirection: "column",
+  },
+
+  textTopTag: {
+    fontSize: 20,
   },
 
   text1: {
@@ -172,67 +238,62 @@ const styles = StyleSheet.create({
     color: "blue",
   },
 
-  viewOne: {
-    width: "100%",
-    height: 90,
-    justifyContent: "center",
-    alignItems: "center",
+  bodyListChat: {
+    flex: 1,
   },
 
-  chatBox: {
+  footer: {
     width: "100%",
-    height: 90,
+    height: 60,
     flexDirection: "row",
+    alignItems: "center",
+    borderTopWidth: 1,
   },
 
-  imaContainer: {
+  btn: {
+    marginRight: 5,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "#66B2FF",
     justifyContent: "center",
     alignItems: "center",
   },
 
   imaAvatar: {
-    marginLeft: 10,
-    height: 60,
-    width: 60,
+    height: 50,
+    width: 50,
     borderRadius: 100,
     backgroundColor: "red",
   },
 
-  bodyContainer: {
-    marginLeft: 10,
-    paddingRight: 10,
-    paddingLeft: 10,
+  listChoose: {
     flex: 1,
-    height: 90,
-    borderBottomWidth: 1,
     justifyContent: "center",
+    marginTop: 5,
+    marginHorizontal: 10,
+    backgroundColor: "yellow",
   },
 
-  notification: {
-    width: "20%",
-    paddingRight: 13,
+  itemChoose: {
     alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    height: 90,
-    borderBottomWidth: 1,
-  },
-
-  textName: {
-    paddingLeft: 15,
-    fontSize: 20,
-    fontWeight: "bold",
+    justifyContent: "center",
+    backgroundColor: "red",
+    borderRadius: 50,
+    height: 50,
+    width: 50,
+    marginRight: 10,
   },
 
   status: {
     position: "absolute",
-    top: 65,
-    left: 55,
-    backgroundColor: "green",
-    height: 10,
-    width: 10,
-    borderRadius: 10,
+    top: 0,
+    right: 0,
+    height: 15,
+    width: 15,
+    backgroundColor: "gray",
+    borderRadius: 20,
   },
 });
 
-export default AddFriend;
+export default AddGroup;
