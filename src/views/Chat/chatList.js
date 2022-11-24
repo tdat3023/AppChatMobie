@@ -23,7 +23,7 @@ import ChatGroupItem from "./chatGroupItem";
 import conversationApi from "../../api/conversationApi";
 import Contex from "../../store/Context";
 
-import { SetUser } from "../../store/Actions";
+import { SetUser, SetSocket } from "../../store/Actions";
 import { each } from "immer/dist/internal";
 
 export default ChatApp = function ({ navigation }) {
@@ -36,15 +36,13 @@ export default ChatApp = function ({ navigation }) {
 
   // console.log(typeof conversationApi);
   useEffect(() => {
-    // setA("b");
     if (user) {
       socket.current = io("https://13.228.206.211");
-      // socket.current = io("http://localhost:5005");
-      // console.log(socket);
+
+      console.log(socket);
       socket.current.emit("start", user);
 
-      //console.log("dau buoi");
-      //socket.current.emit("start", user);
+      depatch(SetSocket(socket));
     }
   }, [user]);
   useEffect(() => {
@@ -55,11 +53,11 @@ export default ChatApp = function ({ navigation }) {
       socket.current.emit("join-conversations", ids);
     }
   }, [user, conversations]);
-  // console.log("socket", user);
+
   React.useEffect(() => {
     // //get api set list conversation
     // //fetch product in wishlist
-    // depatch(SetUser("HiIaKOEh8qTzOfTF1Va0Z6z61Qz2"));
+
     const fetchConversations = async () => {
       // console.log("user:", user.user.uid);
       try {
@@ -79,8 +77,45 @@ export default ChatApp = function ({ navigation }) {
       }
     };
 
+    socket.current?.on("get-message", ({ senderId, message }) => {
+      fetchConversations();
+    });
+    socket.current?.on(
+      " create-conversation-was-friend",
+      (conversationId, message) => {
+        console.log("Conversationid", conversationId);
+        fetchConversations();
+      }
+    );
+
     fetchConversations();
-  }, [conversations]);
+  }, [user]);
+
+  React.useEffect(() => {
+    // //get api set list conversation
+    // //fetch product in wishlist
+
+    const fetchConversations = async () => {
+      // console.log("user:", user.user.uid);
+      try {
+        // user.uid,page,size
+        const response = await conversationApi.getConversations(
+          user.uid,
+          0,
+          200
+        );
+        const { data, page, size, totalPages } = response;
+        console.log("data", data);
+        if (response) {
+          setConversations(data);
+        }
+      } catch (error) {
+        console.log("Failed to fetch conversation list: ", error);
+      }
+    };
+
+    fetchConversations();
+  }, [idConversation]);
 
   //  check type conversation ? render groupChatItem : render ChatItem
   const renderItem = ({ item }) => {

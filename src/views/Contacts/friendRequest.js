@@ -1,40 +1,100 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 
 import React from "react";
+import friendApi from "../../api/friendApi";
+import Contex from "../../store/Context";
 
-export default function FriendRequest(item) {
+export default function FriendRequest({ item }) {
+  const { state, depatch } = React.useContext(Contex);
+  const { user, userSearched, idConversation, userChatting } = state;
+
+  const handDeleteInvite = async () => {
+    try {
+      await friendApi
+        .deleteInvite(user.uid, item.inviteId)
+        .then(console.log("ok"));
+      console.log("idinvite", item.inviteId);
+    } catch (error) {
+      console.log("errors");
+    }
+  };
+  const handAceptFriend = async () => {
+    console.log("handAceptFriend");
+    try {
+      const { conversationId } = await friendApi.acceptFriend(
+        user.uid,
+        item.inviteId
+      );
+      console.log("acceptFriend", conversationId);
+      //console.log("idinvite", item.inviteId);
+    } catch (error) {
+      console.log("errors acceptFriend");
+    }
+  };
+
+  //console.log("item", item);
   return (
     <View style={styles.viewOne}>
       {/* ảnh đại diện */}
       <View style={styles.imaContainer}>
-        <Image style={styles.imaAvatar} source={{ uri: item.url }}></Image>
+        {item.avaUser == "" ? (
+          <Image
+            style={styles.imaAvatar}
+            source={{
+              uri: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
+            }}></Image>
+        ) : (
+          <Image
+            style={styles.imaAvatar}
+            source={{
+              uri: item.avaUser,
+            }}></Image>
+        )}
       </View>
 
       {/* Thông tin */}
       <View style={styles.infoContainer}>
         <View style={styles.headerContainer}>
           {/* tên */}
-          <Text style={styles.textName}>Nguyễn Tiến Đạt</Text>
-          <Text style={styles.textDate}>21/10</Text>
+          <Text style={styles.textName}>
+            {item.userFistName} {item.userLastName}
+          </Text>
+          <View
+            style={[
+              styles.viewGroupCommon,
+              { justifyContent: "space-evenly" },
+            ]}>
+            <View style={styles.viewGroupCommon}>
+              <View style={styles.viewDot}></View>
+              <Text style={styles.textDate}>Nhom chung: </Text>
+              <Text style={styles.textDate}>{item.numCommonGroup}</Text>
+            </View>
+
+            <View style={styles.viewGroupCommon}>
+              <View style={styles.viewDot}></View>
+              <Text style={styles.textDate}>Ban chung: </Text>
+              <Text style={styles.textDate}>{item.numCommonFriend}</Text>
+            </View>
+          </View>
         </View>
 
         {/* lời nhắn */}
-        <View style={styles.bodyContainer}>
+        {/* <View style={styles.bodyContainer}>
           <Text style={styles.text}>
             Xin chào, mình là Nguyễn Tiến Đạt. Kết bạn với mình nhé!
           </Text>
-        </View>
+        </View> */}
 
         {/* nút */}
         <View style={styles.footerContainer}>
           <TouchableOpacity
-            style={[styles.btn, { backgroundColor: "#CCCCCC" }]}
-          >
+            onPress={handDeleteInvite}
+            style={[styles.btn, { backgroundColor: "#CCCCCC" }]}>
             <Text>TỪ CHỐI</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.btn, { backgroundColor: "#66B2FF" }]}
-          >
+            onPress={handAceptFriend}
+            style={[styles.btn, { backgroundColor: "#66B2FF" }]}>
             <Text>ĐỒNG Ý</Text>
           </TouchableOpacity>
         </View>
@@ -47,7 +107,7 @@ const styles = StyleSheet.create({
   viewOne: {
     width: "100%",
     flexDirection: "row",
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.2,
   },
 
   imaAvatar: {
@@ -62,13 +122,13 @@ const styles = StyleSheet.create({
   infoContainer: {},
 
   textName: {
-    paddingLeft: 15,
+    paddingLeft: 30,
     fontSize: 20,
     fontWeight: "bold",
   },
 
   textDate: {
-    paddingLeft: 15,
+    //paddingLeft: 15,
   },
 
   headerContainer: {
@@ -93,7 +153,7 @@ const styles = StyleSheet.create({
 
   footerContainer: {
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "space-around",
     marginBottom: 10,
   },
 
@@ -103,5 +163,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 20,
+    marginLeft: 20,
+  },
+  viewDot: {
+    height: 7,
+    width: 7,
+    borderRadius: 100,
+    backgroundColor: "gray",
+    marginRight: 10,
+  },
+  viewGroupCommon: {
+    flexDirection: "row",
+    //justifyContent: "center",
+    alignItems: "center",
   },
 });

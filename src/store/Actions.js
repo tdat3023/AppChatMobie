@@ -14,6 +14,8 @@ export const SET_INDEXTAB = "set_IndexTab";
 export const SET_USERCHATTING = "set_UserChatting";
 export const SET_SEARCHEDUSERS = "set_SearchUsers";
 export const SET_IDCONVERSATION = "set_IdConversation";
+export const SET_SOCKET = "set_Socket";
+
 export const SetIsSignedIn = (payload) => {
   return {
     type: SET_ISSIGNEDIN,
@@ -104,6 +106,12 @@ export const SetSearchedUser = (payload) => {
 export const SetIdConversation = (payload) => {
   return {
     type: SET_IDCONVERSATION,
+    payload,
+  };
+};
+export const SetSocket = (payload) => {
+  return {
+    type: SET_SOCKET,
     payload,
   };
 };

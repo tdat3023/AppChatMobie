@@ -13,6 +13,7 @@ import {
   SET_USERCHATTING,
   SET_SEARCHEDUSERS,
   SET_IDCONVERSATION,
+  SET_SOCKET,
 } from "./Actions";
 
 //innite state
@@ -45,6 +46,8 @@ const initState = {
 
   //list of searched users
   searchedUsers: [],
+
+  socket: null,
 };
 
 //depatch
@@ -120,6 +123,11 @@ const Reducer = (state, action) => {
       return {
         ...state,
         idConversation: action.payload,
+      };
+    case SET_SOCKET:
+      return {
+        ...state,
+        socket: action.payload,
       };
   }
 };

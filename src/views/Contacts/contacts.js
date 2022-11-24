@@ -24,6 +24,8 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import Feather from "react-native-vector-icons/Feather";
 import FriendItem from "./FriendItem";
 import FriendRequest from "./friendRequest";
+import friendApi from "../../api/friendApi";
+import Contex from "../../store/Context";
 
 const WinWidth = Dimensions.get("window").width;
 const WinHeight = Dimensions.get("window").height;
@@ -31,16 +33,16 @@ const Friend = "Friend";
 const Request = "Request";
 
 const Contact = ({ navigation }) => {
-  const [users, setUsers] = useState([
-    {
-      id: "1",
-      url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
-      name: "Tiến Đạt",
-      lastMessage: "Hello",
-    },
-  ]);
+  const { state, depatch } = React.useContext(Contex);
+  const { user, userSearched, idConversation, userChatting, socket } = state;
+
+  const [listFriend, setListFirend] = useState([]);
+
+  const [listInvite, setListInvite] = useState([]);
 
   const [Refreshing, setRefreshing] = useState(false);
+
+  //console.log("socket", socket);
   const onRefresh = () => {
     setRefreshing(true);
     setItems([...Items, { key: 100, item: "Item100" }]);
@@ -50,6 +52,41 @@ const Contact = ({ navigation }) => {
     }, 3000);
   };
   const [typing, setTyping] = useState(Friend);
+  React.useEffect(() => {
+    const fetchListRequest = async () => {
+      // console.log("user:", user.user.uid);
+      try {
+        // user.uid,page,size
+        const response = await friendApi.getListInvite(user.uid);
+        const data = response;
+        // console.log("listMess ", data[0].messages);
+        if (response) {
+          setListInvite(data);
+          // console.log("listMess", data);
+        }
+      } catch (error) {
+        console.log("Failed to fetch conversation list: ", error);
+      }
+    };
+    const fetchListFriend = async () => {
+      // console.log("user:", user.user.uid);
+      try {
+        // user.uid,page,size
+        const response = await friendApi.getListFriend(user.uid);
+        const data = response;
+        // console.log("listMess ", data[0].messages);
+        if (response) {
+          setListFirend(data);
+          // console.log("listMess", data);
+        }
+      } catch (error) {
+        console.log("Failed to fetch conversation list: ", error);
+      }
+    };
+
+    fetchListRequest();
+    fetchListFriend();
+  }, [listInvite, listFriend]);
 
   return (
     <SafeAreaView>
@@ -63,8 +100,7 @@ const Contact = ({ navigation }) => {
             <TextInput
               style={styles.textTopTag}
               placeholder="Tìm kiếm"
-              placeholderTextColor="white"
-            ></TextInput>
+              placeholderTextColor="white"></TextInput>
           </View>
 
           <View style={styles.moreTag}>
@@ -80,8 +116,7 @@ const Contact = ({ navigation }) => {
             <TouchableOpacity
               onPress={() => {
                 setTyping(Friend);
-              }}
-            >
+              }}>
               {typing === Friend ? (
                 <Text style={styles.text2}>BẠN BÈ</Text>
               ) : (
@@ -93,8 +128,7 @@ const Contact = ({ navigation }) => {
             <TouchableOpacity
               onPress={() => {
                 setTyping(Request);
-              }}
-            >
+              }}>
               {typing === Request ? (
                 <Text style={styles.text2}>LỜI MỜI</Text>
               ) : (
@@ -109,7 +143,7 @@ const Contact = ({ navigation }) => {
           <View style={styles.bodyListChat}>
             <FlatList
               style={styles.bodyList}
-              data={users}
+              data={listFriend}
               renderItem={({ item }) => <FriendItem item={item} />}
               // keyExtractor={(item) => item.id}
             ></FlatList>
@@ -118,7 +152,7 @@ const Contact = ({ navigation }) => {
           <View style={styles.bodyListChat}>
             <FlatList
               style={styles.bodyList}
-              data={users}
+              data={listInvite}
               renderItem={({ item }) => (
                 // <FriendItem item={item} />
                 <FriendRequest item={item} />
