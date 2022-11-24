@@ -32,8 +32,8 @@ export default Login = function ({ navigation }) {
   const [errorEmail, setErrorEmail] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
   //states to store email/password
-  const [email, setEmail] = useState("hao1@gmail.com");
-  const [password, setPassword] = useState("11111111");
+  const [email, setEmail] = useState("hoanganh1410tb@gmail.com");
+  const [password, setPassword] = useState("123456789");
   const isValidationOK = () => {
     email.length > 0 &&
       password.length > 0 &&
@@ -71,7 +71,8 @@ export default Login = function ({ navigation }) {
             style={{ alignItems: "center", marginLeft: 5 }}
             onPress={() => {
               navigation.goBack();
-            }}>
+            }}
+          >
             <AntDesign name="arrowleft" size={30} color="white"></AntDesign>
           </TouchableOpacity>
           <Text style={styles.textTopTag}>Đăng nhập</Text>
@@ -98,7 +99,8 @@ export default Login = function ({ navigation }) {
                 );
                 setEmail(text);
               }}
-              placeholder="example@gmail.com"></TextInput>
+              placeholder="example@gmail.com"
+            ></TextInput>
           </View>
 
           {/* password */}
@@ -110,11 +112,13 @@ export default Login = function ({ navigation }) {
                 setPassword(text);
               }}
               placeholder="Enter your password"
-              secureTextEntry={getPassWordVisible ? false : true}></TextInput>
+              secureTextEntry={getPassWordVisible ? false : true}
+            ></TextInput>
             <TouchableOpacity
               onPress={() => {
                 setPassWordVisible(!getPassWordVisible);
-              }}>
+              }}
+            >
               {getPassWordVisible ? (
                 <Ionicons
                   style={styles.imageEye}
@@ -138,7 +142,8 @@ export default Login = function ({ navigation }) {
             <TouchableOpacity
               onPress={() => {
                 alert("Emai= ${email}");
-              }}>
+              }}
+            >
               <Text style={{ fontSize: 15, color: "blue", marginTop: 15 }}>
                 Lấy lại mật khẩu
               </Text>
@@ -157,7 +162,8 @@ export default Login = function ({ navigation }) {
           <TouchableOpacity
             style={styles.login}
             disabled={isValidationOK() == false}
-            onPress={() => handleLogin()}>
+            onPress={() => handleLogin()}
+          >
             <AntDesign name="login" size={30} color="white"></AntDesign>
           </TouchableOpacity>
         </View>
