@@ -47,13 +47,22 @@ function ChatItem({ item, navigation, socket }) {
           {/* ảnh đại diện */}
           <View style={styles.imaContainer}>
             {/* {item.conversations} */}
-            <Image
-              style={styles.imaAvatar}
-              source={{
-                uri: item.inFo.avatar
-                  ? item.inFo.avatar
-                  : "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
-              }}></Image>
+            {item.inFo.avatar ? (
+              <Image
+                style={styles.imaAvatar}
+                source={{
+                  uri: item.inFo.avatar,
+                }}
+              ></Image>
+            ) : (
+              <Image
+                style={styles.imaAvatar}
+                accessibilityLabel="ok"
+                source={{
+                  uri: "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
+                }}
+              ></Image>
+            )}
           </View>
 
           <View style={styles.bodyContainer}>
@@ -66,7 +75,8 @@ function ChatItem({ item, navigation, socket }) {
                 justifyContent: "space-between",
                 flexDirection: "row",
                 alignItems: "center",
-              }}>
+              }}
+            >
               <Text style={styles.textLastMes}>
                 {/* check lastmess is image , sticker ? render lastmess [image, sticker], check length >10 ? .... */}
                 {item.conversations?.lastMessage[0].type === "NOTIFY" ||
@@ -96,10 +106,13 @@ function ChatItem({ item, navigation, socket }) {
           </View>
 
           <View style={styles.notification}>
-            <Ionicons name="notifications-outline" size={24} color="black" />
+            {/* <Ionicons name="notifications-outline" size={24} color="black" /> */}
+            <Text>2 phut</Text>
             {item.conversations.mb.numberUnread > 0 && (
               <View style={styles.textNoti}>
-                <Text>{item.conversations.mb.numberUnread}</Text>
+                <Text style={{ color: "white", fontSize: 12 }}>
+                  {item.conversations.mb.numberUnread}
+                </Text>
               </View>
             )}
           </View>
@@ -158,9 +171,10 @@ const styles = StyleSheet.create({
 
   textName: {
     marginLeft: 10,
-    fontSize: 20,
-    fontWeight: "blod",
+    fontSize: 18,
+    fontWeight: "500",
     color: "black",
+    textTransform: "capitalize",
   },
 
   textLastMes: {
@@ -181,7 +195,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "red",
-    width: 20,
+    width: 22,
     borderRadius: 10,
   },
 });

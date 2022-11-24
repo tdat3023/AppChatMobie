@@ -10,9 +10,7 @@ import {
   TextInput,
   Dimensions,
 } from "react-native";
-import axios from "axios";
 import io from "socket.io-client";
-
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -24,12 +22,27 @@ import Contex from "../../store/Context";
 
 import { SetUser, SetSocket } from "../../store/Actions";
 import { each } from "immer/dist/internal";
+import CardUser from "../component/CardUser";
+//import UserService from "../../services/UserService";
+
+import { db } from "../../firebase/firebaseDB";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  getDoc,
+  doc,
+  query,
+  where,
+} from "firebase/firestore/lite";
 
 export default ChatApp = function ({ navigation }) {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
+  const [userSearedList, setSearchedList] = useState([]);
   const [conversations, setConversations] = useState([]);
-
+  //console.log(user);
+  // console.log(userSearedList);
   const socket = React.useRef();
   // console.log("user:", user.user.uid);
 
@@ -67,44 +80,7 @@ export default ChatApp = function ({ navigation }) {
           200
         );
         const { data, page, size, totalPages } = response;
-        //console.log("data", data);
-        if (response) {
-          setConversations(data);
-        }
-      } catch (error) {
-        console.log("Failed to fetch conversation list: ", error);
-      }
-    };
-
-    socket.current?.on("get-message", ({ senderId, message }) => {
-      fetchConversations();
-    });
-    socket.current?.on(
-      " create-conversation-was-friend",
-      (conversationId, message) => {
-        console.log("Conversationid", conversationId);
-        fetchConversations();
-      }
-    );
-
-    fetchConversations();
-  }, [user]);
-
-  React.useEffect(() => {
-    // //get api set list conversation
-    // //fetch product in wishlist
-
-    const fetchConversations = async () => {
-      // console.log("user:", user.user.uid);
-      try {
-        // user.uid,page,size
-        const response = await conversationApi.getConversations(
-          user.uid,
-          0,
-          200
-        );
-        const { data, page, size, totalPages } = response;
-        console.log("data", data);
+        // console.log("data", data);
         if (response) {
           setConversations(data);
         }
@@ -137,13 +113,24 @@ export default ChatApp = function ({ navigation }) {
   // sreach
   const [typing, setTyping] = useState(false);
   const [sreachText, setSreachText] = useState("");
-  const handleChangText = (text) => {
+  //tim kiem
+  const handleChangText = async (text) => {
     if (text.length > 0) {
       setTyping(true);
     } else if (text.length === 0) {
       setTyping(false);
     }
     setSreachText(text);
+    const q = query(collection(db, "users"), where("email", "==", text));
+    const newArr = [];
+
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc.id, " => ", doc.data());
+      newArr.push(doc.data());
+    });
+    setSearchedList(newArr);
   };
 
   return (
@@ -194,19 +181,33 @@ export default ChatApp = function ({ navigation }) {
           <View style={styles.listSreach}>
             {/* List sreach */}
             <View style={styles.bodyListSreach}>
-              <FlatList
+              <Text
+                style={{
+                  textAlign: "left",
+                  fontSize: 14,
+                  marginHorizontal: 12,
+                  marginVertical: 12,
+                }}
+              >
+                Tìm qua email:
+              </Text>
+              {/* <Text style={{textAlign:"center", marginTop:40}}>Email chưa đăng ký tài khoản</Text> */}
+              {/* <FlatList
                 contentContainerStyle={{ paddingBottom: 100 }}
                 style={styles.bodyList}
                 data={conversations}
                 renderItem={renderItem}
                 // keyExtractor={(item) => item.conversations._id}
-              ></FlatList>
+              ></FlatList> */}
+              {userSearedList.map((val) => {
+                return <CardUser value={val} key={Math.random()} />;
+              })}
             </View>
           </View>
         ) : (
           <View style={styles.listConversation}>
             {/* phan loai */}
-            <View style={styles.topTagMenu}>
+            {/* <View style={styles.topTagMenu}>
               <View>
                 <TouchableOpacity>
                   <Text style={styles.text1}>TIN NHẮN</Text>
@@ -217,7 +218,7 @@ export default ChatApp = function ({ navigation }) {
                   <Text style={styles.text1}>TIN CHỜ</Text>
                 </TouchableOpacity>
               </View>
-            </View>
+            </View> */}
             {/* list chat */}
             <View style={styles.bodyListChat}>
               <FlatList
@@ -348,7 +349,7 @@ const styles = StyleSheet.create({
   },
 
   listSreach: {
-    backgroundColor: "red",
+    backgroundColor: "white",
     flex: 1,
   },
   listConversation: {
@@ -357,6 +358,5 @@ const styles = StyleSheet.create({
 
   bodyListSreach: {
     width: "100%",
-    alignItems: "center",
   },
 });

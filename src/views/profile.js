@@ -1,11 +1,5 @@
-import React, { Component } from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useState, useEffect, useRef } from "react";
-import AntDesign from "react-native-vector-icons/AntDesign";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import Feather from "react-native-vector-icons/Feather";
+import React, { Component, useContext } from "react";
+
 import {
   View,
   Text,
@@ -24,18 +18,20 @@ import {
   Touchable,
   withTheme,
 } from "@draftbit/ui";
-import { firebase } from "../firebase/firebaseDB";
-import "firebase/compat/auth";
+import Contex from "../store/Context";
+import bg from "../images/bg.jpg";
+
 const WinWidth = Dimensions.get("window").width;
 const WinHeight = Dimensions.get("window").height;
 
 export default Profile = ({ navigation }) => {
+  const { state, depatch } = useContext(Contex);
+  const { user } = state;
   const handleLogout = () => {
     console.log("logout");
-    //log out
-    firebase.auth().signOut();
+    //handle logout in here
 
-    navigation.navigate("Login");
+    //  navigation.navigate("Login");
   };
   return (
     <View style={{ flex: 1 }}>
@@ -46,9 +42,7 @@ export default Profile = ({ navigation }) => {
       >
         <ImageBackground
           style={styles.imageBackgroundNb}
-          source={{
-            uri: "https://img.freepik.com/free-vector/flat-geometric-background_23-2148957201.jpg?w=996&t=st=1665661938~exp=1665662538~hmac=cb58f71313de34607e5ccc39de6d766db79a87eab239cee8c7b7786f143f8719",
-          }}
+          source={bg}
           resizeMode="cover"
         />
         <Container
@@ -56,14 +50,24 @@ export default Profile = ({ navigation }) => {
           elevation={0}
           useThemeGutterPadding={true}
         >
-          <Image
-            style={StyleSheet.flatten([styles.imageA3])}
-            resizeMode="cover"
-            source={{
-              uri: "https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=785&q=80",
-            }}
-          />
-          <Text style={StyleSheet.flatten([styles.textPr])}>Jessica Green</Text>
+          {user?.avatar ? (
+            <Image
+              style={StyleSheet.flatten([styles.imageA3])}
+              resizeMode="cover"
+              source={user.avatar}
+            />
+          ) : (
+            <Image
+              style={StyleSheet.flatten([styles.imageA3])}
+              resizeMode="cover"
+              source={{
+                uri: "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
+              }}
+            />
+          )}
+          <Text style={StyleSheet.flatten([styles.textPr])}>
+            {user?.first_name + " " + user?.last_name}
+          </Text>
           <TouchableOpacity style={styles.buttonP2}>
             <Text style={{ color: "#8438f9", fontWeight: "600" }}>
               Edit Profile
@@ -71,43 +75,31 @@ export default Profile = ({ navigation }) => {
           </TouchableOpacity>
           {/* <Button style={styles.buttonP2} type="outline"></Button> */}
         </Container>
-        <Container useThemeGutterPadding={true} elevation={0}>
-          <Touchable style={StyleSheet.flatten([styles.touchableOk])}>
-            <View style={styles.viewKs}>
-              <Text style={{}}>Settings</Text>
-              <Icon
-                style={styles.iconFE}
-                size={24}
-                color={{}}
-                name="MaterialIcons/account-circle"
-              />
-            </View>
-          </Touchable>
-          <Touchable style={StyleSheet.flatten([styles.touchableOm])}>
-            <View style={styles.viewYR}>
-              <Text style={{}}>Notifications</Text>
-              <Icon
-                style={styles.iconCl}
-                color={"black"}
-                name="MaterialIcons/notifications"
-                size={24}
-              />
-            </View>
-          </Touchable>
-          <Touchable style={StyleSheet.flatten([styles.touchableBp])}>
-            <View style={styles.viewS1}>
-              <Text style={{}}>Order History</Text>
-              <Icon
-                style={styles.iconZz}
-                color={"black"}
-                size={24}
-                name="MaterialIcons/history"
-              />
-            </View>
-          </Touchable>
+        {/* <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ fontWeight: "500", fontSize: 18, marginBottom: 12 }}>
+            {`Hôm nay ${user?.first_name + " " + user?.last_name} có gì vui ?`}
+          </Text>
+          <Text style={{ textAlign: "center", paddingHorizontal: 30 }}>
+            Hãy chia sẻ cảm súc với bạn bè và lưu lại những khoảng khắc đáng nhớ
+            nhé
+          </Text>
+        </View> */}
+        {/* <TouchableOpacity style={styles.viewAl}>
+          <Text onPress={() => handleLogout()}>Logout</Text>
+        </TouchableOpacity> */}
+        {/* <Container useThemeGutterPadding={true} elevation={0}>
           <Touchable style={StyleSheet.flatten([styles.touchableJg])}>
             <View style={styles.viewAl}>
-              <Text style={{}} onPress={() => handleLogout()}>
+              <Text
+                style={{ position: "absolute", bottom: 0 }}
+                onPress={() => handleLogout()}
+              >
                 Logout
               </Text>
               <Icon
@@ -118,7 +110,7 @@ export default Profile = ({ navigation }) => {
               />
             </View>
           </Touchable>
-        </Container>
+        </Container> */}
       </ScreenContainer>
     </View>
   );
@@ -126,7 +118,8 @@ export default Profile = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   screenContainerJb: {
-    justifyContent: "space-evenly",
+    //justifyContent: "space-evenly",
+    height: 50,
   },
   viewKs: {
     justifyContent: "space-between",
@@ -141,17 +134,25 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   viewAl: {
-    justifyContent: "space-between",
-    flexDirection: "row",
+    backgroundColor: "#A5F1E9",
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 12,
+    marginHorizontal: 12,
   },
   imageBackgroundNb: {
     width: "100%",
-    height: 250,
+    height: 200,
   },
   imageA3: {
-    height: 200,
-    width: 200,
+    height: 100,
+    width: 100,
     borderRadius: 100,
+    borderWidth: 2,
+    borderColor: "white",
   },
   containerEA: {
     alignItems: "center",
@@ -165,6 +166,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     lineHeight: 25,
     color: "black",
+    textTransform: "capitalize",
   },
   touchableOk: {
     borderTopWidth: 1,

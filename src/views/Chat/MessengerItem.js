@@ -16,6 +16,7 @@ import { convertDateTimeToString, handleDate } from "../../utilies/DateTime";
 function MessengerItem({ messend, props, route }) {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
+  // console.log(userChatting);
   const [pressOn, setPressOnPin] = useState(false);
 
   const onPressRenderTime = () => {
@@ -36,12 +37,22 @@ function MessengerItem({ messend, props, route }) {
               </View>
             ) : user.uid != messend.userId ? (
               <View style={styles.yourMess}>
-                <Image
-                  style={styles.imaAvatar}
-                  source={{
-                    uri: "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
-                  }}
-                ></Image>
+                {userChatting?.avatar ? (
+                  <Image
+                    style={styles.imaAvatar}
+                    source={{
+                      //  uri: userChatting?.avatar,
+                      uri: "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
+                    }}
+                  ></Image>
+                ) : (
+                  <Image
+                    style={styles.imaAvatar}
+                    source={{
+                      uri: "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
+                    }}
+                  ></Image>
+                )}
                 <View>
                   <View
                     style={[
@@ -186,10 +197,10 @@ function MessengerItem({ messend, props, route }) {
                             padding: 10,
                             marginLeft: 10,
                             fontSize: 15,
-                            borderRadius: 15,
+                            borderRadius: 8,
                             backgroundColor: "#CCCCCC",
                             borderColor: "white",
-                            borderWidth: 0.5,
+                            borderWidth: 0.1,
                             shadowOffset: {
                               width: 0,
                               height: 3,
@@ -201,7 +212,9 @@ function MessengerItem({ messend, props, route }) {
                           }
                         : styles.textmyMes,
                       {
-                        width: messend.content.length > 40 ? "80%" : "auto",
+                        width: messend.content.length > 30 ? "60%" : "auto",
+                        backgroundColor: "#d8f1fd",
+                        color: "black",
                       },
                     ]}
                   >

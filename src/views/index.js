@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { Component, useContext, useEffect, useState } from "react";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -13,9 +13,12 @@ import ChatScreen from "./Chat/chatScreen";
 import Resgister from "./Login/resgister";
 import CreateAboutScreen from "./Chat/about";
 import AboutGroupScreen from "./Chat/aboutGroup";
+
 import AddGroup from "./Contacts/addGroup";
 import { firebase } from "../firebase/firebaseDB";
 import "firebase/compat/auth";
+
+import AddFriend from "./Contacts/addGroup";
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -79,16 +82,35 @@ function MyTabs({ route }) {
 }
 
 export default RootComponent = function () {
-  // // // Listen to the Firebase Auth state and set the local state.
+  // // Listen to the Firebase Auth state and set the local state.
   // useEffect(() => {
-  //   const unregisterAuthObserver = firebase.auth().onAuthStateChanged((u) => {
-  //     if (!u) {
-  //       console.log("not user");
-  //     } else {
-  //       //login
-  //       //navigation.navigate("HomeTabs");
-  //       console.log(u);
+  //   const unregisterAuthObserver = onAuthStateChanged(authetication, (user) => {
+  //     if (user) {
+  //       // User is signed in, see docs for a list of available properties
+  //       // https://firebase.google.com/docs/reference/js/firebase.User
 
+  //       // console.log(userCredential.user.uid);
+  //       const getUser = async (db, id) => {
+  //         //get info user by id
+  //         const docRef = doc(db, "users", id);
+  //         const docSnap = await getDoc(docRef);
+
+  //         if (docSnap.exists()) {
+  //           // return docSnap.data();
+  //           console.log("Document data:", docSnap.data());
+  //           //set user
+  //           depatch(SetUser(docSnap.data()));
+  //           //redict home page
+  //         } else {
+  //           // doc.data() will be undefined in this case
+  //           console.log("No such document!");
+  //         }
+  //       };
+
+  //       getUser(db, user.uid);
+  //     } else {
+  //       // User is signed out
+  //       // ...
   //     }
   //   });
 
