@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { useState, useEffect, useRef } from "react";
 import {
@@ -14,35 +14,55 @@ import {
   StatusBar,
 } from "react-native";
 
-import { firebase } from "../../firebase/firebaseDB";
-import "firebase/compat/auth";
-import UserService from "../../services/UserService";
+import { onAuthStateChanged } from "firebase/auth";
+
+import { getDoc, doc } from "firebase/firestore/lite";
+import Contex from "../../store/Context";
+import { SetUser } from "../../store/Actions";
+import { authetication, db } from "../../firebase/firebaseDB";
 
 const WinWidth = Dimensions.get("window").width;
 const WinHeight = Dimensions.get("window").height;
 
 export default Home = ({ navigation }) => {
+  const { state, depatch } = useContext(Contex);
+  const { user } = state;
   // // Listen to the Firebase Auth state and set the local state.
-  // useEffect(() => {
-  //   const unregisterAuthObserver = firebase.auth().onAuthStateChanged((u) => {
-  //     if (!u) {
-  //       console.log("not user");
-  //     } else {
-  //       //login
-  //       //navigation.navigate("HomeTabs");
-  //       console.log(u);
-  //       UserService.getById(u.uid).then(function (snapshot) {
-  //         console.log("d" + snapshot.data().first_name);
-  //         const userTemp = { uid: u.uid, ...snapshot.data() };
-  //         console.log(snapshot.data());
-  //         depatch(SetUset(userTemp));
-  //       });
-  //       navigation.navigate("HomeTabs");
-  //     }
-  //   });
+  useEffect(() => {
+    const unregisterAuthObserver = onAuthStateChanged(authetication, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
 
-  //   return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
-  // }, []);
+        // console.log(userCredential.user.uid);
+        const getUser = async (db, id) => {
+          //get info user by id
+          const docRef = doc(db, "users", id);
+          const docSnap = await getDoc(docRef);
+
+          if (docSnap.exists()) {
+            // return docSnap.data();
+            console.log("Document data:", docSnap.data());
+            //set user
+            depatch(SetUser(docSnap.data()));
+            navigation.navigate("HomeTabs");
+            //redict home page
+          } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+          }
+        };
+
+        getUser(db, user.uid);
+      } else {
+        // User is signed out
+        // ...
+      }
+    });
+
+    return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
+  }, []);
+
   return (
     <SafeAreaView>
       {/* Text Zalo */}
@@ -54,7 +74,8 @@ export default Home = ({ navigation }) => {
               fontWeight: "500",
               color: "#356C90",
               alignItems: "center",
-            }}>
+            }}
+          >
             ZenChat
           </Text>
         </View>
@@ -64,7 +85,8 @@ export default Home = ({ navigation }) => {
             style={styles.btnLogin}
             onPress={() => {
               navigation.navigate("Login");
-            }}>
+            }}
+          >
             <Text style={{ fontSize: 20, color: "white" }}> ĐĂNG NHẬP</Text>
           </TouchableOpacity>
 
@@ -72,7 +94,8 @@ export default Home = ({ navigation }) => {
             style={styles.btnRegister}
             onPress={() => {
               navigation.navigate("Resgister");
-            }}>
+            }}
+          >
             <Text style={{ fontSize: 20 }}> ĐĂNG KÝ</Text>
           </TouchableOpacity>
         </View>

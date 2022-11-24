@@ -16,8 +16,17 @@ import { isValidEmail, isValidPassword } from "../../utilies/Validations";
 import Contex from "../../store/Context";
 import { SetUser } from "../../store/Actions";
 
-import {authetication} from '../../firebase/firebaseDB'
-import {signInWithEmailAndPassword} from 'firebase/auth'
+import { authetication, db } from "../../firebase/firebaseDB";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  getDoc,
+  doc,
+  query,
+  where,
+} from "firebase/firestore/lite";
 // const fdb = firebase.firestore().collection('users');
 const WinWidth = Dimensions.get("window").width;
 const WinHeight = Dimensions.get("window").height;
@@ -45,14 +54,29 @@ export default Login = function ({ navigation }) {
   const handleLogin = () => {
     //send email, pass to server
     const loginFunc = (mail, pass) => {
-     
-        signInWithEmailAndPassword(authetication, mail, pass)
+      signInWithEmailAndPassword(authetication, mail, pass)
         .then((userCredential) => {
-          //set user
-          depatch(SetUser(userCredential.user));
+         // console.log(userCredential.user.uid);
+          const getUser = async (db, id) => {
+            //get info user by id
+            const docRef = doc(db, "users", id);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+              // return docSnap.data();
+              //console.log("Document data:", docSnap.data());
+              //set user
+              depatch(SetUser(docSnap.data()));
+            } else {
+              // doc.data() will be undefined in this case
+              console.log("No such document!");
+            }
+          };
+
+          getUser(db, userCredential.user.uid);
 
           //redict homepage
-          
+
           navigation.navigate("HomeTabs");
         })
         .catch((error) => {

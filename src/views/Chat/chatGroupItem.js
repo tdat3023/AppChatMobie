@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
+import avt_group from "../../images/avtgroup.jpg";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 
@@ -104,6 +105,9 @@ function ChatGroupItem({ item, navigation, socket }) {
       <TouchableOpacity onPress={onPress}>
         <View style={styles.chatBox}>
           {/* ảnh đại diện */}
+          <View style={styles.imaContainer}>
+            <Image style={styles.imaAvatarOne} source={avt_group}></Image>
+          </View>
           {/* <View style={styles.imaContainer}>{renderImaAvatar()}</View> */}
 
           <View style={styles.bodyContainer}>
@@ -190,11 +194,12 @@ const styles = StyleSheet.create({
   },
 
   viewOne: {
-    display: "flex",
-    width: "100%",
-    height: 90,
-    justifyContent: "center",
-    alignItems: "center",
+    // display: "flex",
+    // width: "100%",
+    // height: 90,
+    // justifyContent: "center",
+    // alignItems: "center",
+    // backgroundColor: "red",
   },
 
   imaGroupAvata: {

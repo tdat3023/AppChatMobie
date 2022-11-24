@@ -42,8 +42,8 @@ export default ChatApp = function ({ navigation }) {
   const { user, userSearched, idConversation, userChatting } = state;
   const [userSearedList, setSearchedList] = useState([]);
   const [conversations, setConversations] = useState([]);
-
-  console.log(userSearedList);
+  //console.log(user);
+  // console.log(userSearedList);
   const socket = React.useRef();
   // console.log("user:", user.user.uid);
 
@@ -136,39 +136,13 @@ export default ChatApp = function ({ navigation }) {
     setSearchedList(newArr);
   };
 
-  const search = async () => {
-    // Get a list of cities from your database
-    // console.log("click");
-    // // UserService.getUserByEmail("h@gmail.com");
-    // const q = query(
-    //   collection(db, "users"),
-    //   where("email", "==", "h@gmail.com")
-    // );
-    // const querySnapshot = await getDocs(q);
-    // querySnapshot.forEach((doc) => {
-    //   // doc.data() is never undefined for query doc snapshots
-    //   console.log(doc.id, " => ", doc.data());
-    // });
-    // const docRef = doc(db, "users", "hoanganh1410tb@gmail.com");
-    // const docSnap = await getDoc(docRef);
-    // if (docSnap.exists()) {
-    //   console.log("Document data:", docSnap.data());
-    // } else {
-    //   // doc.data() will be undefined in this case
-    //   console.log("No such document!");
-    // }
-  };
-
   return (
     <SafeAreaView>
       <View style={styles.container}>
         {/* header */}
         <View style={styles.topTag}>
           <View style={styles.sreach}>
-            <TouchableOpacity
-              style={{ alignItems: "center", marginLeft: 10 }}
-              onPress={() => search()}
-            >
+            <TouchableOpacity style={{ alignItems: "center", marginLeft: 10 }}>
               <AntDesign name="search1" size={24} color="white" />
             </TouchableOpacity>
             {/* sreach input */}

@@ -35,7 +35,6 @@ const windowHeight = Dimensions.get("window").height;
 import socket from "../../socket/socketClient";
 
 export default ChatScreen = ({ props, navigation, route }) => {
- 
   // const [panigation, setPanigation] = React.useState({ page: 0, size: 50 });
   // const [page, setPage] = React.useState(0);
 
@@ -124,12 +123,12 @@ export default ChatScreen = ({ props, navigation, route }) => {
       type: "TEXT",
     };
     console.log(newMessSend);
+    setNewMess("");
     const messSave = await messageApi.addTextMess(newMessSend);
 
     //  console.log("mess send", messSave);
 
     setListMessage((prev) => [...prev, { ...messSave }]);
-    setNewMess("");
 
     //call soket in here
 
@@ -227,25 +226,47 @@ export default ChatScreen = ({ props, navigation, route }) => {
                 navigation.goBack();
               }}
             >
-              <Ionicons name="arrow-back" size={28} color="black" />
+              <Ionicons name="arrow-back" size={24} color="white" />
             </TouchableOpacity>
             <View style={styles.nameFriend}>
-              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: "500",
+                  textTransform: "capitalize",
+                  color: "white",
+                  marginLeft: 12,
+                }}
+              >
                 {/* check type conversations ? set name group : set name user chat */}
-                {idConversation.type
-                  ? userChatting.name
-                  : userChatting.firstName + " " + userChatting.lastName}
+                {idConversation?.type
+                  ? userChatting?.name
+                  : userChatting?.firstName + " " + userChatting?.lastName}
+              </Text>
+              <Text
+                style={{
+                  fontSize: 10,
+                  color: "white",
+                  marginLeft: 12,
+                }}
+              >
+                {/* check type conversations ? set name group : set name user chat */}
+                {idConversation?.type ? (
+                  <Text>5 thành viên</Text>
+                ) : (
+                  <Text>Truy cập 11 phút trước</Text>
+                )}
               </Text>
             </View>
           </View>
 
           <View style={styles.moreTag}>
             <TouchableOpacity>
-              <Ionicons name="call-outline" size={24} color="black" />
+              <Ionicons name="call-outline" size={24} color="white" />
             </TouchableOpacity>
 
             <TouchableOpacity style={{ marginLeft: 10 }}>
-              <Ionicons name="videocam-outline" size={24} color="black" />
+              <Ionicons name="videocam-outline" size={24} color="white" />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -258,7 +279,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
                 aboutScreen();
               }}
             >
-              <Ionicons name="menu" size={24} color="black" />
+              <Ionicons name="menu" size={24} color="white" />
             </TouchableOpacity>
           </View>
         </View>
@@ -313,21 +334,21 @@ export default ChatScreen = ({ props, navigation, route }) => {
             {typing ? (
               <View style={styles.send}>
                 <TouchableOpacity onPress={handSendMess}>
-                  <Feather name="send" size={27} color="black" />
+                  <Feather name="send" size={27} color="#3F4E4F" />
                 </TouchableOpacity>
               </View>
             ) : (
               <View style={styles.moreTag}>
-                <TouchableOpacity>
+                {/* <TouchableOpacity>
                   <Feather name="more-horizontal" size={27} color="black" />
                 </TouchableOpacity>
                 <TouchableOpacity>
                   <Feather name="mic" size={27} color="black" />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <TouchableOpacity
                 //onPress={pickImage}
                 >
-                  <Feather name="image" size={27} color="black" />
+                  <Feather name="image" size={27} color="#3F4E4F" />
                 </TouchableOpacity>
               </View>
             )}
@@ -341,14 +362,14 @@ export default ChatScreen = ({ props, navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: "blue",
+    backgroundColor: "#e5e7eb",
     justifyContent: "space-between",
   },
 
   headerContainer: {
     //display: "flex",
     height: 60,
-    backgroundColor: "#66B2FF",
+    backgroundColor: "#0091ff",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -365,12 +386,13 @@ const styles = StyleSheet.create({
   },
 
   footerContainer: {
-    height: 60,
+    // height: 60,
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",
     //borderWidth: 0.2,
+    backgroundColor: "white",
   },
 
   inputMess: {
@@ -395,12 +417,11 @@ const styles = StyleSheet.create({
   },
 
   textChat: {
-    height: 40,
     flex: 1,
-    borderRadius: 30,
-    paddingLeft: 20,
+    fontSize: 14,
     marginHorizontal: 5,
-    backgroundColor: "#E4E4E4",
+    // backgroundColor: "#E4E4E4",
+    //  backgroundColor: "red",
   },
 
   bodyListChat: {

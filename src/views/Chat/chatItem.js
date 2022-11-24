@@ -47,15 +47,22 @@ function ChatItem({ item, navigation, socket }) {
           {/* ảnh đại diện */}
           <View style={styles.imaContainer}>
             {/* {item.conversations} */}
-            <Image
-              style={styles.imaAvatar}
-              source={{
-                uri:
-                  item.inFo.avatar.length > 0
-                    ? item.inFo.avatar
-                    : "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
-              }}
-            ></Image>
+            {item.inFo.avatar ? (
+              <Image
+                style={styles.imaAvatar}
+                source={{
+                  uri: item.inFo.avatar,
+                }}
+              ></Image>
+            ) : (
+              <Image
+                style={styles.imaAvatar}
+                accessibilityLabel="ok"
+                source={{
+                  uri: "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
+                }}
+              ></Image>
+            )}
           </View>
 
           <View style={styles.bodyContainer}>
@@ -164,8 +171,8 @@ const styles = StyleSheet.create({
 
   textName: {
     marginLeft: 10,
-    fontSize: 20,
-    fontWeight: "blod",
+    fontSize: 18,
+    fontWeight: "500",
     color: "black",
     textTransform: "capitalize",
   },
