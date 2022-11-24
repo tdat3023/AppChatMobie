@@ -10,7 +10,7 @@
             <domain includeSubdomains="true">localhost</domain>
         </domain-config>
 
-        <domain includeSubdomains="true">13.228.206.211</domain>
+        <domain includeSubdomains="true">13.212.137.7</domain>
         <trust-anchors>
             <certificates src="@raw/ca"/>
             <certificates src="system"/>

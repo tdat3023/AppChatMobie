@@ -37,7 +37,7 @@ export default ChatApp = function ({ navigation }) {
   useEffect(() => {
     // setA("b");
     if (user) {
-      socket.current = io("https://13.228.206.211");
+      socket.current = io("https://13.212.137.7");
       // socket.current = io("http://localhost:5005");
       // console.log(socket);
       socket.current.emit("start", user);
@@ -79,7 +79,7 @@ export default ChatApp = function ({ navigation }) {
     };
 
     fetchConversations();
-  }, [conversations]);
+  }, [user]);
 
   //  check type conversation ? render groupChatItem : render ChatItem
   const renderItem = ({ item }) => {
