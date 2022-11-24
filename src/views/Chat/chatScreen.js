@@ -128,8 +128,8 @@ export default ChatScreen = ({ props, navigation, route }) => {
           message: messSave,
           idCon: idConversation._id,
         });
-        console.log("sender", user.uid);
-        console.log("rec", userChatting.userIdFriend);
+        // console.log("sender", user.uid);
+        // console.log("rec", userChatting.userIdFriend);
       }
       console.log("send");
     }

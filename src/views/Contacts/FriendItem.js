@@ -2,20 +2,34 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import React from "react";
 
-export default function FriendItem(item) {
+export default function FriendItem({ item }) {
   return (
     <View style={styles.viewOne}>
       <TouchableOpacity>
         <View style={styles.chatBox}>
           {/* ảnh đại diện */}
           <View style={styles.imaContainer}>
-            <Image style={styles.imaAvatar} source={{ uri: item.url }}></Image>
+            {item.avaUser == "" ? (
+              <Image
+                style={styles.imaAvatar}
+                source={{
+                  uri: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
+                }}></Image>
+            ) : (
+              <Image
+                style={styles.imaAvatar}
+                source={{
+                  uri: item.avaUser,
+                }}></Image>
+            )}
             <View style={styles.status}></View>
           </View>
 
           <View style={styles.bodyContainer}>
             {/* tên */}
-            <Text style={styles.textName}>Ten o day</Text>
+            <Text style={styles.textName}>
+              {item.userFistName} {item.userLastName}
+            </Text>
           </View>
 
           <View style={styles.notification}>

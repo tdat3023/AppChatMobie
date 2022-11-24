@@ -50,10 +50,9 @@ function ChatItem({ item, navigation, socket }) {
             <Image
               style={styles.imaAvatar}
               source={{
-                uri:
-                  item.inFo.avatar.length > 0
-                    ? item.inFo.avatar
-                    : "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
+                uri: item.inFo.avatar
+                  ? item.inFo.avatar
+                  : "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
               }}></Image>
           </View>
 
