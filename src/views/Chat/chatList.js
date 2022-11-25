@@ -57,6 +57,7 @@ export default ChatApp = function ({ navigation }) {
       depatch(SetSocket(socket));
     }
   }, [user]);
+
   useEffect(() => {
     // setA("b");
     if (socket.current) {
@@ -167,7 +168,7 @@ export default ChatApp = function ({ navigation }) {
 
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("AddGroup");
+                navigation.navigate("AddGroup", { socket: socket });
               }}
             >
               <AntDesign name="addusergroup" size={24} color="white" />

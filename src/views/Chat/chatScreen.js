@@ -252,7 +252,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
               >
                 {/* check type conversations ? set name group : set name user chat */}
                 {idConversation?.type ? (
-                  <Text>5 thành viên</Text>
+                  <Text>{userChatting.userInfo.length} thành viên</Text>
                 ) : (
                   <Text>Truy cập 11 phút trước</Text>
                 )}

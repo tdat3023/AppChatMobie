@@ -3,95 +3,134 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import React from "react";
 import { useState, useEffect, useRef } from "react";
 
-export default function AddGroupItem({ item, setCount, count }) {
+export default function AddGroupItem({
+  item,
+  setCount,
+  count,
+  setListUserAddToGroup,
+  listUserAddToGroup,
+}) {
   const [typing, setTyping] = useState(false);
+  console.log(typing);
+
+  //add user into a list -> create group
+  const handleOnPress = () => {
+    // if (typing) {
+    //   setCount(count - 1);
+    // } else {
+    //   setCount(count + 1);
+    // }
+    //  setTyping(!typing);
+
+    //check user da co trong listUserAddToGroup chua => khong cho them
+    let status = 0;
+    listUserAddToGroup.forEach((val) => {
+      if (val.uid === item.uid) {
+        status = 1;
+      }
+    });
+
+    if (status === 0) {
+      setListUserAddToGroup([...listUserAddToGroup, item]);
+      setCount(++count);
+    } else if (status === 1) {
+      //remove user out group list
+      const newArrAfterRemo = listUserAddToGroup.filter((val) => {
+        return val.uid !== item.uid;
+      });
+      //  console.log(newArrAfterRemo);
+      setCount(--count);
+      setListUserAddToGroup(newArrAfterRemo);
+    }
+  };
 
   return (
-    <View style={styles.viewOne}>
+    <TouchableOpacity style={styles.viewOne} onPress={() => handleOnPress()}>
       <View style={styles.chatBox}>
         {/* ảnh đại diện */}
         <View style={styles.imaContainer}>
-          <Image style={styles.imaAvatar} source={{ uri: item.url }}></Image>
+          {item.avatar ? (
+            <Image
+              style={styles.imaAvatar}
+              source={{ uri: item.avatar }}
+            ></Image>
+          ) : (
+            <Image
+              style={styles.imaAvatar}
+              source={{
+                uri: "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
+              }}
+            ></Image>
+          )}
+
           {/* <View style={styles.status}></View> */}
         </View>
 
         <View style={styles.bodyContainer}>
           {/* tên */}
-          <Text style={styles.textName}>Ten o day</Text>
+          <Text style={styles.textName}>
+            {item?.first_name + " " + item?.last_name}
+          </Text>
         </View>
 
         <View style={styles.notification}>
-          <TouchableOpacity
-            onPress={() => {
-              if (typing) {
-                setCount(count - 1);
-              } else {
-                setCount(count + 1);
-              }
-              setTyping(!typing);
-            }}
-          >
+          <TouchableOpacity>
             {typing ? (
-              <Ionicons name="checkbox" size={24} color="black" />
+              <Ionicons name="checkbox" size={24} color="#0091ff" />
             ) : (
               <Ionicons name="checkbox-outline" size={24} color="black" />
             )}
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   viewOne: {
     width: "100%",
-    height: 90,
-    justifyContent: "center",
-    alignItems: "center",
   },
 
   chatBox: {
     width: "100%",
-    height: 90,
+
     flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 12,
   },
 
   imaContainer: {
-    justifyContent: "center",
-    alignItems: "center",
+    // justifyContent: "center",
+    // alignItems: "center",
   },
 
   imaAvatar: {
-    marginLeft: 35,
-    height: 60,
-    width: 60,
+    height: 50,
+    width: 50,
     borderRadius: 100,
-    backgroundColor: "red",
+
+    backgroundColor: "#FFF6BF",
+    marginRight: 12,
   },
 
   bodyContainer: {
-    marginLeft: 10,
-    paddingRight: 10,
-    paddingLeft: 10,
     flex: 1,
-    height: 90,
     justifyContent: "center",
   },
 
   notification: {
-    width: "20%",
-    paddingRight: 13,
     alignItems: "center",
     flexDirection: "row",
+    borderRadius: 100,
     justifyContent: "space-between",
-    height: 90,
   },
 
   textName: {
-    paddingLeft: 15,
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: 16,
+    fontWeight: "400",
+    color: "black",
+    textTransform: "capitalize",
   },
 
   status: {

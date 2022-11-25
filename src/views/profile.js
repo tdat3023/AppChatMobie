@@ -54,7 +54,9 @@ export default Profile = ({ navigation }) => {
             <Image
               style={StyleSheet.flatten([styles.imageA3])}
               resizeMode="cover"
-              source={user.avatar}
+              source={{
+                uri: user?.avatar,
+              }}
             />
           ) : (
             <Image

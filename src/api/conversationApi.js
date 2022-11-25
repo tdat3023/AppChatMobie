@@ -28,7 +28,7 @@ const conversationApi = {
   },
 
   // [POST] /coversation/groups
-  createConversation: (temp) => {
+  createConversationGroup: (temp) => {
     return axiosClient.post("conversation/groups", temp);
   },
 

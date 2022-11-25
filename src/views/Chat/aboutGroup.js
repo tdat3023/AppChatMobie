@@ -12,10 +12,13 @@ import {
   TouchableOpacity,
 } from "react-native";
 import ToggleSwitch from "toggle-switch-react-native";
+import Contex from "../../store/Context";
 const AboutGroupScreen = ({ navigation }) => {
+  const { state, depatch } = React.useContext(Contex);
+  const { user, userSearched, idConversation, userChatting } = state;
   const [switchOnPin, setSwitchOnPin] = useState(false);
   const [switchOn, setSwitchOn] = useState(false);
-  const [user, setUser] = useState("Tên");
+
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -34,7 +37,7 @@ const AboutGroupScreen = ({ navigation }) => {
               marginTop: 10,
             }}
           >
-            {user}
+            {userChatting?.name}
           </Text>
           <View style={styles.viewListOpstion}>
             <TouchableOpacity>
@@ -77,26 +80,7 @@ const AboutGroupScreen = ({ navigation }) => {
                 </Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity>
-              <View style={styles.viewListIcon}>
-                <View style={styles.viewIcon}>
-                  <Ionicons
-                    style={{ lineHeight: 40 }}
-                    name="color-palette"
-                    size={25}
-                  />
-                </View>
-                <Text
-                  style={{
-                    textAlign: "center",
-                    fontSize: 12,
-                    fontWeight: "bold",
-                  }}
-                >
-                  Đổi hình nền
-                </Text>
-              </View>
-            </TouchableOpacity>
+
             <TouchableOpacity>
               <View style={styles.viewListIcon}>
                 <View style={styles.viewIcon}>
@@ -155,38 +139,6 @@ const AboutGroupScreen = ({ navigation }) => {
               </View>
             </View>
           </TouchableOpacity>
-
-          <View style={styles.viewItem}>
-            <Ionicons name="eye-off" size={23} />
-            <View style={styles.viewCustomItem}>
-              <Text style={{ fontSize: 15 }}>Ẩn cuộc trò chuyện</Text>
-              <ToggleSwitch
-                isOn={switchOnPin}
-                onColor="#33C481"
-                offColor="#E4E6EB"
-                size="small"
-                onToggle={() => {
-                  setSwitchOnPin(!switchOnPin);
-                }}
-              />
-            </View>
-          </View>
-
-          <View style={styles.viewItem}>
-            <Ionicons name="eyedrop" size={23} />
-            <View style={styles.viewCustomItem}>
-              <Text style={{ fontSize: 15 }}>Ghim cuộc trò chuyện</Text>
-              <ToggleSwitch
-                isOn={switchOn}
-                onColor="#33C481"
-                offColor="#E4E6EB"
-                size="small"
-                onToggle={() => {
-                  setSwitchOn(!switchOn);
-                }}
-              />
-            </View>
-          </View>
 
           <TouchableOpacity>
             <View style={styles.viewItem}>

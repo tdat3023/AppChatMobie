@@ -12,6 +12,7 @@ import {
   Image,
   TextInput,
   Dimensions,
+  Alert,
 } from "react-native";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -21,7 +22,81 @@ import AddGroupItem from "./addGroupItem";
 const WinWidth = Dimensions.get("window").width;
 const WinHeight = Dimensions.get("window").height;
 
-const AddGroup = ({ navigation }) => {
+import { db } from "../../firebase/firebaseDB";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  getDoc,
+  doc,
+  query,
+  where,
+} from "firebase/firestore/lite";
+import Contex from "../../store/Context";
+import conversationApi from "../../api/conversationApi";
+import { SetIdConversation, SetUserChatting } from "../../store/Actions";
+
+const UserChoise = ({
+  item,
+  listUserAddToGroup,
+  setListUserAddToGroup,
+  setCount,
+  count,
+}) => {
+  //remove user out list of create goup
+  const handleRemoveOutGroupList = () => {
+    //remove user out group list
+    const newArrAfterRemo = listUserAddToGroup.filter((val) => {
+      return val.uid !== item.uid;
+    });
+
+    setCount(--count);
+    setListUserAddToGroup(newArrAfterRemo);
+  };
+  return (
+    <TouchableOpacity
+      style={styles.itemChoose}
+      key={Math.random()}
+      onPress={() => handleRemoveOutGroupList()}
+    >
+      {item.avatar ? (
+        <Image style={styles.imaAvatar} source={{ uri: item.avatar }}></Image>
+      ) : (
+        <Image
+          style={styles.imaAvatar}
+          source={{
+            uri: "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
+          }}
+        ></Image>
+      )}
+
+      <View style={styles.status}>
+        <TouchableOpacity>
+          <AntDesign name="close" size={12} color="white" />
+        </TouchableOpacity>
+      </View>
+    </TouchableOpacity>
+  );
+};
+
+const AddGroup = ({ navigation, route }) => {
+  //get socket from navigation value
+  const socket = route?.params;
+  //console.log(socket);
+  const { state, depatch } = React.useContext(Contex);
+  const { user, userSearched, idConversation, userChatting } = state;
+
+  //list of user will be add a group
+  const [listUserAddToGroup, setListUserAddToGroup] = useState([]);
+  const [groupName, setGroupName] = useState("");
+  console.log(listUserAddToGroup);
+
+  //state
+  //khi tim kiem user thanh cong se add vao list de render data
+  const [listUserSearch, setListUserSearch] = useState([]);
+
+  //search text
+  const [textSearch, setTextSearch] = useState("");
   const [users, setUsers] = useState([
     {
       id: "1",
@@ -81,8 +156,103 @@ const AddGroup = ({ navigation }) => {
 
   const [count, setCount] = useState(0);
 
-  console.log(count);
+  //handle search user by email
+  const handleSearch = async (text) => {
+    const q = query(collection(db, "users"), where("email", "==", text));
+    const newArr = [];
 
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc.id, " => ", doc.data());
+      newArr.push(doc.data());
+    });
+
+    setListUserSearch(newArr);
+  };
+
+  //create agroup
+  const handleCreateGroup = () => {
+    //check name group
+    if (groupName.length < 1) {
+      Alert.alert("Vui lòng nhập tên nhóm!!");
+      return;
+    }
+    //check list co du 2 thanh vien k
+    if (listUserAddToGroup.length < 2) {
+      Alert.alert("Phải trên 3 thành viên mới được tạo nhóm!!");
+      return;
+    } else {
+      //du dieu kien
+      //cal api create group in here
+      //handle create group
+
+      const idList = listUserAddToGroup.map((val) => {
+        return val.uid;
+      });
+      //  console.log(idList);
+
+      //upload image into firebase
+      //co avatar
+
+      console.log("khong co avatar ----> ");
+      //call api save data
+      const createGroup = async () => {
+        try {
+          const temp = {
+            userId: user.uid,
+            name: groupName,
+            userList: [...idList],
+            avatar: "",
+          };
+          // console.log(temp);
+          const response = await conversationApi.createConversationGroup(temp);
+
+          //cuoc hoi thoai da dc luu vao db -> chinh la cuoc hoi thoai dau tien trong mang tra ve
+          //get cuoc hoi thoai nhom vua moi tao
+          const fetchConversations = async () => {
+            // console.log("user:", user.user.uid);
+            try {
+              // user.uid,page,size
+              const response = await conversationApi.getConversations(
+                user.uid,
+                0,
+                1
+              );
+              const { data, page, size, totalPages } = response;
+              // console.log("data", data);
+              if (response) {
+                console.log(response);
+                // type conversation is true set conversation= conversation, chatUser= GroupInfo
+                depatch(SetIdConversation(data[0].conversations));
+                depatch(SetUserChatting(data[0].inFo));
+                //socket create group in here
+                if (socket.current) {
+                  console.log("vooo");
+                  socket.current.emit("create-conversation", {
+                    idConversation: response,
+                    idList,
+                  });
+                }
+                navigation.navigate("ChatScreen", { item: data[0] });
+              }
+            } catch (error) {
+              console.log("Failed to fetch conversation list: ", error);
+            }
+          };
+
+          fetchConversations();
+
+          //redict trang nhan tin
+          // navigation.navigate("ChatScreen");
+          console.log("tao nhom thanh cong" + response);
+        } catch (error) {
+          console.log("Failed to fetch conversation list: ", error);
+        }
+      };
+      createGroup();
+    }
+  };
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -90,11 +260,11 @@ const AddGroup = ({ navigation }) => {
 
         <View style={styles.topTag}>
           <TouchableOpacity style={{ alignItems: "center", marginLeft: 10 }}>
-            <Ionicons name="arrow-back" size={30} color="gray" />
+            <Ionicons name="arrow-back" size={20} color="black" />
           </TouchableOpacity>
           <View style={styles.topTag1}>
-            <Text style={{ fontSize: 20 }}>Nhóm mới</Text>
-            <Text>
+            <Text style={{ fontSize: 18, fontWeight: "500" }}>Nhóm mới</Text>
+            <Text style={{ fontSize: 12 }}>
               Đã chọn:
               <Text> {count} </Text>
             </Text>
@@ -104,14 +274,25 @@ const AddGroup = ({ navigation }) => {
         {/* tên nhóm */}
         <View style={{ alignItems: "center" }}>
           <View style={styles.topTag0}>
-            <TouchableOpacity style={{ alignItems: "center", marginLeft: 10 }}>
-              <AntDesign name="camera" size={28} color="gray" />
+            <TouchableOpacity
+              style={{
+                alignItems: "center",
+                justifyContent: "center",
+                marginLeft: 10,
+                borderRadius: 100,
+                backgroundColor: "#d6dbe1",
+                paddingHorizontal: 12,
+                paddingVertical: 12,
+              }}
+            >
+              <AntDesign name="camera" size={24} color="gray" />
             </TouchableOpacity>
             <View style={styles.sreach}>
               <TextInput
                 style={styles.textTopTag}
                 placeholder="Đặt tên nhóm"
                 placeholderTextColor="gray"
+                onChangeText={(text) => setGroupName(text)}
               ></TextInput>
             </View>
           </View>
@@ -119,11 +300,12 @@ const AddGroup = ({ navigation }) => {
           {/* sreach */}
           <View style={styles.topTag2}>
             <TouchableOpacity style={{ alignItems: "center", marginLeft: 10 }}>
-              <AntDesign name="search1" size={24} color="gray" />
+              <AntDesign name="search1" size={20} color="gray" />
             </TouchableOpacity>
             <View style={styles.sreach}>
               <TextInput
                 style={styles.textTopTag}
+                onChangeText={(text) => handleSearch(text)}
                 placeholder="Tìm kiếm"
                 placeholderTextColor="gray"
               ></TextInput>
@@ -135,43 +317,53 @@ const AddGroup = ({ navigation }) => {
         <View style={styles.bodyListChat}>
           <FlatList
             style={styles.bodyList}
-            data={users}
+            data={listUserSearch}
             renderItem={({ item }) => (
-              <AddGroupItem item={item} setCount={setCount} count={count} />
+              <AddGroupItem
+                setListUserAddToGroup={setListUserAddToGroup}
+                listUserAddToGroup={listUserAddToGroup}
+                item={item}
+                setCount={setCount}
+                count={count}
+                key={Math.random() + item.uid}
+              />
             )}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.uid + Math.random() + Math.random()}
           ></FlatList>
         </View>
 
-        <View style={styles.footer}>
-          <View style={styles.listChoose}>
-            <FlatList
-              horizontal
-              // style={{ justifyContent: "center" }}
-              data={users}
-              renderItem={({ item }) => (
-                <View style={styles.itemChoose}>
-                  <Image
-                    style={styles.imaAvatar}
-                    source={{ uri: item.url }}
-                  ></Image>
-
-                  <View style={styles.status}>
-                    <TouchableOpacity>
-                      <AntDesign name="close" size={14} color="black" />
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              )}
-              keyExtractor={(item) => item.id}
-            ></FlatList>
+        {listUserAddToGroup.length > 0 ? (
+          <View style={styles.footer}>
+            <View style={styles.listChoose}>
+              <FlatList
+                horizontal
+                // style={{ justifyContent: "center" }}
+                data={listUserAddToGroup}
+                renderItem={({ item }) => (
+                  <UserChoise
+                    item={item}
+                    setCount={setCount}
+                    count={count}
+                    key={Math.random()}
+                    setListUserAddToGroup={setListUserAddToGroup}
+                    listUserAddToGroup={listUserAddToGroup}
+                  />
+                )}
+                keyExtractor={(item) =>
+                  item.uid + Math.random() + Math.random()
+                }
+              ></FlatList>
+            </View>
+            <View style={styles.viewbtn}>
+              <TouchableOpacity
+                style={styles.btn}
+                onPress={() => handleCreateGroup()}
+              >
+                <Feather name="arrow-right" size={22} color="white" />
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={styles.viewbtn}>
-            <TouchableOpacity style={styles.btn}>
-              <Feather name="arrow-right" size={30} color="white" />
-            </TouchableOpacity>
-          </View>
-        </View>
+        ) : null}
       </View>
     </SafeAreaView>
   );
@@ -199,24 +391,22 @@ const styles = StyleSheet.create({
   topTag: {
     width: "100%",
     height: 55,
-    backgroundColor: "#66B2FF",
+    backgroundColor: "#dfe2e7",
     flexDirection: "row",
     alignItems: "center",
-    borderBottomWidth: 1,
   },
   topTag0: {
-    width: "90%",
     height: 50,
     flexDirection: "row",
     alignItems: "center",
+    marginVertical: 12,
   },
 
   topTag2: {
-    width: "90%",
-    height: 50,
+    //height: 50,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#D6E4E5",
+    backgroundColor: "#dfe2e7",
     borderRadius: 10,
   },
 
@@ -226,7 +416,7 @@ const styles = StyleSheet.create({
   },
 
   textTopTag: {
-    fontSize: 20,
+    fontSize: 16,
   },
 
   text1: {
@@ -240,6 +430,8 @@ const styles = StyleSheet.create({
 
   bodyListChat: {
     flex: 1,
+    paddingHorizontal: 14,
+    marginTop: 12,
   },
 
   footer: {
@@ -255,16 +447,15 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "#66B2FF",
+    backgroundColor: "#0091ff",
     justifyContent: "center",
     alignItems: "center",
   },
 
   imaAvatar: {
-    height: 50,
-    width: 50,
+    height: "100%",
+    width: "100%",
     borderRadius: 100,
-    backgroundColor: "red",
   },
 
   listChoose: {
@@ -272,16 +463,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 5,
     marginHorizontal: 10,
-    backgroundColor: "yellow",
   },
 
   itemChoose: {
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "red",
+
     borderRadius: 50,
-    height: 50,
-    width: 50,
+    height: 45,
+    width: 45,
     marginRight: 10,
   },
 
@@ -291,6 +481,8 @@ const styles = StyleSheet.create({
     right: 0,
     height: 15,
     width: 15,
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: "gray",
     borderRadius: 20,
   },
