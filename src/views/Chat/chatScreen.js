@@ -49,7 +49,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
   const [typing, setTyping] = useState(false);
 
   const { state, depatch } = React.useContext(Contex);
-  const { user, userSearched, idConversation, userChatting } = state;
+  const { user, idConversation, userChatting } = state;
   const [listMessgae, setListMessage] = useState([]);
   // if (socket) {
   //   console.log("socket", socket);

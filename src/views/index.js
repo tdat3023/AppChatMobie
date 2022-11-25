@@ -19,6 +19,7 @@ import { firebase } from "../firebase/firebaseDB";
 import "firebase/compat/auth";
 
 import AddFriend from "./Contacts/addGroup";
+import MemberComponent from "./Chat/group/MemberComponent";
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -131,6 +132,7 @@ export default RootComponent = function () {
           screenOptions={{ headerShown: false }}
         />
         <Stack.Screen name="ChatScreen" component={ChatScreen} />
+        <Stack.Screen name="MemberScreen" component={MemberComponent} />
         <Stack.Screen name="Resgister" component={Resgister} />
         <Stack.Screen name="CreateAboutScreen" component={CreateAboutScreen} />
         <Stack.Screen name="AboutGroupScreen" component={AboutGroupScreen} />

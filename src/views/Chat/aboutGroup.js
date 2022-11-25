@@ -19,6 +19,9 @@ const AboutGroupScreen = ({ navigation }) => {
   const [switchOnPin, setSwitchOnPin] = useState(false);
   const [switchOn, setSwitchOn] = useState(false);
 
+  const handleOpenMemberScreen = () => {
+    navigation.navigate("MemberScreen");
+  };
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -187,12 +190,12 @@ const AboutGroupScreen = ({ navigation }) => {
           </TouchableOpacity>
 
           {/* xóa thành viên */}
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => handleOpenMemberScreen()}>
             <View style={styles.viewItem}>
-              <Ionicons name="person-remove-outline" size={23} color="red" />
+              <Ionicons name="person-remove-outline" size={23} />
               <View style={styles.viewCustomItem}>
-                <Text style={{ fontSize: 15, color: "red" }}>
-                  Xóa thành viên
+                <Text style={{ fontSize: 15 }}>
+                  Thành viên ({userChatting.userInfo.length})
                 </Text>
                 <Ionicons
                   style={{}}
@@ -209,21 +212,6 @@ const AboutGroupScreen = ({ navigation }) => {
               <Ionicons name="ios-key-outline" size={23} />
               <View style={styles.viewCustomItem}>
                 <Text style={{ fontSize: 15 }}>Chuyển quyền trưởng nhóm</Text>
-                <Ionicons
-                  style={{}}
-                  color={"gray"}
-                  name="chevron-forward-outline"
-                  size={20}
-                />
-              </View>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity>
-            <View style={styles.viewItem}>
-              <Ionicons name="link-outline" size={23} />
-              <View style={styles.viewCustomItem}>
-                <Text style={{ fontSize: 15 }}>Link tham gia nhóm</Text>
                 <Ionicons
                   style={{}}
                   color={"gray"}
@@ -253,26 +241,25 @@ const AboutGroupScreen = ({ navigation }) => {
             Riêng tư
           </Text>
         </View>
+        <TouchableOpacity>
+          <View style={styles.viewItem}>
+            <MaterialIcons name="logout" size={23} color="red" />
 
-        <View style={styles.viewCustomization}>
-          <TouchableOpacity>
-            <View style={styles.viewItem}>
-              <Ionicons name="warning" size={23} />
-              <View style={styles.viewCustomItem}>
-                <Text style={{ fontSize: 15 }}>Báo xấu</Text>
-              </View>
+            <View style={styles.viewCustomItem}>
+              <Text style={{ fontSize: 15, color: "red" }}>Rời nhóm</Text>
             </View>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={styles.viewItem}>
-              <MaterialIcons name="logout" size={23} color="red" />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <View style={styles.viewItem}>
+            <MaterialIcons name="logout" size={23} color="red" />
 
-              <View style={styles.viewCustomItem}>
-                <Text style={{ fontSize: 15, color: "red" }}>Rời nhớm</Text>
-              </View>
+            <View style={styles.viewCustomItem}>
+              <Text style={{ fontSize: 15, color: "red" }}>Giải tán nhóm</Text>
             </View>
-          </TouchableOpacity>
-        </View>
+          </View>
+        </TouchableOpacity>
+
         <View style={{ display: "flex", height: 20 }}></View>
       </View>
     </ScrollView>
