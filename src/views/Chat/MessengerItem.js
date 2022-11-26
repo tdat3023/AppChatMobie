@@ -43,15 +43,13 @@ function MessengerItem({ messend, props, route }) {
                     source={{
                       //  uri: userChatting?.avatar,
                       uri: "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
-                    }}
-                  ></Image>
+                    }}></Image>
                 ) : (
                   <Image
                     style={styles.imaAvatar}
                     source={{
                       uri: "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
-                    }}
-                  ></Image>
+                    }}></Image>
                 )}
                 <View>
                   <View
@@ -84,8 +82,7 @@ function MessengerItem({ messend, props, route }) {
                       {
                         width: messend.content.length > 40 ? "80%" : "auto",
                       },
-                    ]}
-                  >
+                    ]}>
                     <Text style={{ fontWeight: "bold" }}>
                       {idConversation.type ? (
                         userChatting.userInfo.map((user) => {
@@ -108,7 +105,7 @@ function MessengerItem({ messend, props, route }) {
                             cache: "default", //  default || reload || force-cache || only-if-cached
                           }}
                           dimensionType={imageDimensionTypes.HEIGHT}
-                          dimensionValue={200}
+                          dimensionValue={150}
                         />
                       ) : checkUrlIsSticker(messend.content) ? (
                         <AutoDimensionImage
@@ -130,8 +127,7 @@ function MessengerItem({ messend, props, route }) {
                       pressOn
                         ? { marginLeft: 20, marginTop: 10 }
                         : { margin: 0 },
-                    ]}
-                  >
+                    ]}>
                     {/* check time mess  receive with current time ? set time is hours or date */}
                     {pressOn ? (
                       differenceInCalendarDays(
@@ -177,7 +173,7 @@ function MessengerItem({ messend, props, route }) {
                       cache: "default", //  default || reload || force-cache || only-if-cached
                     }}
                     dimensionType={imageDimensionTypes.HEIGHT}
-                    dimensionValue={200}
+                    dimensionValue={150}
                   />
                 ) : checkUrlIsSticker(messend.content) ? (
                   <AutoDimensionImage
@@ -216,8 +212,7 @@ function MessengerItem({ messend, props, route }) {
                         backgroundColor: "#d8f1fd",
                         color: "black",
                       },
-                    ]}
-                  >
+                    ]}>
                     {messend.content}
                   </Text>
                 )}
@@ -226,8 +221,7 @@ function MessengerItem({ messend, props, route }) {
                     pressOn
                       ? { marginRight: 20, marginTop: 10 }
                       : { margin: 0 },
-                  ]}
-                >
+                  ]}>
                   {/* check time mess send  with current time ? set time is hours or date */}
                   {pressOn ? (
                     // >1 is date

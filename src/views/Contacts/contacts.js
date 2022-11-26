@@ -61,7 +61,7 @@ const Contact = ({ navigation }) => {
         const data = response;
         // console.log("listMess ", data[0].messages);
         if (response) {
-          // setListInvite(data);
+          setListInvite(data);
           // console.log("listMess", data);
         }
       } catch (error) {
@@ -76,7 +76,7 @@ const Contact = ({ navigation }) => {
         const data = response;
         // console.log("listMess ", data[0].messages);
         if (response) {
-          // setListFirend(data);
+          setListFirend(data);
           // console.log("listMess", data);
         }
       } catch (error) {
@@ -86,7 +86,7 @@ const Contact = ({ navigation }) => {
 
     fetchListRequest();
     fetchListFriend();
-  }, [listInvite, listFriend]);
+  }, []);
 
   return (
     <SafeAreaView>
@@ -100,8 +100,7 @@ const Contact = ({ navigation }) => {
             <TextInput
               style={styles.textTopTag}
               placeholder="Tìm kiếm"
-              placeholderTextColor="white"
-            ></TextInput>
+              placeholderTextColor="white"></TextInput>
           </View>
 
           <View style={styles.moreTag}>
@@ -117,8 +116,7 @@ const Contact = ({ navigation }) => {
             <TouchableOpacity
               onPress={() => {
                 setTyping(Friend);
-              }}
-            >
+              }}>
               {typing === Friend ? (
                 <Text style={styles.text2}>BẠN BÈ</Text>
               ) : (
@@ -130,8 +128,7 @@ const Contact = ({ navigation }) => {
             <TouchableOpacity
               onPress={() => {
                 setTyping(Request);
-              }}
-            >
+              }}>
               {typing === Request ? (
                 <Text style={styles.text2}>LỜI MỜI</Text>
               ) : (

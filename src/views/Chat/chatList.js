@@ -81,7 +81,7 @@ export default ChatApp = function ({ navigation }) {
           200
         );
         const { data, page, size, totalPages } = response;
-        // console.log("data", data);
+        //console.log("data", data);
         if (response) {
           setConversations(data);
         }
@@ -89,6 +89,21 @@ export default ChatApp = function ({ navigation }) {
         console.log("Failed to fetch conversation list: ", error);
       }
     };
+
+    socket.current?.on("get-message", ({ senderId, message }) => {
+      fetchConversations();
+    });
+    socket.current?.on(
+      " create-conversation-was-friend",
+      (conversationId, message) => {
+        console.log("Conversationid", conversationId);
+        fetchConversations();
+      }
+    );
+
+    socket.current?.on("get-conversation-group", (idCon) => {
+      fetchConversations();
+    });
 
     fetchConversations();
   }, [user]);
@@ -105,8 +120,7 @@ export default ChatApp = function ({ navigation }) {
         <ChatItem
           item={item}
           navigation={navigation}
-          socket={socket}
-        ></ChatItem>
+          socket={socket}></ChatItem>
       );
     }
   };
@@ -144,8 +158,7 @@ export default ChatApp = function ({ navigation }) {
               style={{ alignItems: "center", marginLeft: 10 }}
               onPress={() => {
                 alert(sreachText);
-              }}
-            >
+              }}>
               <AntDesign name="search1" size={24} color="white" />
             </TouchableOpacity>
             {/* sreach input */}
@@ -153,8 +166,7 @@ export default ChatApp = function ({ navigation }) {
               style={styles.textTopTag}
               value={sreachText}
               onChangeText={(text) => handleChangText(text)}
-              placeholder="Tìm kiếm"
-            ></TextInput>
+              placeholder="Tìm kiếm"></TextInput>
           </View>
 
           <View style={styles.moreTag}>
@@ -169,8 +181,7 @@ export default ChatApp = function ({ navigation }) {
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate("AddGroup", { socket: socket });
-              }}
-            >
+              }}>
               <AntDesign name="addusergroup" size={24} color="white" />
             </TouchableOpacity>
           </View>
@@ -188,8 +199,7 @@ export default ChatApp = function ({ navigation }) {
                   fontSize: 14,
                   marginHorizontal: 12,
                   marginVertical: 12,
-                }}
-              >
+                }}>
                 Tìm qua email:
               </Text>
               {/* <Text style={{textAlign:"center", marginTop:40}}>Email chưa đăng ký tài khoản</Text> */}

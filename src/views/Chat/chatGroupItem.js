@@ -27,7 +27,7 @@ function ChatGroupItem({ item, navigation, socket }) {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
   const onPress = () => {
-    navigation.navigate("ChatScreen", { item: item });
+    navigation.navigate("ChatScreen", socket);
     // type conversation is true set conversation= conversation, chatUser= GroupInfo
     depatch(SetIdConversation(item.conversations));
     depatch(SetUserChatting(item.inFo));
@@ -44,8 +44,7 @@ function ChatGroupItem({ item, navigation, socket }) {
             uri: item.inFo.avatar[0].avaUser
               ? item.inFo.avatar[0].avaUser
               : "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
-          }}
-        ></Image>
+          }}></Image>
       );
     }
     return (
@@ -57,16 +56,14 @@ function ChatGroupItem({ item, navigation, socket }) {
               uri: item.inFo.avatar[0].avaUser
                 ? item.inFo.avatar[0].avaUser
                 : "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
-            }}
-          ></Image>
+            }}></Image>
           <Image
             style={styles.imaAvatar}
             source={{
               uri: item.inFo.avatar[1]
                 ? item.inFo.avatar[1].avaUser
                 : "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
-            }}
-          ></Image>
+            }}></Image>
         </View>
         <View style={styles.imaGroup}>
           <Image
@@ -76,8 +73,7 @@ function ChatGroupItem({ item, navigation, socket }) {
                 item.inFo.avatar.length > 3
                   ? item.inFo.avatar[2].avaUser
                   : "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
-            }}
-          ></Image>
+            }}></Image>
 
           {item.inFo.avatar.length == 3 && null}
 
@@ -88,8 +84,7 @@ function ChatGroupItem({ item, navigation, socket }) {
                 uri: item.inFo.avatar[3].avaUser
                   ? item.inFo.avatar[3].avaUser
                   : "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
-              }}
-            ></Image>
+              }}></Image>
           )}
 
           {item.inFo.avatar.length > 4 && (
@@ -120,8 +115,7 @@ function ChatGroupItem({ item, navigation, socket }) {
                 justifyContent: "space-between",
                 flexDirection: "row",
                 alignItems: "center",
-              }}
-            >
+              }}>
               <Text style={styles.textLastMes}>
                 {/* check name user send mess */}
                 {item.conversations?.lastMessage[0].type.endsWith("NOTIFY")
