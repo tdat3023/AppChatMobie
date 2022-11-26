@@ -1,28 +1,26 @@
-import React, { Component } from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useState, useEffect, useRef } from "react";
+import React from "react";
+
+import { useState } from "react";
 import {
   View,
-  FlatList,
-  Text,
   StyleSheet,
   TouchableOpacity,
   SafeAreaView,
   Image,
-  TextInput,
   Dimensions,
   Alert,
+  Text,
+  TextInput,
+  FlatList,
 } from "react-native";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Feather from "react-native-vector-icons/Feather";
-import AddGroupItem from "./addGroupItem";
 
 const WinWidth = Dimensions.get("window").width;
 const WinHeight = Dimensions.get("window").height;
 
-import { db } from "../../firebase/firebaseDB";
+import { db } from "../../../firebase/firebaseDB";
 import {
   getFirestore,
   collection,
@@ -32,9 +30,9 @@ import {
   query,
   where,
 } from "firebase/firestore/lite";
-import Contex from "../../store/Context";
-import conversationApi from "../../api/conversationApi";
-import { SetIdConversation, SetUserChatting } from "../../store/Actions";
+import Contex from "../../../store/Context";
+import AddGroupItem from "../../Contacts/addGroupItem";
+import conversationApi from "../../../api/conversationApi";
 
 const UserChoise = ({
   item,
@@ -43,6 +41,7 @@ const UserChoise = ({
   setCount,
   count,
 }) => {
+  console.log(item);
   //remove user out list of create goup
   const handleRemoveOutGroupList = () => {
     //remove user out group list
@@ -79,80 +78,19 @@ const UserChoise = ({
   );
 };
 
-const AddGroup = ({ navigation, route }) => {
-  //get socket from navigation value
-  const socket = route?.params;
-  //console.log(socket);
+export default AddMemberGroupComponent = ({ navigation }) => {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
 
   //list of user will be add a group
   const [listUserAddToGroup, setListUserAddToGroup] = useState([]);
-  const [groupName, setGroupName] = useState("");
-  console.log(listUserAddToGroup);
 
   //state
   //khi tim kiem user thanh cong se add vao list de render data
   const [listUserSearch, setListUserSearch] = useState([]);
-
+  console.log(listUserSearch);
   //search text
   const [textSearch, setTextSearch] = useState("");
-  const [users, setUsers] = useState([
-    {
-      id: "1",
-      url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
-      name: "Tiến Đạt",
-      lastMessage: "Hello",
-    },
-    {
-      id: "2",
-      url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
-      name: "Tiến Đạt",
-      lastMessage: "Hello",
-    },
-    {
-      id: "3",
-      url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
-      name: "Tiến Đạt",
-      lastMessage: "Hello",
-    },
-    {
-      id: "4",
-      url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
-      name: "Tiến Đạt",
-      lastMessage: "Hello",
-    },
-    {
-      id: "5",
-      url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
-      name: "Tiến Đạt",
-      lastMessage: "Hello",
-    },
-    {
-      id: "6",
-      url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
-      name: "Tiến Đạt",
-      lastMessage: "Hello",
-    },
-    {
-      id: "7",
-      url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
-      name: "Tiến Đạt",
-      lastMessage: "Hello",
-    },
-    {
-      id: "8",
-      url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
-      name: "Tiến Đạt",
-      lastMessage: "Hello",
-    },
-    {
-      id: "9",
-      url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
-      name: "Tiến Đạt",
-      lastMessage: "Hello",
-    },
-  ]);
 
   const [count, setCount] = useState(0);
 
@@ -164,95 +102,65 @@ const AddGroup = ({ navigation, route }) => {
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data());
-      newArr.push(doc.data());
+      // console.log(doc.id, " => ", doc.data());
+      let checkJoied = false;
+      //check user da co trong nhom chua
+      userChatting.userInfo.forEach((val) => {
+        console.log("may lan");
+        if (doc.id === val.userId) {
+          checkJoied = true;
+          return;
+        }
+      });
+
+      if (checkJoied === true) {
+        checkJoied = false;
+        newArr.push({ ...doc.data(), status: true });
+      } else {
+        checkJoied = false;
+        newArr.push({ ...doc.data(), status: false });
+      }
     });
 
+    // console.log("neew   ", newArr);
     setListUserSearch(newArr);
   };
 
   //create agroup
-  const handleCreateGroup = () => {
-    //check name group
-    if (groupName.length < 1) {
-      Alert.alert("Vui lòng nhập tên nhóm!!");
-      return;
-    }
-    //check list co du 2 thanh vien k
-    if (listUserAddToGroup.length < 2) {
-      Alert.alert("Phải trên 3 thành viên mới được tạo nhóm!!");
-      return;
-    } else {
-      //du dieu kien
-      //cal api create group in here
-      //handle create group
+  const handleAddMember = () => {
+    //get list id in users will add to group
+    const idList = listUserAddToGroup.map((val) => {
+      return val.uid;
+    });
 
-      const idList = listUserAddToGroup.map((val) => {
-        return val.uid;
-      });
-      //  console.log(idList);
+    console.log(idList);
 
-      //upload image into firebase
-      //co avatar
+    //call api save data
+    const addMemberIntoGroup = async () => {
+      try {
+        const response = await conversationApi.addMember(
+          idConversation._id,
+          user.uid,
+          idList
+        );
+        setListUserAddToGroup([]);
+        console.log("add member thanh cong" + response);
+      } catch (error) {
+        console.log("Failed to add member: ", error);
+      }
+    };
 
-      console.log("khong co avatar ----> ");
-      //call api save data
-      const createGroup = async () => {
-        try {
-          const temp = {
-            userId: user.uid,
-            name: groupName,
-            userList: [...idList],
-            avatar: "",
-          };
-          // console.log(temp);
-          const response = await conversationApi.createConversationGroup(temp);
+    //call custom hook
+    addMemberIntoGroup(idConversation, user.uid, idList);
 
-          //cuoc hoi thoai da dc luu vao db -> chinh la cuoc hoi thoai dau tien trong mang tra ve
-          //get cuoc hoi thoai nhom vua moi tao
-          const fetchConversations = async () => {
-            // console.log("user:", user.user.uid);
-            try {
-              // user.uid,page,size
-              const response = await conversationApi.getConversations(
-                user.uid,
-                0,
-                1
-              );
-              const { data, page, size, totalPages } = response;
-              // console.log("data", data);
-              if (response) {
-                setListUserAddToGroup([]);
-                console.log(response);
-                // type conversation is true set conversation= conversation, chatUser= GroupInfo
-                depatch(SetIdConversation(data[0].conversations));
-                depatch(SetUserChatting(data[0].inFo));
-                //socket create group in here
-                if (socket.current) {
-                  console.log("vooo");
-                  socket.current.emit("create-conversation", {
-                    idConversation: response,
-                    idList,
-                  });
-                }
-                navigation.navigate("ChatScreen", { item: data[0] });
-              }
-            } catch (error) {
-              console.log("Failed to fetch conversation list: ", error);
-            }
-          };
-
-          fetchConversations();
-
-          //redict trang nhan tin
-          // navigation.navigate("ChatScreen");
-          console.log("tao nhom thanh cong" + response);
-        } catch (error) {
-          console.log("Failed to fetch conversation list: ", error);
-        }
-      };
-      createGroup();
-    }
+    //socket in here
+    // if (socket.current) {
+    //   socket.current.emit("kickUser", {
+    //     idConversation: idConversation._id,
+    //     // idLeader:user.uid,
+    //     idUserKick: user.uid,
+    //   });
+    // }
   };
   return (
     <SafeAreaView>
@@ -264,7 +172,9 @@ const AddGroup = ({ navigation, route }) => {
             <Ionicons name="arrow-back" size={20} color="black" />
           </TouchableOpacity>
           <View style={styles.topTag1}>
-            <Text style={{ fontSize: 18, fontWeight: "500" }}>Nhóm mới</Text>
+            <Text style={{ fontSize: 18, fontWeight: "500" }}>
+              Thêm vào nhóm
+            </Text>
             <Text style={{ fontSize: 12 }}>
               Đã chọn:
               <Text> {count} </Text>
@@ -273,31 +183,7 @@ const AddGroup = ({ navigation, route }) => {
         </View>
 
         {/* tên nhóm */}
-        <View style={{ alignItems: "center" }}>
-          <View style={styles.topTag0}>
-            <TouchableOpacity
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                marginLeft: 10,
-                borderRadius: 100,
-                backgroundColor: "#d6dbe1",
-                paddingHorizontal: 12,
-                paddingVertical: 12,
-              }}
-            >
-              <AntDesign name="camera" size={24} color="gray" />
-            </TouchableOpacity>
-            <View style={styles.sreach}>
-              <TextInput
-                style={styles.textTopTag}
-                placeholder="Đặt tên nhóm"
-                placeholderTextColor="gray"
-                onChangeText={(text) => setGroupName(text)}
-              ></TextInput>
-            </View>
-          </View>
-
+        <View style={{ alignItems: "center", marginTop: 24 }}>
           {/* sreach */}
           <View style={styles.topTag2}>
             <TouchableOpacity style={{ alignItems: "center", marginLeft: 10 }}>
@@ -358,7 +244,7 @@ const AddGroup = ({ navigation, route }) => {
             <View style={styles.viewbtn}>
               <TouchableOpacity
                 style={styles.btn}
-                onPress={() => handleCreateGroup()}
+                onPress={() => handleAddMember()}
               >
                 <Feather name="arrow-right" size={22} color="white" />
               </TouchableOpacity>
@@ -488,5 +374,3 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
 });
-
-export default AddGroup;

@@ -44,6 +44,14 @@ const conversationApi = {
       }
     );
   },
+
+  //[POST] add member into group
+  addMember: (idConversation, idUserAdd, listMember) => {
+    return axiosClient.post(`conversation/members/${idConversation}`, {
+      userId: idUserAdd,
+      members: listMember,
+    });
+  },
 };
 
 export default conversationApi;

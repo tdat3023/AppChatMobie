@@ -20,6 +20,7 @@ import "firebase/compat/auth";
 
 import AddFriend from "./Contacts/addGroup";
 import MemberComponent from "./Chat/group/MemberComponent";
+import AddMemberGroupComponent from "./Chat/group/AddMemberGroupComponent";
 
 const Stack = createNativeStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -139,6 +140,10 @@ export default RootComponent = function () {
         <Stack.Screen name="AddGroup" component={AddGroup} />
 
         <Stack.Screen name="Password" component={PasswordRes} />
+        <Stack.Screen
+          name="AddMemberGroupComponent"
+          component={AddMemberGroupComponent}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

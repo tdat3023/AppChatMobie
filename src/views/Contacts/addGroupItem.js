@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  Alert,
+} from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import React from "react";
 import { useState, useEffect, useRef } from "react";
@@ -11,10 +18,15 @@ export default function AddGroupItem({
   listUserAddToGroup,
 }) {
   const [typing, setTyping] = useState(false);
-  console.log(typing);
 
   //add user into a list -> create group
   const handleOnPress = () => {
+    //neu da tham gia nhom => khong them vao nhom
+    if (item?.status) {
+      Alert.alert("Đã tham gia nhóm");
+      return;
+    }
+
     // if (typing) {
     //   setCount(count - 1);
     // } else {
@@ -71,6 +83,9 @@ export default function AddGroupItem({
           <Text style={styles.textName}>
             {item?.first_name + " " + item?.last_name}
           </Text>
+          {item?.status ? (
+            <Text style={{ color: "#333", fontSize: 12 }}>Đã tham gia</Text>
+          ) : null}
         </View>
 
         <View style={styles.notification}>

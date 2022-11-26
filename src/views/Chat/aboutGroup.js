@@ -22,6 +22,10 @@ const AboutGroupScreen = ({ navigation }) => {
   const handleOpenMemberScreen = () => {
     navigation.navigate("MemberScreen");
   };
+
+  const NavigationToAddMember = () => {
+    navigation.navigate("AddMemberGroupComponent");
+  };
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -63,7 +67,7 @@ const AboutGroupScreen = ({ navigation }) => {
                 </Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => NavigationToAddMember()}>
               <View style={styles.viewListIcon}>
                 <View style={styles.viewIcon}>
                   <Ionicons
