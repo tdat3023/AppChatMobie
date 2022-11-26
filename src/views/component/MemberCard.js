@@ -22,7 +22,7 @@ import { checkUrlIsImage, checkUrlIsSticker } from "../../utilies/Validations";
 
 // import { convertDateTimeToString, handleDate } from "../../utilies/DateTime";
 
-function MemberCard({ value }) {
+function MemberCard({ value,leaderId }) {
   const { state, depatch } = React.useContext(Contex);
   const { user, idConversation, userChatting, socket } = state;
 
@@ -67,7 +67,7 @@ function MemberCard({ value }) {
   //show aleart kick user
   const handleClik = () => {
     //k la truong nhom
-    if (value.userId === idConversation.leaderId) {
+    if (value.userId === leaderId) {
       return;
     }
 
@@ -114,7 +114,7 @@ function MemberCard({ value }) {
             <Text style={styles.textName}>
               {value?.userFistName + " " + value?.userLastName}
             </Text>
-            {value.userId === idConversation.leaderId ? (
+            {value.userId === leaderId ? (
               <Text style={styles.textNameLeader}>Trưởng nhóm</Text>
             ) : null}
             <View

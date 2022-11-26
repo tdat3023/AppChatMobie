@@ -81,11 +81,22 @@ const UserChoise = ({
 
 const AddGroup = ({ navigation, route }) => {
   //get socket from navigation value
-  const socket = route?.params;
+  // const socket = route?.params;
   //console.log(socket);
-  const { state, depatch } = React.useContext(Contex);
-  const { user, userSearched, idConversation, userChatting } = state;
+  // if(socket){
+  //   console.log("socket is connected");
+  // }else{
+  //   console.log("socket is cc");
 
+  // }
+  const { state, depatch } = React.useContext(Contex);
+  const { user, userSearched, idConversation, userChatting,socket } = state;
+
+  if(socket.current){
+      console.log("socket is connected");
+    }else{
+      console.log("socket is cc");
+    }
   //list of user will be add a group
   const [listUserAddToGroup, setListUserAddToGroup] = useState([]);
   const [groupName, setGroupName] = useState("");
@@ -171,6 +182,7 @@ const AddGroup = ({ navigation, route }) => {
     setListUserSearch(newArr);
   };
 
+  
   //create agroup
   const handleCreateGroup = () => {
     //check name group
@@ -227,18 +239,13 @@ const AddGroup = ({ navigation, route }) => {
                 // type conversation is true set conversation= conversation, chatUser= GroupInfo
                 depatch(SetIdConversation(data[0].conversations));
                 depatch(SetUserChatting(data[0].inFo));
-                //socket create group in here
-                if (socket.current) {
-                  console.log("vooo");
-                  socket.current.emit("create-conversation", {
-                    idConversation: response,
-                    idList,
-                  });
-                }
+                
                 navigation.navigate("ChatScreen", { item: data[0] });
               }
             } catch (error) {
-              console.log("Failed to fetch conversation list: ", error);
+              if(error){
+                console.log("Failed to fetch conversation list group: ", error);
+              }
             }
           };
 
@@ -247,11 +254,21 @@ const AddGroup = ({ navigation, route }) => {
           //redict trang nhan tin
           // navigation.navigate("ChatScreen");
           console.log("tao nhom thanh cong" + response);
+          //socket create group in here
+                  console.log("vooo");
+                  socket.current?.emit("create-conversation", {
+                    idConversation: response,
+                    idList,
+                  });
         } catch (error) {
-          console.log("Failed to fetch conversation list: ", error);
+          console.log("Failed create group: ", error);
         }
       };
       createGroup();
+
+
+
+
     }
   };
   return (
