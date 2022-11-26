@@ -27,6 +27,10 @@ const conversationApi = {
     });
   },
 
+  getListMember: (idConversation) => {
+    return axiosClient.get(`conversation/members/${idConversation}`);
+  },
+
   // [POST] /coversation/groups
   createConversationGroup: (temp) => {
     return axiosClient.post("conversation/groups", temp);

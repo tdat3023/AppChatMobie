@@ -27,7 +27,7 @@ function ChatGroupItem({ item, navigation, socket }) {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
   const onPress = () => {
-    navigation.navigate("ChatScreen", { item: item });
+    navigation.navigate("ChatScreen", socket);
     // type conversation is true set conversation= conversation, chatUser= GroupInfo
     depatch(SetIdConversation(item.conversations));
     depatch(SetUserChatting(item.inFo));

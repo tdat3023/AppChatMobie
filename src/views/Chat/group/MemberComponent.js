@@ -30,9 +30,15 @@ import MemberCard from "../../component/MemberCard";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default MemberComponent = ({ navigation }) => {
+
+
+
+
+export default MemberComponent = ({ navigation,route }) => {
   const { state, depatch } = React.useContext(Contex);
   const { user, idConversation, userChatting } = state;
+  const{members,leaderId}=route.params;
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Top tag */}
@@ -78,10 +84,10 @@ export default MemberComponent = ({ navigation }) => {
         }}
       >
         <Text styles={{ color: "#22A39F" }}>
-          Thành viên ({userChatting.userInfo.length})
+          Thành viên ({members.length})
         </Text>
-        {userChatting.userInfo.map((val) => {
-          return <MemberCard value={val} />;
+        {members.map((val) => {
+          return <MemberCard value={val} leaderId={leaderId} />;
         })}
       </View>
     </SafeAreaView>

@@ -26,13 +26,14 @@ import AboutGroupScreen from "./aboutGroup";
 import Contex from "../../store/Context";
 import messageApi from "../../api/messageApi";
 import { Dimensions } from "react-native";
+import conversationApi from "../../api/conversationApi";
 
 // import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 // import ImagePicker from "react-native-image-picker";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-import socket from "../../socket/socketClient";
+// import socket from "../../socket/socketClient";
 
 export default ChatScreen = ({ props, navigation, route }) => {
   // const [panigation, setPanigation] = React.useState({ page: 0, size: 50 });
@@ -47,6 +48,8 @@ export default ChatScreen = ({ props, navigation, route }) => {
   const [onFocus, setOnFocus] = useState(false);
   // const {item} = route.params;
   const [typing, setTyping] = useState(false);
+  const [members, setMembers] = useState([]);
+  const [leaderId, setLeaderId] = useState("");
 
   const { state, depatch } = React.useContext(Contex);
   const { user, idConversation, userChatting } = state;
@@ -94,6 +97,21 @@ export default ChatScreen = ({ props, navigation, route }) => {
 
     fetchMessages();
   }, [userChatting]);
+
+  React.useEffect(() => {
+      const featchListMember = async (_id) => {
+        try {
+          const response = await conversationApi.getListMember(_id);
+          console.log("data::: ", response);
+
+          setMembers(response.members);
+          setLeaderId(response.leaderId);
+        } catch (error) {
+          console.log("Failed to fetch conversation list: ", error);
+        }
+      };
+      featchListMember(idConversation._id);
+  }, []);
 
   useEffect(() => {
     socket.current?.emit("join-room", {
@@ -209,7 +227,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
   const aboutScreen = () => {
     if (idConversation.type) {
       // console.log("type", con.conversations.type);
-      return navigation.navigate("AboutGroupScreen");
+      return navigation.navigate("AboutGroupScreen",{members,leaderId});
     } else {
       return navigation.navigate("CreateAboutScreen");
     }
@@ -252,7 +270,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
               >
                 {/* check type conversations ? set name group : set name user chat */}
                 {idConversation?.type ? (
-                  <Text>{userChatting.userInfo.length} thành viên</Text>
+                  <Text>{members.length} thành viên</Text>
                 ) : (
                   <Text>Truy cập 11 phút trước</Text>
                 )}

@@ -13,15 +13,18 @@ import {
 } from "react-native";
 import ToggleSwitch from "toggle-switch-react-native";
 import Contex from "../../store/Context";
-const AboutGroupScreen = ({ navigation }) => {
+const AboutGroupScreen = ({ navigation,route }) => {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
   const [switchOnPin, setSwitchOnPin] = useState(false);
   const [switchOn, setSwitchOn] = useState(false);
 
   const handleOpenMemberScreen = () => {
-    navigation.navigate("MemberScreen");
+    navigation.navigate("MemberScreen",{members,leaderId});
   };
+
+  const{members,leaderId}=route.params;
+  console.log(members);
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -195,7 +198,7 @@ const AboutGroupScreen = ({ navigation }) => {
               <Ionicons name="person-remove-outline" size={23} />
               <View style={styles.viewCustomItem}>
                 <Text style={{ fontSize: 15 }}>
-                  Thành viên ({userChatting.userInfo.length})
+                  Thành viên ({members.length})
                 </Text>
                 <Ionicons
                   style={{}}

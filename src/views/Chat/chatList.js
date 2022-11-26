@@ -81,7 +81,7 @@ export default ChatApp = function ({ navigation }) {
           200
         );
         const { data, page, size, totalPages } = response;
-        // console.log("data", data);
+        //console.log("data", data);
         if (response) {
           setConversations(data);
         }
@@ -90,8 +90,28 @@ export default ChatApp = function ({ navigation }) {
       }
     };
 
+    socket.current?.on("get-message", ({ senderId, message }) => {
+      fetchConversations();
+    });
+    socket.current?.on(
+      " create-conversation-was-friend",
+      (conversationId, message) => {
+        console.log("Conversationid", conversationId);
+        fetchConversations();
+      }
+    );
+
+    socket.current?.on(
+      "get-conversation-group",
+      (idCon) => {
+        console.log("RE Conversationid");
+
+        fetchConversations();
+      }
+    );
+
     fetchConversations();
-  }, [user]);
+  }, [user])
 
   //  check type conversation ? render groupChatItem : render ChatItem
   const renderItem = ({ item }) => {

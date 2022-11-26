@@ -37,12 +37,12 @@ export default Login = function ({ navigation }) {
   // console.log("context", Contex);
   // const user = auth().currentUser;
   const [getPassWordVisible, setPassWordVisible] = useState(false);
-  //states for validating
+  //states for validatingpp
   const [errorEmail, setErrorEmail] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
   //states to store email/password
-  const [email, setEmail] = useState("hoanganh1410tb@gmail.com");
-  const [password, setPassword] = useState("123456789");
+  const [email, setEmail] = useState("dang@gmail.com");
+  const [password, setPassword] = useState("12345678");
   const isValidationOK = () => {
     email.length > 0 &&
       password.length > 0 &&
