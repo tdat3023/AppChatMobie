@@ -27,6 +27,8 @@ function MemberCard({ value, leaderId, navigation }) {
   const { state, depatch } = React.useContext(Contex);
   const { user, idConversation, userChatting, socket } = state;
 
+  console.log("navigation", navigation);
+
   const [userName, setUserName] = useState(
     value?.userFistName + " " + value?.userLastName
   );
@@ -80,7 +82,7 @@ function MemberCard({ value, leaderId, navigation }) {
       [
         {
           text: "Hủy",
-          onPress: () => console.log("Cancel Pressed"),
+          onPress: () => console.log("navigation", navigation),
           style: "cancel",
         },
         { text: "Đồng ý", onPress: () => handleKickUser(navigation) },

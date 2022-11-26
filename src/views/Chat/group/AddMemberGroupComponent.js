@@ -159,6 +159,7 @@ export default AddMemberGroupComponent = ({ navigation }) => {
         idUserKick: user.uid,
       });
     }
+    navigation.navigate("ChatScreen", socket);
   };
   return (
     <SafeAreaView>

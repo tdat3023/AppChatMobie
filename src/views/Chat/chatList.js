@@ -26,6 +26,7 @@ import CardUser from "../component/CardUser";
 //import UserService from "../../services/UserService";
 
 import { db } from "../../firebase/firebaseDB";
+import { SetIdConversation, SetUserChatting } from "../../store/Actions";
 import {
   getFirestore,
   collection,
@@ -106,8 +107,16 @@ export default ChatApp = function ({ navigation }) {
 
       fetchConversations();
     });
-    socket.current.on("kickUser-group", (idCon) => {
+    socket.current?.on("kickUser-group", (idCon) => {
+      depatch(SetUserChatting(conversations[0].inFo));
       fetchConversations();
+    });
+
+    socket.current?.on("messNotifi", (idC) => {
+      fetchConversations();
+      depatch(SetUserChatting(conversations[0].inFo));
+
+      console.log("fetch notifi chat list");
     });
 
     fetchConversations();
