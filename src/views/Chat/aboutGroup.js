@@ -13,24 +13,21 @@ import {
 } from "react-native";
 import ToggleSwitch from "toggle-switch-react-native";
 import Contex from "../../store/Context";
-const AboutGroupScreen = ({ navigation,route }) => {
+const AboutGroupScreen = ({ navigation, route }) => {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
   const [switchOnPin, setSwitchOnPin] = useState(false);
   const [switchOn, setSwitchOn] = useState(false);
 
   const handleOpenMemberScreen = () => {
-    navigation.navigate("MemberScreen",{members,leaderId});
+    navigation.navigate("MemberScreen", { members, leaderId });
   };
 
-<<<<<<< HEAD
   const NavigationToAddMember = () => {
     navigation.navigate("AddMemberGroupComponent");
   };
-=======
-  const{members,leaderId}=route.params;
+  const { members, leaderId } = route.params;
   console.log(members);
->>>>>>> dangdt
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -47,8 +44,7 @@ const AboutGroupScreen = ({ navigation,route }) => {
               fontSize: 20,
               fontWeight: "bold",
               marginTop: 10,
-            }}
-          >
+            }}>
             {userChatting?.name}
           </Text>
           <View style={styles.viewListOpstion}>
@@ -66,8 +62,7 @@ const AboutGroupScreen = ({ navigation,route }) => {
                     textAlign: "center",
                     fontSize: 12,
                     fontWeight: "bold",
-                  }}
-                >
+                  }}>
                   Tìm tin nhắn
                 </Text>
               </View>
@@ -86,8 +81,7 @@ const AboutGroupScreen = ({ navigation,route }) => {
                     textAlign: "center",
                     fontSize: 12,
                     fontWeight: "bold",
-                  }}
-                >
+                  }}>
                   Thêm thành viên
                 </Text>
               </View>
@@ -107,8 +101,7 @@ const AboutGroupScreen = ({ navigation,route }) => {
                     style={{
                       fontSize: 12,
                       fontWeight: "bold",
-                    }}
-                  >
+                    }}>
                     Tắt thông báo
                   </Text>
                 </View>
@@ -123,15 +116,13 @@ const AboutGroupScreen = ({ navigation,route }) => {
             justifyContent: "flex-start",
             marginTop: 15,
             marginBottom: 10,
-          }}
-        >
+          }}>
           <Text
             style={{
               fontSize: 13,
               fontWeight: "normal",
               color: "gray",
-            }}
-          >
+            }}>
             Tùy chỉnh
           </Text>
         </View>
@@ -170,15 +161,13 @@ const AboutGroupScreen = ({ navigation,route }) => {
             justifyContent: "flex-start",
             marginTop: 15,
             marginBottom: 10,
-          }}
-        >
+          }}>
           <Text
             style={{
               fontSize: 14,
               fontWeight: "normal",
               color: "gray",
-            }}
-          >
+            }}>
             Thêm hành động
           </Text>
         </View>
@@ -238,15 +227,13 @@ const AboutGroupScreen = ({ navigation,route }) => {
             justifyContent: "flex-start",
             marginTop: 15,
             marginBottom: 10,
-          }}
-        >
+          }}>
           <Text
             style={{
               fontSize: 14,
               fontWeight: "normal",
               color: "gray",
-            }}
-          >
+            }}>
             Riêng tư
           </Text>
         </View>

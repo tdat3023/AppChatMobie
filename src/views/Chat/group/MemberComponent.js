@@ -30,14 +30,10 @@ import MemberCard from "../../component/MemberCard";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-
-
-
-
-export default MemberComponent = ({ navigation,route }) => {
+export default MemberComponent = ({ navigation, route }) => {
   const { state, depatch } = React.useContext(Contex);
   const { user, idConversation, userChatting } = state;
-  const{members,leaderId}=route.params;
+  const { members, leaderId } = route.params;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -48,8 +44,7 @@ export default MemberComponent = ({ navigation,route }) => {
             style={{ alignItems: "center", marginLeft: 10 }}
             onPress={() => {
               navigation.goBack();
-            }}
-          >
+            }}>
             <Ionicons name="arrow-back" size={24} color="white" />
           </TouchableOpacity>
           <View style={styles.nameFriend}>
@@ -60,8 +55,7 @@ export default MemberComponent = ({ navigation,route }) => {
                 textTransform: "capitalize",
                 color: "white",
                 marginLeft: 12,
-              }}
-            >
+              }}>
               Quản lý thành viên
             </Text>
             <Text
@@ -69,8 +63,7 @@ export default MemberComponent = ({ navigation,route }) => {
                 fontSize: 10,
                 color: "white",
                 marginLeft: 12,
-              }}
-            ></Text>
+              }}></Text>
           </View>
         </View>
       </View>
@@ -81,13 +74,16 @@ export default MemberComponent = ({ navigation,route }) => {
           width: "100%",
           paddingHorizontal: 12,
           paddingVertical: 12,
-        }}
-      >
-        <Text styles={{ color: "#22A39F" }}>
-          Thành viên ({members.length})
-        </Text>
+        }}>
+        <Text styles={{ color: "#22A39F" }}>Thành viên ({members.length})</Text>
         {members.map((val) => {
-          return <MemberCard value={val} leaderId={leaderId} />;
+          return (
+            <MemberCard
+              value={val}
+              leaderId={leaderId}
+              navigation={navigation}
+            />
+          );
         })}
       </View>
     </SafeAreaView>

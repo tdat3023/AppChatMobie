@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  ToastAndroid,
 } from "react-native";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -22,7 +23,7 @@ import { checkUrlIsImage, checkUrlIsSticker } from "../../utilies/Validations";
 
 // import { convertDateTimeToString, handleDate } from "../../utilies/DateTime";
 
-function MemberCard({ value,leaderId }) {
+function MemberCard({ value, leaderId, navigation }) {
   const { state, depatch } = React.useContext(Contex);
   const { user, idConversation, userChatting, socket } = state;
 
@@ -31,7 +32,7 @@ function MemberCard({ value,leaderId }) {
   );
 
   //handle kick user
-  const handleKickUser = () => {
+  const handleKickUser = (navigation) => {
     console.log("user kick id ", value);
 
     //cal api kick user
@@ -44,7 +45,7 @@ function MemberCard({ value,leaderId }) {
           value.userId
         );
         console.log(response);
-        Alert.alert(`Đã xóa ${userName.toUpperCase()} thành công!`);
+        ToastAndroid.show("Đã xóa thành viên ra khỏi nhóm", ToastAndroid.LONG);
       } catch (error) {
         console.log("Failed to kick member: ", error);
       }
@@ -56,11 +57,13 @@ function MemberCard({ value,leaderId }) {
     //emit socket kick user
     if (socket.current) {
       socket.current.emit("kickUser", {
-        idConversation: idConversation,
-        idLeader: user.uid,
+        idConversation: idConversation._id,
+        idLeader: leaderId,
         idUserKick: value.userId,
       });
     }
+
+    navigation.navigate("ChatScreen", socket);
 
     //call socket in here
   };
@@ -80,7 +83,7 @@ function MemberCard({ value,leaderId }) {
           onPress: () => console.log("Cancel Pressed"),
           style: "cancel",
         },
-        { text: "Đồng ý", onPress: () => handleKickUser() },
+        { text: "Đồng ý", onPress: () => handleKickUser(navigation) },
       ]
     );
   };
@@ -97,15 +100,13 @@ function MemberCard({ value,leaderId }) {
                 style={styles.imaAvatar}
                 source={{
                   uri: value?.avaUser,
-                }}
-              ></Image>
+                }}></Image>
             ) : (
               <Image
                 style={styles.imaAvatar}
                 source={{
                   uri: "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
-                }}
-              ></Image>
+                }}></Image>
             )}
           </View>
 
@@ -122,8 +123,7 @@ function MemberCard({ value,leaderId }) {
                 justifyContent: "space-between",
                 flexDirection: "row",
                 alignItems: "center",
-              }}
-            ></View>
+              }}></View>
           </View>
         </View>
       </TouchableOpacity>

@@ -94,23 +94,31 @@ export default ChatScreen = ({ props, navigation, route }) => {
         console.log("Failed to fetch conversation list: ", error);
       }
     };
+    socket.current?.on("messNotifi", (idC) => {
+      fetchMessages();
+      console.log("fetch notifi kick user");
+    });
 
     fetchMessages();
   }, [userChatting]);
 
   React.useEffect(() => {
-      const featchListMember = async (_id) => {
-        try {
-          const response = await conversationApi.getListMember(_id);
-          console.log("data::: ", response);
+    const featchListMember = async (_id) => {
+      try {
+        const response = await conversationApi.getListMember(_id);
+        console.log("data::: ", response);
 
-          setMembers(response.members);
-          setLeaderId(response.leaderId);
-        } catch (error) {
-          console.log("Failed to fetch conversation list: ", error);
-        }
-      };
+        setMembers(response.members);
+        setLeaderId(response.leaderId);
+      } catch (error) {
+        console.log("Failed to fetch conversation list: ", error);
+      }
+    };
+    socket.current?.on("notifi-kickUser", (data) => {
       featchListMember(idConversation._id);
+      console.log("kich dm ");
+    });
+    featchListMember(idConversation._id);
   }, []);
 
   useEffect(() => {
@@ -152,16 +160,28 @@ export default ChatScreen = ({ props, navigation, route }) => {
 
     if (socket) {
       if (socket.current) {
-        socket.current.emit("send-message", {
-          senderId: user.uid,
-          receiverId: userChatting.userIdFriend,
-          message: messSave,
-          idCon: idConversation._id,
-        });
-        // console.log("sender", user.uid);
-        // console.log("rec", userChatting.userIdFriend);
+        if (idConversation.type) {
+          if (socket.current) {
+            socket.current.emit("send-message", {
+              senderId: user.uid,
+              idCon: idConversation._id,
+              message: messSave,
+              isGroup: true,
+            });
+            console.log("send group");
+          }
+        } else {
+          socket.current.emit("send-message", {
+            senderId: user.uid,
+            receiverId: userChatting.userIdFriend,
+            message: messSave,
+            idCon: idConversation._id,
+          });
+          // console.log("sender", user.uid);
+          console.log("rec", idConversation);
+        }
+        console.log("send");
       }
-      console.log("send");
     }
   };
   // if (socket) {
@@ -227,7 +247,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
   const aboutScreen = () => {
     if (idConversation.type) {
       // console.log("type", con.conversations.type);
-      return navigation.navigate("AboutGroupScreen",{members,leaderId});
+      return navigation.navigate("AboutGroupScreen", { members, leaderId });
     } else {
       return navigation.navigate("CreateAboutScreen");
     }
@@ -242,8 +262,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
               style={{ alignItems: "center", marginLeft: 10 }}
               onPress={() => {
                 navigation.goBack();
-              }}
-            >
+              }}>
               <Ionicons name="arrow-back" size={24} color="white" />
             </TouchableOpacity>
             <View style={styles.nameFriend}>
@@ -254,8 +273,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
                   textTransform: "capitalize",
                   color: "white",
                   marginLeft: 12,
-                }}
-              >
+                }}>
                 {/* check type conversations ? set name group : set name user chat */}
                 {idConversation?.type
                   ? userChatting?.name
@@ -266,8 +284,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
                   fontSize: 10,
                   color: "white",
                   marginLeft: 12,
-                }}
-              >
+                }}>
                 {/* check type conversations ? set name group : set name user chat */}
                 {idConversation?.type ? (
                   <Text>{members.length} thành viên</Text>
@@ -295,8 +312,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
               }}
               onPress={() => {
                 aboutScreen();
-              }}
-            >
+              }}>
               <Ionicons name="menu" size={24} color="white" />
             </TouchableOpacity>
           </View>
@@ -310,8 +326,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
               !onFocus
                 ? { height: windowHeight - 140 }
                 : { height: windowHeight - 400 },
-            ]}
-          >
+            ]}>
             <View style={styles.bodyListChat}>
               <FlatList
                 // invertStickyHeaders={false}
@@ -344,8 +359,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
                 onBlur={onFoucsInPut}
                 onSubmitEditing={handSendMess}
                 blurOnSubmit={false}
-                placeholder="Tin nhắn"
-              ></TextInput>
+                placeholder="Tin nhắn"></TextInput>
             </View>
 
             {/* input */}

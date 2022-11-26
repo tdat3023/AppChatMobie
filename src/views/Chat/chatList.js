@@ -101,17 +101,17 @@ export default ChatApp = function ({ navigation }) {
       }
     );
 
-    socket.current?.on(
-      "get-conversation-group",
-      (idCon) => {
-        console.log("RE Conversationid");
+    socket.current?.on("get-conversation-group", (idCon) => {
+      console.log("RE Conversationid");
 
-        fetchConversations();
-      }
-    );
+      fetchConversations();
+    });
+    socket.current.on("kickUser-group", (idCon) => {
+      fetchConversations();
+    });
 
     fetchConversations();
-  }, [user])
+  }, [user]);
 
   //  check type conversation ? render groupChatItem : render ChatItem
   const renderItem = ({ item }) => {
@@ -125,8 +125,7 @@ export default ChatApp = function ({ navigation }) {
         <ChatItem
           item={item}
           navigation={navigation}
-          socket={socket}
-        ></ChatItem>
+          socket={socket}></ChatItem>
       );
     }
   };
@@ -164,8 +163,7 @@ export default ChatApp = function ({ navigation }) {
               style={{ alignItems: "center", marginLeft: 10 }}
               onPress={() => {
                 alert(sreachText);
-              }}
-            >
+              }}>
               <AntDesign name="search1" size={24} color="white" />
             </TouchableOpacity>
             {/* sreach input */}
@@ -173,8 +171,7 @@ export default ChatApp = function ({ navigation }) {
               style={styles.textTopTag}
               value={sreachText}
               onChangeText={(text) => handleChangText(text)}
-              placeholder="Tìm kiếm"
-            ></TextInput>
+              placeholder="Tìm kiếm"></TextInput>
           </View>
 
           <View style={styles.moreTag}>
@@ -189,8 +186,7 @@ export default ChatApp = function ({ navigation }) {
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate("AddGroup", { socket: socket });
-              }}
-            >
+              }}>
               <AntDesign name="addusergroup" size={24} color="white" />
             </TouchableOpacity>
           </View>
@@ -208,8 +204,7 @@ export default ChatApp = function ({ navigation }) {
                   fontSize: 14,
                   marginHorizontal: 12,
                   marginVertical: 12,
-                }}
-              >
+                }}>
                 Tìm qua email:
               </Text>
               {/* <Text style={{textAlign:"center", marginTop:40}}>Email chưa đăng ký tài khoản</Text> */}

@@ -56,8 +56,7 @@ const UserChoise = ({
     <TouchableOpacity
       style={styles.itemChoose}
       key={Math.random()}
-      onPress={() => handleRemoveOutGroupList()}
-    >
+      onPress={() => handleRemoveOutGroupList()}>
       {item.avatar ? (
         <Image style={styles.imaAvatar} source={{ uri: item.avatar }}></Image>
       ) : (
@@ -65,8 +64,7 @@ const UserChoise = ({
           style={styles.imaAvatar}
           source={{
             uri: "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
-          }}
-        ></Image>
+          }}></Image>
       )}
 
       <View style={styles.status}>
@@ -80,7 +78,7 @@ const UserChoise = ({
 
 export default AddMemberGroupComponent = ({ navigation }) => {
   const { state, depatch } = React.useContext(Contex);
-  const { user, userSearched, idConversation, userChatting } = state;
+  const { user, userSearched, idConversation, userChatting, socket } = state;
 
   //list of user will be add a group
   const [listUserAddToGroup, setListUserAddToGroup] = useState([]);
@@ -154,13 +152,13 @@ export default AddMemberGroupComponent = ({ navigation }) => {
     addMemberIntoGroup(idConversation, user.uid, idList);
 
     //socket in here
-    // if (socket.current) {
-    //   socket.current.emit("kickUser", {
-    //     idConversation: idConversation._id,
-    //     // idLeader:user.uid,
-    //     idUserKick: user.uid,
-    //   });
-    // }
+    if (socket.current) {
+      socket.current.emit("kickUser", {
+        idConversation: idConversation._id,
+        // idLeader:user.uid,
+        idUserKick: user.uid,
+      });
+    }
   };
   return (
     <SafeAreaView>
@@ -194,8 +192,7 @@ export default AddMemberGroupComponent = ({ navigation }) => {
                 style={styles.textTopTag}
                 onChangeText={(text) => handleSearch(text)}
                 placeholder="Tìm kiếm"
-                placeholderTextColor="gray"
-              ></TextInput>
+                placeholderTextColor="gray"></TextInput>
             </View>
           </View>
         </View>
@@ -215,8 +212,9 @@ export default AddMemberGroupComponent = ({ navigation }) => {
                 key={Math.random() + item.uid}
               />
             )}
-            keyExtractor={(item) => item.uid + Math.random() + Math.random()}
-          ></FlatList>
+            keyExtractor={(item) =>
+              item.uid + Math.random() + Math.random()
+            }></FlatList>
         </View>
 
         {listUserAddToGroup.length > 0 ? (
@@ -238,14 +236,12 @@ export default AddMemberGroupComponent = ({ navigation }) => {
                 )}
                 keyExtractor={(item) =>
                   item.uid + Math.random() + Math.random()
-                }
-              ></FlatList>
+                }></FlatList>
             </View>
             <View style={styles.viewbtn}>
               <TouchableOpacity
                 style={styles.btn}
-                onPress={() => handleAddMember()}
-              >
+                onPress={() => handleAddMember()}>
                 <Feather name="arrow-right" size={22} color="white" />
               </TouchableOpacity>
             </View>
