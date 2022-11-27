@@ -6,16 +6,26 @@ import Contex from "../../store/Context";
 
 export default function FriendRequest({ item }) {
   const { state, depatch } = React.useContext(Contex);
-  const { user, userSearched, idConversation, userChatting } = state;
+  const { user, userSearched, idConversation, userChatting, socket } = state;
 
   const handDeleteInvite = async () => {
     try {
       await friendApi
         .deleteInvite(user.uid, item.inviteId)
-        .then(console.log("ok"));
+        .then(console.log("delete ok"));
       console.log("idinvite", item.inviteId);
     } catch (error) {
       console.log("errors");
+    }
+    if (socket) {
+      if (socket.current) {
+        socket.current.emit("handle-request-friend", {
+          idUser: user.uid,
+          idFriend: item.inviteId,
+          idCon: idConversation._id,
+        });
+        console.log("friend request");
+      }
     }
   };
   const handAceptFriend = async () => {

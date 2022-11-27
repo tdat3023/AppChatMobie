@@ -24,7 +24,7 @@ const AboutGroupScreen = ({ navigation, route }) => {
   };
 
   const NavigationToAddMember = () => {
-    navigation.navigate("AddMemberGroupComponent");
+    navigation.navigate("AddMemberGroupComponent", { members });
   };
   const { members, leaderId } = route.params;
   console.log(members);

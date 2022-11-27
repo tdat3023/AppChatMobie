@@ -52,16 +52,14 @@ function ChatItem({ item, navigation, socket }) {
                 style={styles.imaAvatar}
                 source={{
                   uri: item.inFo.avatar,
-                }}
-              ></Image>
+                }}></Image>
             ) : (
               <Image
                 style={styles.imaAvatar}
                 accessibilityLabel="ok"
                 source={{
                   uri: "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
-                }}
-              ></Image>
+                }}></Image>
             )}
           </View>
 
@@ -75,8 +73,7 @@ function ChatItem({ item, navigation, socket }) {
                 justifyContent: "space-between",
                 flexDirection: "row",
                 alignItems: "center",
-              }}
-            >
+              }}>
               <Text style={styles.textLastMes}>
                 {/* check lastmess is image , sticker ? render lastmess [image, sticker], check length >10 ? .... */}
                 {item.conversations?.lastMessage[0].type === "NOTIFY" ||

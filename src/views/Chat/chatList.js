@@ -108,13 +108,11 @@ export default ChatApp = function ({ navigation }) {
       fetchConversations();
     });
     socket.current?.on("kickUser-group", (idCon) => {
-      depatch(SetUserChatting(conversations[0].inFo));
       fetchConversations();
     });
 
     socket.current?.on("messNotifi", (idC) => {
       fetchConversations();
-      depatch(SetUserChatting(conversations[0].inFo));
 
       console.log("fetch notifi chat list");
     });

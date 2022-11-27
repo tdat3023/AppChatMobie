@@ -76,9 +76,10 @@ const UserChoise = ({
   );
 };
 
-export default AddMemberGroupComponent = ({ navigation }) => {
+export default AddMemberGroupComponent = ({ navigation, route }) => {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting, socket } = state;
+  const { members } = route.params;
 
   //list of user will be add a group
   const [listUserAddToGroup, setListUserAddToGroup] = useState([]);
@@ -87,6 +88,8 @@ export default AddMemberGroupComponent = ({ navigation }) => {
   //khi tim kiem user thanh cong se add vao list de render data
   const [listUserSearch, setListUserSearch] = useState([]);
   console.log(listUserSearch);
+
+  console.log("userChat", members);
   //search text
   const [textSearch, setTextSearch] = useState("");
 
@@ -98,13 +101,15 @@ export default AddMemberGroupComponent = ({ navigation }) => {
     const newArr = [];
 
     const querySnapshot = await getDocs(q);
+    console.log("userSearch", querySnapshot);
     querySnapshot.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
       // console.log(doc.id, " => ", doc.data());
       let checkJoied = false;
       //check user da co trong nhom chua
-      userChatting.userInfo.forEach((val) => {
+      members.forEach((val) => {
         console.log("may lan");
+        console.log("iduser", val.userId);
         if (doc.id === val.userId) {
           checkJoied = true;
           return;

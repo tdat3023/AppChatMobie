@@ -38,8 +38,6 @@ const Contact = ({ navigation }) => {
 
   const [listFriend, setListFirend] = useState([]);
 
-  const [listInvite, setListInvite] = useState([]);
-
   const [Refreshing, setRefreshing] = useState(false);
 
   //console.log("socket", socket);
@@ -52,40 +50,64 @@ const Contact = ({ navigation }) => {
     }, 3000);
   };
   const [typing, setTyping] = useState(Friend);
-  React.useEffect(() => {
-    const fetchListRequest = async () => {
-      // console.log("user:", user.user.uid);
-      try {
-        // user.uid,page,size
-        const response = await friendApi.getListInvite(user.uid);
-        const data = response;
-        // console.log("listMess ", data[0].messages);
-        if (response) {
-          setListInvite(data);
-          // console.log("listMess", data);
-        }
-      } catch (error) {
-        console.log("Failed to fetch conversation list: ", error);
-      }
-    };
-    const fetchListFriend = async () => {
-      // console.log("user:", user.user.uid);
-      try {
-        // user.uid,page,size
-        const response = await friendApi.getListFriend(user.uid);
-        const data = response;
-        // console.log("listMess ", data[0].messages);
-        if (response) {
-          setListFirend(data);
-          // console.log("listMess", data);
-        }
-      } catch (error) {
-        console.log("Failed to fetch conversation list: ", error);
-      }
-    };
+  const fetchListRequest = async () => {
+    try {
+      // user.uid,page,size
+      const response = await friendApi.getListInvite(user.uid);
+      const data = response;
 
-    fetchListRequest();
-    fetchListFriend();
+      if (response) {
+        setListFirend(data);
+      }
+    } catch (error) {
+      console.log("Failed to fetch conversation list: ", error);
+    }
+  };
+  const fetchListFriend = async () => {
+    try {
+      // user.uid,page,size
+      const response = await friendApi.getListFriend(user.uid);
+      const data = response;
+
+      if (response) {
+        setListFirend(data);
+      }
+    } catch (error) {
+      console.log("Failed to fetch conversation list: ", error);
+    }
+  };
+  React.useEffect(() => {
+    if (typing === Friend) {
+      fetchListFriend();
+    } else {
+      fetchListRequest();
+    }
+  }, [user]);
+
+  React.useEffect(() => {
+    socket.current?.on("send-friend-invite", (user) => {
+      console.log("recInvite", user);
+      fetchListRequest();
+    });
+    socket.current?.on(
+      " create-conversation-was-friend",
+      (conversationId, message) => {
+        console.log("Conversationid", conversationId);
+        fetchListRequest();
+      }
+    );
+    socket.current?.on("deleted-invite", (id) => {
+      console.log(" rec delete invite id", id);
+      fetchListRequest();
+    });
+    socket.current?.on("update-inviteFr", (idFriend) => {
+      console.log("delete invite id", idFriend);
+      fetchListRequest();
+    });
+    socket.current?.on("delete-friend", (id) => {
+      console.log("you have been unfriend by ", id);
+      fetchListFriend();
+    });
   }, []);
 
   return (
@@ -116,6 +138,7 @@ const Contact = ({ navigation }) => {
             <TouchableOpacity
               onPress={() => {
                 setTyping(Friend);
+                fetchListFriend();
               }}>
               {typing === Friend ? (
                 <Text style={styles.text2}>BẠN BÈ</Text>
@@ -128,6 +151,7 @@ const Contact = ({ navigation }) => {
             <TouchableOpacity
               onPress={() => {
                 setTyping(Request);
+                fetchListRequest();
               }}>
               {typing === Request ? (
                 <Text style={styles.text2}>LỜI MỜI</Text>
@@ -152,7 +176,7 @@ const Contact = ({ navigation }) => {
           <View style={styles.bodyListChat}>
             <FlatList
               style={styles.bodyList}
-              data={listInvite}
+              data={listFriend}
               renderItem={({ item }) => (
                 // <FriendItem item={item} />
                 <FriendRequest item={item} />
