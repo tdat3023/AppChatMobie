@@ -57,8 +57,7 @@ const UserChoise = ({
     <TouchableOpacity
       style={styles.itemChoose}
       key={Math.random()}
-      onPress={() => handleRemoveOutGroupList()}
-    >
+      onPress={() => handleRemoveOutGroupList()}>
       {item.avatar ? (
         <Image style={styles.imaAvatar} source={{ uri: item.avatar }}></Image>
       ) : (
@@ -66,8 +65,7 @@ const UserChoise = ({
           style={styles.imaAvatar}
           source={{
             uri: "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
-          }}
-        ></Image>
+          }}></Image>
       )}
 
       <View style={styles.status}>
@@ -90,13 +88,13 @@ const AddGroup = ({ navigation, route }) => {
 
   // }
   const { state, depatch } = React.useContext(Contex);
-  const { user, userSearched, idConversation, userChatting,socket } = state;
+  const { user, userSearched, idConversation, userChatting, socket } = state;
 
-  if(socket.current){
-      console.log("socket is connected");
-    }else{
-      console.log("socket is cc");
-    }
+  if (socket.current) {
+    console.log("socket is connected");
+  } else {
+    console.log("socket is cc");
+  }
   //list of user will be add a group
   const [listUserAddToGroup, setListUserAddToGroup] = useState([]);
   const [groupName, setGroupName] = useState("");
@@ -182,7 +180,6 @@ const AddGroup = ({ navigation, route }) => {
     setListUserSearch(newArr);
   };
 
-  
   //create agroup
   const handleCreateGroup = () => {
     //check name group
@@ -239,11 +236,11 @@ const AddGroup = ({ navigation, route }) => {
                 // type conversation is true set conversation= conversation, chatUser= GroupInfo
                 depatch(SetIdConversation(data[0].conversations));
                 depatch(SetUserChatting(data[0].inFo));
-                
+
                 navigation.navigate("ChatScreen", { item: data[0] });
               }
             } catch (error) {
-              if(error){
+              if (error) {
                 console.log("Failed to fetch conversation list group: ", error);
               }
             }
@@ -255,20 +252,16 @@ const AddGroup = ({ navigation, route }) => {
           // navigation.navigate("ChatScreen");
           console.log("tao nhom thanh cong" + response);
           //socket create group in here
-                  console.log("vooo");
-                  socket.current?.emit("create-conversation", {
-                    idConversation: response,
-                    idList,
-                  });
+          console.log("vooo");
+          socket.current?.emit("create-conversation", {
+            idConversation: response,
+            idList,
+          });
         } catch (error) {
           console.log("Failed create group: ", error);
         }
       };
       createGroup();
-
-
-
-
     }
   };
   return (
@@ -301,8 +294,7 @@ const AddGroup = ({ navigation, route }) => {
                 backgroundColor: "#d6dbe1",
                 paddingHorizontal: 12,
                 paddingVertical: 12,
-              }}
-            >
+              }}>
               <AntDesign name="camera" size={24} color="gray" />
             </TouchableOpacity>
             <View style={styles.sreach}>
@@ -310,8 +302,7 @@ const AddGroup = ({ navigation, route }) => {
                 style={styles.textTopTag}
                 placeholder="Đặt tên nhóm"
                 placeholderTextColor="gray"
-                onChangeText={(text) => setGroupName(text)}
-              ></TextInput>
+                onChangeText={(text) => setGroupName(text)}></TextInput>
             </View>
           </View>
 
@@ -325,8 +316,7 @@ const AddGroup = ({ navigation, route }) => {
                 style={styles.textTopTag}
                 onChangeText={(text) => handleSearch(text)}
                 placeholder="Tìm kiếm"
-                placeholderTextColor="gray"
-              ></TextInput>
+                placeholderTextColor="gray"></TextInput>
             </View>
           </View>
         </View>
@@ -346,8 +336,9 @@ const AddGroup = ({ navigation, route }) => {
                 key={Math.random() + item.uid}
               />
             )}
-            keyExtractor={(item) => item.uid + Math.random() + Math.random()}
-          ></FlatList>
+            keyExtractor={(item) =>
+              item.uid + Math.random() + Math.random()
+            }></FlatList>
         </View>
 
         {listUserAddToGroup.length > 0 ? (
@@ -369,14 +360,12 @@ const AddGroup = ({ navigation, route }) => {
                 )}
                 keyExtractor={(item) =>
                   item.uid + Math.random() + Math.random()
-                }
-              ></FlatList>
+                }></FlatList>
             </View>
             <View style={styles.viewbtn}>
               <TouchableOpacity
                 style={styles.btn}
-                onPress={() => handleCreateGroup()}
-              >
+                onPress={() => handleCreateGroup()}>
                 <Feather name="arrow-right" size={22} color="white" />
               </TouchableOpacity>
             </View>

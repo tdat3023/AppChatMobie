@@ -56,6 +56,22 @@ const conversationApi = {
       members: listMember,
     });
   },
+  leaveGroup: (idConversation, idUser) => {
+    console.log("idCOnversiot:", idUser);
+    return axiosClient.delete(`conversation/leave/${idConversation}`, {
+      data: { userId: idUser },
+    });
+  },
+
+  deleteAllMess: (idConversation, idUser) => {
+    return axiosClient.delete(`conversation/${idConversation}/messages`, {
+      data: { userId: idUser },
+    });
+  },
+
+  deleteGroup: (idConversation) => {
+    return axiosClient.delete(`conversation/groups/${idConversation}`);
+  },
 };
 
 export default conversationApi;

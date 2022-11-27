@@ -92,7 +92,10 @@ const Contact = ({ navigation }) => {
     socket.current?.on(
       " create-conversation-was-friend",
       (conversationId, message) => {
-        console.log("Conversationid", conversationId);
+        console.log(
+          "friend was accepted create conversations id ",
+          conversationId
+        );
         fetchListRequest();
       }
     );
@@ -105,7 +108,7 @@ const Contact = ({ navigation }) => {
       fetchListRequest();
     });
     socket.current?.on("delete-friend", (id) => {
-      console.log("you have been unfriend by ", id);
+      console.log("you have been unfriend by id ", id);
       fetchListFriend();
     });
   }, []);

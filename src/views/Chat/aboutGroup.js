@@ -10,12 +10,15 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  Alert,
+  ToastAndroid,
 } from "react-native";
 import ToggleSwitch from "toggle-switch-react-native";
 import Contex from "../../store/Context";
+import conversationApi from "../../api/conversationApi";
 const AboutGroupScreen = ({ navigation, route }) => {
   const { state, depatch } = React.useContext(Contex);
-  const { user, userSearched, idConversation, userChatting } = state;
+  const { user, userSearched, idConversation, userChatting, socket } = state;
   const [switchOnPin, setSwitchOnPin] = useState(false);
   const [switchOn, setSwitchOn] = useState(false);
 
@@ -26,6 +29,92 @@ const AboutGroupScreen = ({ navigation, route }) => {
   const NavigationToAddMember = () => {
     navigation.navigate("AddMemberGroupComponent", { members });
   };
+
+  // click leave group
+  const handleClikLeaveGroup = () => {
+    Alert.alert(
+      "Canh Bao ",
+      "Ban chan chan muon roi khoi nhom",
+
+      [
+        {
+          text: "Hủy",
+          onPress: () => console.log("navigation", navigation),
+          style: "cancel",
+        },
+        { text: "Đồng ý", onPress: () => handleLeaveGroup() },
+      ]
+    );
+  };
+
+  //// click delete group
+
+  const handleClikDeleteGroup = () => {
+    //k la truong nhom
+    if (user.uid != leaderId) {
+      alert("Chi nhom truong moi co the giai tan nhom");
+    } else {
+      Alert.alert(
+        "Canh Bao ",
+        "Ban chan chan muon giai tan nhom",
+
+        [
+          {
+            text: "Hủy",
+            onPress: () => console.log("navigation", navigation),
+            style: "cancel",
+          },
+          { text: "Đồng ý", onPress: () => handleDeleteGroup() },
+        ]
+      );
+    }
+  };
+  // delete group
+  const handleDeleteGroup = async () => {
+    try {
+      const response = await conversationApi.deleteGroup(idConversation._id);
+      if (response) {
+        console.log("delete........group");
+
+        if (socket.current) {
+          socket.current.emit("kickUser", {
+            idConversation: idConversation._id,
+          });
+        }
+      }
+      ToastAndroid.show("Ban da giai tan nhom ", ToastAndroid.LONG);
+      navigation.navigate("HomeTabs");
+    } catch (error) {
+      console.log("Failed to fetch conversation list: ", error);
+    }
+  };
+
+  // leave group
+  const handleLeaveGroup = async () => {
+    try {
+      const response = await conversationApi.leaveGroup(
+        idConversation._id,
+        user.uid
+      );
+      if (response) {
+        console.log("leave");
+
+        if (socket.current) {
+          socket.current.emit("kickUser", {
+            idConversation: idConversation._id,
+            // idLeader:user.uid,
+            idUserKick: user.uid,
+          });
+          console.log("leave ..............");
+        }
+      }
+      ToastAndroid.show("Ban da roi khoi nhom ", ToastAndroid.LONG);
+      navigation.navigate("HomeTabs");
+    } catch (error) {
+      console.log("Failed to fetch conversation list: ", error);
+    }
+  };
+
   const { members, leaderId } = route.params;
   console.log(members);
   return (
@@ -237,7 +326,7 @@ const AboutGroupScreen = ({ navigation, route }) => {
             Riêng tư
           </Text>
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleClikLeaveGroup}>
           <View style={styles.viewItem}>
             <MaterialIcons name="logout" size={23} color="red" />
 
@@ -246,7 +335,7 @@ const AboutGroupScreen = ({ navigation, route }) => {
             </View>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleClikDeleteGroup}>
           <View style={styles.viewItem}>
             <MaterialIcons name="logout" size={23} color="red" />
 

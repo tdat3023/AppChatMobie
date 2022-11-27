@@ -119,6 +119,31 @@ export default ChatApp = function ({ navigation }) {
 
     fetchConversations();
   }, [user]);
+  React.useEffect(() => {
+    // //get api set list conversation
+    // //fetch product in wishlist
+
+    const fetchConversations = async () => {
+      // console.log("user:", user.user.uid);
+      try {
+        // user.uid,page,size
+        const response = await conversationApi.getConversations(
+          user.uid,
+          0,
+          200
+        );
+        const { data, page, size, totalPages } = response;
+        console.log("data", data);
+        if (response) {
+          setConversations(data);
+        }
+      } catch (error) {
+        console.log("Failed to fetch conversation list: ", error);
+      }
+    };
+
+    fetchConversations();
+  }, [idConversation]);
 
   //  check type conversation ? render groupChatItem : render ChatItem
   const renderItem = ({ item }) => {

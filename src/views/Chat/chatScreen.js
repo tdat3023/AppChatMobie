@@ -43,7 +43,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
   //   // messagesEnd.current.scrollToEnd({ animated: true });
   // };
 
-  const socket = route?.params;
+  // const socket = route?.params;
 
   const [onFocus, setOnFocus] = useState(false);
   // const {item} = route.params;
@@ -52,7 +52,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
   const [leaderId, setLeaderId] = useState("");
 
   const { state, depatch } = React.useContext(Contex);
-  const { user, idConversation, userChatting } = state;
+  const { user, idConversation, userChatting, socket } = state;
   const [listMessgae, setListMessage] = useState([]);
   // if (socket) {
   //   console.log("socket", socket);

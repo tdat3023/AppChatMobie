@@ -153,22 +153,17 @@ function ChatGroupItem({ item, navigation, socket }) {
             </View>
           </View>
 
-          {/* <View style={styles.notification}>
-            <Ionicons name="notifications-outline" size={24} color="black" />
+          <View style={styles.notification}>
+            {/* <Ionicons name="notifications-outline" size={24} color="black" /> */}
+            <Text>2 phut</Text>
             {item.conversations.mb.numberUnread > 0 && (
-              <View
-                style={styles.textNoti}
-                // style={[
-                //   styles.textNoti,
-                //   {
-                //     paddingHorizontal: item.numberOfUnReadMess > 9 ? 5 : 10,
-                //   },
-                // ]}
-              >
-                <Text>{item.conversations.mb.numberUnread}</Text>
+              <View style={styles.textNoti}>
+                <Text style={{ color: "white", fontSize: 12 }}>
+                  {item.conversations.mb.numberUnread}
+                </Text>
               </View>
             )}
-          </View> */}
+          </View>
         </View>
       </TouchableOpacity>
     </View>
@@ -186,7 +181,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    borderBottomWidth: 0.8,
   },
 
   viewOne: {
