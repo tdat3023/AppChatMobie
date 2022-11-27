@@ -201,7 +201,13 @@ export default ChatApp = function ({ navigation }) {
                 // keyExtractor={(item) => item.conversations._id}
               ></FlatList> */}
               {userSearedList.map((val) => {
-                return <CardUser value={val} key={Math.random()} />;
+                return (
+                  <CardUser
+                    value={val}
+                    key={Math.random() + val.uid}
+                    navigation={navigation}
+                  />
+                );
               })}
             </View>
           </View>

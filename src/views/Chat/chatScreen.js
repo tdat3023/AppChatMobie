@@ -33,6 +33,8 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 import socket from "../../socket/socketClient";
+import conversationApi from "../../api/conversationApi";
+import { SetIdConversation, SetUserChatting } from "../../store/Actions";
 
 export default ChatScreen = ({ props, navigation, route }) => {
   // const [panigation, setPanigation] = React.useState({ page: 0, size: 50 });
@@ -42,14 +44,14 @@ export default ChatScreen = ({ props, navigation, route }) => {
   //   // messagesEnd.current.scrollToEnd({ animated: true });
   // };
 
-  const socket = route?.params;
+  //const socket = route?.params;
 
   const [onFocus, setOnFocus] = useState(false);
   // const {item} = route.params;
   const [typing, setTyping] = useState(false);
 
   const { state, depatch } = React.useContext(Contex);
-  const { user, idConversation, userChatting } = state;
+  const { user, idConversation, userChatting, socket } = state;
   const [listMessgae, setListMessage] = useState([]);
   // if (socket) {
   //   console.log("socket", socket);
@@ -76,7 +78,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
       try {
         // user.uid,page,size
         const response = await messageApi.getMess(
-          idConversation._id,
+          idConversation?._id,
           user.uid,
           0,
           200
@@ -88,7 +90,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
           //  console.log("listMess", data[0].messages);
         }
       } catch (error) {
-        console.log("Failed to fetch conversation list: ", error);
+        console.log("Failed to fetch conversation list 1: ", error);
       }
     };
 
@@ -96,8 +98,9 @@ export default ChatScreen = ({ props, navigation, route }) => {
   }, [userChatting]);
 
   useEffect(() => {
+    console.log("renderrr");
     socket.current?.emit("join-room", {
-      idCon: idConversation._id,
+      idCon: idConversation?._id,
       // isNew:false
     });
 
@@ -107,7 +110,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
         console.log("send nhung k them vao list ---> ");
       } else {
         console.log("mess nhan dc ---> ");
-
+        console.log(message);
         // console.log(message);
         setListMessage((prev) => [...prev, { ...message }]);
       }
@@ -115,35 +118,111 @@ export default ChatScreen = ({ props, navigation, route }) => {
   }, []);
 
   const handSendMess = async () => {
-    //create new message
-    const newMessSend = {
-      userId: user.uid,
-      content: newMess,
-      conversationId: idConversation._id,
-      type: "TEXT",
-    };
-    console.log(newMessSend);
+    //if newMessage === "" return
+    if (!newMess) {
+      return;
+    }
+    //ckeck
+    //th1: chưa từng trò chuyện, có idConversation == null
     setNewMess("");
-    const messSave = await messageApi.addTextMess(newMessSend);
+    if (!idConversation) {
+      console.log("chua co conversation ---> create");
+      //tao cuoc tro chuyen
+      const createConversation = async () => {
+        try {
+          const response = await conversationApi.createConversation(
+            user.uid,
+            userChatting.userIdFriend
+          );
 
-    //  console.log("mess send", messSave);
+          console.log("id conversation moi tao ---> " + response);
+          //cal api get the conversation
+          try {
+            const response = await conversationApi.getConversationDetails(
+              user.uid,
+              userChatting.userIdFriend
+            );
+            console.log(response[0]);
+            if (response[0]) {
+              console.log("co ");
+              // console.log("render");
+              depatch(SetIdConversation(response[0].conversations));
+              depatch(SetUserChatting(response[0].inFo));
+            }
+          } catch (error) {
+            console.log("Failed to fetch the conversation id: ", error);
+          }
 
-    setListMessage((prev) => [...prev, { ...messSave }]);
+          //join a room with name = id conversation
+          socket.current.emit("join-room", {
+            idCon: response,
+            isNew: true,
+          });
+          try {
+            const newMessSend = {
+              userId: user.uid,
+              content: newMess,
+              conversationId: idConversation?._id,
+              type: "TEXT",
+            };
+            const messSave = await messageApi.addTextMess(newMessSend);
 
-    //call soket in here
+            if (socket.current) {
+              socket.current.emit("send-message", {
+                senderId: user.uid,
+                receiverId: userChatting.userIdFriend,
+                message: messSave,
+                idCon: response,
+                isNew: true,
+              });
+              console.log("send");
+            }
+          } catch (error) {
+            console.log("Failed all: ", error);
+          }
+        } catch (error) {
+          console.log("Failed to create the conversation: ", error);
+        }
+      };
 
-    if (socket) {
-      if (socket.current) {
-        socket.current.emit("send-message", {
-          senderId: user.uid,
-          receiverId: userChatting.userIdFriend,
-          message: messSave,
-          idCon: idConversation._id,
-        });
-        // console.log("sender", user.uid);
-        // console.log("rec", userChatting.userIdFriend);
+      createConversation();
+    } else {
+      try {
+        //th2: đã có cuộc trò chuyện
+        console.log(" co conversation ---> create");
+        //create new message
+        const newMessSend = {
+          userId: user.uid,
+          content: newMess,
+          conversationId: idConversation?._id,
+          type: "TEXT",
+        };
+        console.log(newMessSend);
+        setNewMess("");
+        const messSave = await messageApi.addTextMess(newMessSend);
+
+        //  console.log("mess send", messSave);
+
+        setListMessage((prev) => [...prev, { ...messSave }]);
+
+        //call soket in here
+
+        if (socket) {
+          if (socket.current) {
+            socket.current.emit("send-message", {
+              senderId: user.uid,
+              receiverId: userChatting.userIdFriend,
+              message: messSave,
+              idCon: idConversation?._id,
+            });
+            // console.log("sender", user.uid);
+            // console.log("rec", userChatting.userIdFriend);
+          }
+          console.log("send");
+        }
+      } catch (error) {
+        console.log("Failed to fetch conversation list: ", error);
       }
-      console.log("send");
     }
   };
   // if (socket) {
@@ -207,7 +286,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
   // console.log(item);
 
   const aboutScreen = () => {
-    if (idConversation.type) {
+    if (idConversation?.type) {
       // console.log("type", con.conversations.type);
       return navigation.navigate("AboutGroupScreen");
     } else {
