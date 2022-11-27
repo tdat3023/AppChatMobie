@@ -29,8 +29,8 @@ export default Home = ({ navigation }) => {
   const { user } = state;
   // // Listen to the Firebase Auth state and set the local state.
   useEffect(() => {
-    const unregisterAuthObserver = onAuthStateChanged(authetication, (user) => {
-      if (user) {
+    const unregisterAuthObserver = onAuthStateChanged(authetication, (u) => {
+      if (u) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
 
@@ -53,10 +53,11 @@ export default Home = ({ navigation }) => {
           }
         };
 
-        getUser(db, user.uid);
+        getUser(db, u.uid);
       } else {
         // User is signed out
         // ...
+        console.log("sign out");
       }
     });
 

@@ -3,6 +3,7 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
+import conversationApi from "../../api/conversationApi";
 
 import {
   SetUser,
@@ -13,10 +14,60 @@ import Contex from "../../store/Context";
 import { checkUrlIsImage, checkUrlIsSticker } from "../../utilies/Validations";
 // import { convertDateTimeToString, handleDate } from "../../utilies/DateTime";
 
-function CardUser({ value }) {
+export default CardUser = ({ value, navigation }) => {
+  const { state, depatch } = React.useContext(Contex);
+  const { user, userSearched, idConversation, userChatting } = state;
+  const handleClickOpenSreenChat = () => {
+    console.log(value);
+    // /11/26/2022 - 06:10 pm
+    //auth: Anh Nguyen
+
+    //có 2 trường hợp:
+    //TH1: click vào user dang tìm kiếm -> add user đó vào lịch sử tìm kiếm -> mở cuộc hội thoại
+    //đang tìm kiếm: searchingStatus = true
+
+    //featch id conversation with id sender: user and receiver : u
+    const featchConversation = async () => {
+      try {
+        const response = await conversationApi.getConversationDetails(
+          user.uid,
+          value.uid
+        );
+        //  console.log(response[0].conversations);
+        if (response[0]) {
+          console.log("co ");
+          // console.log("render");
+          depatch(SetIdConversation(response[0].conversations));
+          depatch(SetUserChatting(response[0].inFo));
+        } else {
+          console.log("chua co ");
+          const newInfo = {
+            firstName: value.first_name,
+            lastName: value.last_name,
+            avatar: value.avatar,
+            userIdFriend: value.uid,
+            idCon: null,
+          };
+          //console.log(newInfo);
+          depatch(SetIdConversation(null));
+          depatch(SetUserChatting(newInfo));
+        }
+        //redict chat screen
+        navigation.navigate("ChatScreen");
+
+        //set userChangting = user currently clicked
+        // depatch(SetUserChatting(u));
+      } catch (error) {
+        console.log("Failed to fetch conversation id: ", error);
+      }
+    };
+
+    featchConversation();
+  };
+
   return (
     <View style={styles.viewOne}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => handleClickOpenSreenChat()}>
         <View style={styles.chatBox}>
           {/* ảnh đại diện */}
           <View style={styles.imaContainer}>
@@ -55,7 +106,7 @@ function CardUser({ value }) {
       </TouchableOpacity>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   imaContainer: {
@@ -77,9 +128,9 @@ const styles = StyleSheet.create({
   },
 
   viewOne: {
-    display: "flex",
     width: "100%",
     height: 90,
+
     justifyContent: "center",
     alignItems: "center",
   },
@@ -134,5 +185,3 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 });
-
-export default CardUser;

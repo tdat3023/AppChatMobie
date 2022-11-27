@@ -9,6 +9,17 @@ const conversationApi = {
     return axiosClient.get(url);
   },
 
+  //[GET] get details of the conversation
+  //https://13.212.137.7/conversation/individuals/new?senderID=dP2GR6FMv1fJG40SK9CXeZlbLCo2&receiverID=HiIaKOEh8qTzOfTF1Va0Z6z61Qz2
+  //param: senderID, receiverID
+  //respone: a converstion
+
+   getConversationDetails: (senderID, receiverID) => {
+    //console.log(id);
+    const url = `/conversation/individuals/new?senderID=${senderID}&receiverID=${receiverID}`;
+    return axiosClient.get(url);
+  },
+  
   // GET:
   getConversations: (id, page, size) => {
     //console.log(id);
