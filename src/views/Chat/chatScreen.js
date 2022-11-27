@@ -13,11 +13,11 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
+  Modal,
 } from "react-native";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 import AntDesign from "react-native-vector-icons/AntDesign";
-
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Feather from "react-native-vector-icons/Feather";
 import MessengerItem from "./MessengerItem";
@@ -26,13 +26,14 @@ import AboutGroupScreen from "./aboutGroup";
 import Contex from "../../store/Context";
 import messageApi from "../../api/messageApi";
 import { Dimensions } from "react-native";
-
+import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 // import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 // import ImagePicker from "react-native-image-picker";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 import socket from "../../socket/socketClient";
+import { el } from "date-fns/locale";
 
 export default ChatScreen = ({ props, navigation, route }) => {
   // const [panigation, setPanigation] = React.useState({ page: 0, size: 50 });
@@ -161,51 +162,43 @@ export default ChatScreen = ({ props, navigation, route }) => {
   };
 
   // UI send image
-  // const [galleryPhoto, setGalleryPhoto] = useState();
-  // const options = {
-  //   title: "Select Image",
-  //   storageOptions: {
-  //     skipBackup: true,
-  //     path: "images",
-  //   },
-  // };
+  // Open choose Image
+  const [filePath, setFilePath] = useState({});
+  const chooseFile = (type) => {
+    let options = {
+      mediaType: type,
+      maxWidth: 300,
+      maxHeight: 550,
+      quality: 1,
+    };
+    launchImageLibrary(options, (response) => {
+      console.log("Response = ", response);
 
-  // const openGallery = () => {
-  //   ImagePicker.showImagePicker(options, (response) => {
-  //     if (response.didCancle) {
-  //       console.log("User cancelled image picker");
-  //     } else if (response.error) {
-  //       console.log("ImagePicker error: " + response.error);
-  //     } else {
-  //       const source = { uri: response.uri };
-  //       console.log(source);
-  //     }
-  //   });
-  // };
+      if (response.didCancel) {
+        alert("User cancelled camera picker");
+        return;
+      } else if (response.errorCode == "camera_unavailable") {
+        alert("Camera not available on device");
+        return;
+      } else if (response.errorCode == "permission") {
+        alert("Permission not satisfied");
+        return;
+      } else if (response.errorCode == "others") {
+        alert(response.errorMessage);
+        return;
+      }
+      console.log("base64 -> ", response.base64);
+      console.log("uri -> ", response.uri);
+      console.log("width -> ", response.width);
+      console.log("height -> ", response.height);
+      console.log("fileSize -> ", response.fileSize);
+      console.log("type -> ", response.type);
+      console.log("fileName -> ", response.fileName);
+      setFilePath(response);
+    });
+  };
 
-  // const pickImage = async () => {
-  //   // No permissions request is necessary for launching the image library
-  //   let result = await ImagePicker.launchImageLibrary({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
-  //     allowsEditing: true,
-  //     quality: 1,
-  //   });
-  //   if (!result.cancelled) {
-  //     // console.log(result.uri);
-  //     let localUri = result.uri;
-  //     let filename = localUri.split("/").pop();
-  //     console.log("_______________________________________________________");
-  //     console.log("file name:" + filename);
-  //     let formData = new FormData();
-  //     formData.append("file", filename);
-  //     console.log(formData);
-  //   } else if (result.cancelled) {
-  //     console.log(result);
-  //   }
-  // };
-
-  // console.log(item);
-
+  // trang mở rộng
   const aboutScreen = () => {
     if (idConversation.type) {
       // console.log("type", con.conversations.type);
@@ -214,9 +207,11 @@ export default ChatScreen = ({ props, navigation, route }) => {
       return navigation.navigate("CreateAboutScreen");
     }
   };
+
+  const [opacity, setOpacity] = useState(1);
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={[styles.container, { opacity: opacity }]}>
         {/* Top tag */}
         <View style={styles.headerContainer}>
           <View style={{ flexDirection: "row" }}>
@@ -292,6 +287,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
               !onFocus
                 ? { height: windowHeight - 140 }
                 : { height: windowHeight - 400 },
+              // { flex: 1 },
             ]}
           >
             <View style={styles.bodyListChat}>
@@ -301,17 +297,17 @@ export default ChatScreen = ({ props, navigation, route }) => {
                 style={styles.bodyList}
                 data={(() => [...listMessgae].reverse())()}
                 renderItem={({ item }) => (
-                  <MessengerItem messend={item}></MessengerItem>
+                  <MessengerItem
+                    messend={item}
+                    setOpacity={setOpacity}
+                    opacity={opacity}
+                  ></MessengerItem>
                 )}
                 //</View>key={"&{item.}timestamp"}
               ></FlatList>
             </View>
           </View>
 
-          {/* <View
-            style={{ float: "left", clear: "both" }}
-            ref={messagesEnd}
-          ></View> */}
           {/*Footer */}
           <View style={styles.footerContainer}>
             <View style={styles.inputMess}>
@@ -345,9 +341,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
                 <TouchableOpacity>
                   <Feather name="mic" size={27} color="black" />
                 </TouchableOpacity> */}
-                <TouchableOpacity
-                //onPress={pickImage}
-                >
+                <TouchableOpacity onPress={() => chooseFile("photo")}>
                   <Feather name="image" size={27} color="#3F4E4F" />
                 </TouchableOpacity>
               </View>
@@ -361,13 +355,14 @@ export default ChatScreen = ({ props, navigation, route }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
+    height: "100%",
+    width: "100%",
     backgroundColor: "#e5e7eb",
     justifyContent: "space-between",
   },
 
   headerContainer: {
-    //display: "flex",
     height: 60,
     backgroundColor: "#0091ff",
     flexDirection: "row",
@@ -378,9 +373,7 @@ const styles = StyleSheet.create({
   },
 
   bodyContainer: {
-    // display: "flex",
-
-    backgroundColor: "yellow",
+    width: "100%",
     height: windowHeight - 400,
     // height: 500,
   },
@@ -391,8 +384,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",
-    //borderWidth: 0.2,
-    backgroundColor: "white",
+    borderTopWidth: 0.5,
   },
 
   inputMess: {
@@ -402,7 +394,6 @@ const styles = StyleSheet.create({
   },
 
   moreTag: {
-    display: "flex",
     marginRight: 10,
     justifyContent: "space-between",
     flexDirection: "row",
@@ -417,7 +408,7 @@ const styles = StyleSheet.create({
   },
 
   textChat: {
-    flex: 1,
+    // flex: 1,
     fontSize: 14,
     marginHorizontal: 5,
     // backgroundColor: "#E4E4E4",
@@ -425,12 +416,10 @@ const styles = StyleSheet.create({
   },
 
   bodyListChat: {
-    //flex: 1,
     width: "100%",
     alignItems: "center",
   },
   bodyList: {
     width: "100%",
-    //backgroundColor: "blue",
   },
 });

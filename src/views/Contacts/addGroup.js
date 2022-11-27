@@ -97,62 +97,6 @@ const AddGroup = ({ navigation, route }) => {
 
   //search text
   const [textSearch, setTextSearch] = useState("");
-  const [users, setUsers] = useState([
-    {
-      id: "1",
-      url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
-      name: "Tiến Đạt",
-      lastMessage: "Hello",
-    },
-    {
-      id: "2",
-      url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
-      name: "Tiến Đạt",
-      lastMessage: "Hello",
-    },
-    {
-      id: "3",
-      url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
-      name: "Tiến Đạt",
-      lastMessage: "Hello",
-    },
-    {
-      id: "4",
-      url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
-      name: "Tiến Đạt",
-      lastMessage: "Hello",
-    },
-    {
-      id: "5",
-      url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
-      name: "Tiến Đạt",
-      lastMessage: "Hello",
-    },
-    {
-      id: "6",
-      url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
-      name: "Tiến Đạt",
-      lastMessage: "Hello",
-    },
-    {
-      id: "7",
-      url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
-      name: "Tiến Đạt",
-      lastMessage: "Hello",
-    },
-    {
-      id: "8",
-      url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
-      name: "Tiến Đạt",
-      lastMessage: "Hello",
-    },
-    {
-      id: "9",
-      url: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
-      name: "Tiến Đạt",
-      lastMessage: "Hello",
-    },
-  ]);
 
   const [count, setCount] = useState(0);
 
@@ -373,12 +317,11 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     height: "100%",
-    // flex: 1,
   },
 
   sreach: {
-    marginLeft: 10,
-    width: 280,
+    paddingHorizontal: 15,
+    width: "100%",
   },
 
   moreTag: {
@@ -400,14 +343,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginVertical: 12,
+    paddingHorizontal: 5,
+    width: "100%",
   },
 
   topTag2: {
-    //height: 50,
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#dfe2e7",
     borderRadius: 10,
+    paddingHorizontal: 15,
+    width: "94%",
   },
 
   topTag1: {
@@ -468,7 +414,6 @@ const styles = StyleSheet.create({
   itemChoose: {
     alignItems: "center",
     justifyContent: "center",
-
     borderRadius: 50,
     height: 45,
     width: 45,

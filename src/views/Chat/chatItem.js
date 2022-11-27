@@ -38,8 +38,6 @@ function ChatItem({ item, navigation, socket }) {
     setNewMess(text);
   };
 
-  // console.log("image", item.inFo);
-
   return (
     <View style={styles.viewOne}>
       <TouchableOpacity onPress={onPress}>
@@ -133,7 +131,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    borderBottomWidth: 0.2,
+    marginRight: 5,
   },
 
   bodyListChat: {
@@ -166,7 +164,6 @@ const styles = StyleSheet.create({
   bodyContainer: {
     flex: 1,
     justifyContent: "center",
-    borderBottomWidth: 0.2,
   },
 
   textName: {

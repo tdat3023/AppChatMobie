@@ -15,14 +15,14 @@ export default function AddGroupItem({
 
   //add user into a list -> create group
   const handleOnPress = () => {
-    // if (typing) {
-    //   setCount(count - 1);
-    // } else {
-    //   setCount(count + 1);
-    // }
-    //  setTyping(!typing);
+    if (typing) {
+      setCount(count - 1);
+    } else {
+      setCount(count + 1);
+    }
+    setTyping(!typing);
 
-    //check user da co trong listUserAddToGroup chua => khong cho them
+    // check user da co trong listUserAddToGroup chua => khong cho them
     let status = 0;
     listUserAddToGroup.forEach((val) => {
       if (val.uid === item.uid) {

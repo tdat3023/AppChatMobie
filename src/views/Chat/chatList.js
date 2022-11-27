@@ -176,7 +176,6 @@ export default ChatApp = function ({ navigation }) {
           </View>
         </View>
 
-        {/* sửa code tim trong cái list sreach */}
         {/* body */}
         {typing ? (
           <View style={styles.listSreach}>

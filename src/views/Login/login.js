@@ -41,7 +41,7 @@ export default Login = function ({ navigation }) {
   const [errorEmail, setErrorEmail] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
   //states to store email/password
-  const [email, setEmail] = useState("hoanganh1410tb@gmail.com");
+  const [email, setEmail] = useState("h@gmail.com");
   const [password, setPassword] = useState("123456789");
   const isValidationOK = () => {
     email.length > 0 &&
@@ -56,7 +56,7 @@ export default Login = function ({ navigation }) {
     const loginFunc = (mail, pass) => {
       signInWithEmailAndPassword(authetication, mail, pass)
         .then((userCredential) => {
-         // console.log(userCredential.user.uid);
+          // console.log(userCredential.user.uid);
           const getUser = async (db, id) => {
             //get info user by id
             const docRef = doc(db, "users", id);
