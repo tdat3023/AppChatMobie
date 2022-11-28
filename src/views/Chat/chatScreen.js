@@ -104,7 +104,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
     const featchListMember = async (_id) => {
       try {
         const response = await conversationApi.getListMember(_id);
-       // console.log("data::: ", response);
+        // console.log("data::: ", response);
 
         setMembers(response.members);
         setLeaderId(response.leaderId);
@@ -227,18 +227,29 @@ export default ChatScreen = ({ props, navigation, route }) => {
 
         setListMessage((prev) => [...prev, { ...messSave }]);
 
-        //call soket in here
-
         if (socket) {
           if (socket.current) {
-            socket.current.emit("send-message", {
-              senderId: user.uid,
-              receiverId: userChatting.userIdFriend,
-              message: messSave,
-              idCon: idConversation?._id,
-            });
-            // console.log("sender", user.uid);
-            // console.log("rec", userChatting.userIdFriend);
+            //call soket in here
+            if (idConversation.type) {
+              if (socket.current) {
+                socket.current.emit("send-message", {
+                  senderId: user.uid,
+                  idCon: idConversation._id,
+                  message: messSave,
+                  isGroup: true,
+                });
+                console.log("send group");
+              }
+            } else {
+              socket.current.emit("send-message", {
+                senderId: user.uid,
+                receiverId: userChatting.userIdFriend,
+                message: messSave,
+                idCon: idConversation._id,
+              });
+              // console.log("sender", user.uid);
+              console.log("rec", idConversation);
+            }
           }
           console.log("send");
         }

@@ -10,6 +10,7 @@ import {
   SafeAreaView,
   TextInput,
   Dimensions,
+  Alert,
 } from "react-native";
 import { isValidEmail, isValidPassword } from "../../utilies/Validations";
 
@@ -45,6 +46,10 @@ export default Login = function ({ navigation }) {
   const [email, setEmail] = useState("hao1@gmail.com");
   const [password, setPassword] = useState("11111111");
 
+  //false: chua bamlogin
+  //true: khong cho ng dung bam nut  login
+  const [status, setStatus] = useState(false);
+
   const isValidationOK = () => {
     email.length > 0 &&
       password.length > 0 &&
@@ -54,6 +59,11 @@ export default Login = function ({ navigation }) {
 
   // console.log("userLogin: ", user);
   const handleLogin = () => {
+    if (status) {
+      Alert.alert("Đang xử lý login...");
+    }
+
+    setStatus(true);
     //send email, pass to server
     const loginFunc = (mail, pass) => {
       signInWithEmailAndPassword(authetication, mail, pass)
@@ -69,9 +79,11 @@ export default Login = function ({ navigation }) {
               //console.log("Document data:", docSnap.data());
               //set user
               depatch(SetUser(docSnap.data()));
+              setStatus(false);
             } else {
               // doc.data() will be undefined in this case
               console.log("No such document!");
+              setStatus(false);
             }
           };
 
@@ -80,6 +92,7 @@ export default Login = function ({ navigation }) {
           //redict homepage
 
           navigation.navigate("HomeTabs");
+          setStatus(false);
         })
         .catch((error) => {
           alert("Email hoặc mật khẩu không chính xác!");

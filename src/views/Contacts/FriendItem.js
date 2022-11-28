@@ -13,16 +13,18 @@ export default function FriendItem({ item }) {
               <Image
                 style={styles.imaAvatar}
                 source={{
-                  uri: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
-                }}></Image>
+                  uri: "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
+                }}
+              ></Image>
             ) : (
               <Image
                 style={styles.imaAvatar}
                 source={{
                   uri: item.avaUser,
-                }}></Image>
+                }}
+              ></Image>
             )}
-            <View style={styles.status}></View>
+            {/* <View style={styles.status}></View> */}
           </View>
 
           <View style={styles.bodyContainer}>
@@ -44,29 +46,31 @@ export default function FriendItem({ item }) {
 
 const styles = StyleSheet.create({
   viewOne: {
-    width: "100%",
-    height: 90,
-    justifyContent: "center",
-    alignItems: "center",
+    // width: "100%",
+    // height: 90,
+    // justifyContent: "center",
+    // alignItems: "center",
   },
 
   chatBox: {
     width: "100%",
-    height: 90,
     flexDirection: "row",
+
+    paddingHorizontal: 12,
   },
 
   imaContainer: {
     justifyContent: "center",
     alignItems: "center",
+    position: "relative",
+    // backgroundColor: "red",
   },
 
   imaAvatar: {
-    marginLeft: 10,
+    //  marginLeft: 10,
     height: 60,
     width: 60,
     borderRadius: 100,
-    backgroundColor: "red",
   },
 
   bodyContainer: {
@@ -75,7 +79,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     flex: 1,
     height: 90,
-    borderBottomWidth: 1,
+    // borderBottomWidth: 1,
     justifyContent: "center",
   },
 
@@ -86,22 +90,22 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     height: 90,
-    borderBottomWidth: 1,
+    //borderBottomWidth: 1,
   },
 
   textName: {
-    paddingLeft: 15,
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: "bold",
   },
 
   status: {
     position: "absolute",
-    top: 65,
-    left: 55,
+
     backgroundColor: "green",
     height: 10,
     width: 10,
     borderRadius: 10,
+    bottom: 20,
+    right: 4,
   },
 });

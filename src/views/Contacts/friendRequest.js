@@ -51,14 +51,16 @@ export default function FriendRequest({ item }) {
           <Image
             style={styles.imaAvatar}
             source={{
-              uri: "https://www.sightseeingtoursitaly.com/wp-content/uploads/2019/06/Famous-Italian-dishes.jpg",
-            }}></Image>
+              uri: "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
+            }}
+          ></Image>
         ) : (
           <Image
             style={styles.imaAvatar}
             source={{
               uri: item.avaUser,
-            }}></Image>
+            }}
+          ></Image>
         )}
       </View>
 
@@ -72,17 +74,18 @@ export default function FriendRequest({ item }) {
           <View
             style={[
               styles.viewGroupCommon,
-              { justifyContent: "space-evenly" },
-            ]}>
-            <View style={styles.viewGroupCommon}>
+              { justifyContent: "space-evenly", marginVertical: 8 },
+            ]}
+          >
+            <View style={[styles.viewGroupCommon, { marginRight: 12 }]}>
               <View style={styles.viewDot}></View>
-              <Text style={styles.textDate}>Nhom chung: </Text>
+              <Text style={styles.textDate}>Nhóm chung: </Text>
               <Text style={styles.textDate}>{item.numCommonGroup}</Text>
             </View>
 
             <View style={styles.viewGroupCommon}>
               <View style={styles.viewDot}></View>
-              <Text style={styles.textDate}>Ban chung: </Text>
+              <Text style={styles.textDate}>Bạn chung: </Text>
               <Text style={styles.textDate}>{item.numCommonFriend}</Text>
             </View>
           </View>
@@ -99,13 +102,18 @@ export default function FriendRequest({ item }) {
         <View style={styles.footerContainer}>
           <TouchableOpacity
             onPress={handDeleteInvite}
-            style={[styles.btn, { backgroundColor: "#CCCCCC" }]}>
+            style={[
+              styles.btn,
+              { backgroundColor: "#CCCCCC", marginRight: 16 },
+            ]}
+          >
             <Text>TỪ CHỐI</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={handAceptFriend}
-            style={[styles.btn, { backgroundColor: "#66B2FF" }]}>
-            <Text>ĐỒNG Ý</Text>
+            style={[styles.btn, { backgroundColor: "#66B2FF" }]}
+          >
+            <Text style={{ color: "white" }}>ĐỒNG Ý</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -117,23 +125,28 @@ const styles = StyleSheet.create({
   viewOne: {
     width: "100%",
     flexDirection: "row",
-    borderBottomWidth: 0.2,
+    // justifyContent: "space-between",
+    paddingHorizontal: 12,
+    paddingVertical: 12,
   },
 
   imaAvatar: {
     marginTop: 10,
-    marginLeft: 10,
+    //marginLeft: 10,
     height: 60,
     width: 60,
     borderRadius: 100,
-    backgroundColor: "red",
+    //  backgroundColor: "red",
   },
 
-  infoContainer: {},
+  infoContainer: {
+    // backgroundColor: "red",
+    marginLeft: 12,
+  },
 
   textName: {
-    paddingLeft: 30,
-    fontSize: 20,
+    fontSize: 16,
+    textTransform: "capitalize",
     fontWeight: "bold",
   },
 
@@ -142,44 +155,41 @@ const styles = StyleSheet.create({
   },
 
   headerContainer: {
-    marginTop: 13,
-    marginBottom: 5,
+    // marginTop: 13,
+    // marginBottom: 5,
   },
 
   bodyContainer: {
-    width: 320,
-    marginBottom: 10,
+    // width: 320,
+    // marginBottom: 10,
   },
 
   text: {
-    width: 290,
-    height: 60,
-    marginLeft: 13,
-    paddingLeft: 10,
-    paddingTop: 10,
-    borderRadius: 10,
-    borderWidth: 1,
+    // width: 290,
+    // height: 60,
+    // marginLeft: 13,
+    // paddingLeft: 10,
+    // paddingTop: 10,
+    // borderRadius: 10,
+    // borderWidth: 1,
   },
 
   footerContainer: {
     flexDirection: "row",
-    justifyContent: "space-around",
-    marginBottom: 10,
   },
 
   btn: {
-    paddingVertical: 8,
-    width: 130,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 20,
-    marginLeft: 20,
+    // justifyContent: "center",
+    // alignItems: "center",
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    paddingVertical: 6,
   },
   viewDot: {
     height: 7,
     width: 7,
     borderRadius: 100,
-    backgroundColor: "gray",
+    backgroundColor: "green",
     marginRight: 10,
   },
   viewGroupCommon: {

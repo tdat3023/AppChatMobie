@@ -10,20 +10,32 @@ import {
   TouchableOpacity,
 } from "react-native";
 import ToggleSwitch from "toggle-switch-react-native";
+import Contex from "../../store/Context";
 const CreateAboutScreen = ({ navigation }) => {
   const [switchOnPin, setSwitchOnPin] = useState(false);
   const [switchOn, setSwitchOn] = useState(false);
-  const [user, setUser] = useState("Tien Dat");
+  // const [user, setUser] = useState("Tien Dat");
+  const { state, depatch } = React.useContext(Contex);
+  const { userChatting } = state;
   return (
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.ViewTop}>
-          <Image
-            style={styles.viewAvatar}
-            source={{
-              uri: "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
-            }}
-          />
+          {userChatting.avatar ? (
+            <Image
+              style={styles.viewAvatar}
+              source={{
+                uri: userChatting.avatar,
+              }}
+            />
+          ) : (
+            <Image
+              style={styles.viewAvatar}
+              source={{
+                uri: "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
+              }}
+            />
+          )}
           <Text
             style={{
               textAlign: "center",
@@ -32,7 +44,7 @@ const CreateAboutScreen = ({ navigation }) => {
               marginTop: 10,
             }}
           >
-            {user}
+            {userChatting.firstName + " " + userChatting.lastName}
           </Text>
           <View style={styles.viewListOpstion}>
             <TouchableOpacity>
@@ -141,53 +153,6 @@ const CreateAboutScreen = ({ navigation }) => {
         <View style={styles.viewCustomization}>
           <TouchableOpacity>
             <View style={styles.viewItem}>
-              <Ionicons name="pencil" size={23} />
-              <View style={styles.viewCustomItem}>
-                <Text style={{ fontSize: 15 }}>Đổi tên gợi nhớ</Text>
-                <Ionicons
-                  style={{}}
-                  color={"gray"}
-                  name="chevron-forward-outline"
-                  size={20}
-                />
-              </View>
-            </View>
-          </TouchableOpacity>
-
-          <View style={styles.viewItem}>
-            <Ionicons name="eye-off" size={23} />
-            <View style={styles.viewCustomItem}>
-              <Text style={{ fontSize: 15 }}>Ẩn cuộc trò chuyện</Text>
-              <ToggleSwitch
-                isOn={switchOnPin}
-                onColor="#33C481"
-                offColor="#E4E6EB"
-                size="small"
-                onToggle={() => {
-                  setSwitchOnPin(!switchOnPin);
-                }}
-              />
-            </View>
-          </View>
-
-          <View style={styles.viewItem}>
-            <Ionicons name="eyedrop" size={23} />
-            <View style={styles.viewCustomItem}>
-              <Text style={{ fontSize: 15 }}>Ghim cuộc trò chuyện</Text>
-              <ToggleSwitch
-                isOn={switchOn}
-                onColor="#33C481"
-                offColor="#E4E6EB"
-                size="small"
-                onToggle={() => {
-                  setSwitchOn(!switchOn);
-                }}
-              />
-            </View>
-          </View>
-
-          <TouchableOpacity>
-            <View style={styles.viewItem}>
               <Ionicons name="trash" size={23} />
               <View style={styles.viewCustomItem}>
                 <Text style={{ fontSize: 15 }}>Xóa lịch sử trò chuyện</Text>
@@ -237,7 +202,10 @@ const CreateAboutScreen = ({ navigation }) => {
             <View style={styles.viewItem}>
               <Ionicons name="people-circle" size={23} />
               <View style={styles.viewCustomItem}>
-                <Text style={{ fontSize: 15 }}>Tạo nhóm với {user}</Text>
+                <Text style={{ fontSize: 15 }}>
+                  Tạo nhóm với{" "}
+                  {userChatting.firstName + " " + userChatting.lastName}
+                </Text>
                 <Ionicons
                   style={{}}
                   color={"gray"}
@@ -251,7 +219,10 @@ const CreateAboutScreen = ({ navigation }) => {
             <View style={styles.viewItem}>
               <Ionicons name="person-add" size={23} />
               <View style={styles.viewCustomItem}>
-                <Text style={{ fontSize: 15 }}>Thêm {user} vào nhóm</Text>
+                <Text style={{ fontSize: 15 }}>
+                  Thêm {userChatting.firstName + " " + userChatting.lastName}{" "}
+                  vào nhóm
+                </Text>
                 <Ionicons
                   style={{}}
                   color={"gray"}
@@ -276,44 +247,7 @@ const CreateAboutScreen = ({ navigation }) => {
             </View>
           </TouchableOpacity>
         </View>
-        <View
-          style={{
-            display: "flex",
-            width: "85%",
-            justifyContent: "flex-start",
-            marginTop: 15,
-            marginBottom: 10,
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 14,
-              fontWeight: "normal",
-              color: "gray",
-            }}
-          >
-            Riêng tư
-          </Text>
-        </View>
 
-        <View style={styles.viewCustomization}>
-          <TouchableOpacity>
-            <View style={styles.viewItem}>
-              <Ionicons name="warning" size={23} />
-              <View style={styles.viewCustomItem}>
-                <Text style={{ fontSize: 15 }}>Báo xấu</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={styles.viewItem}>
-              <Ionicons name="remove-circle" size={23} />
-              <View style={styles.viewCustomItem}>
-                <Text style={{ fontSize: 15 }}>Chặn tin nhắn</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-        </View>
         <View style={{ display: "flex", height: 20 }}></View>
       </View>
     </ScrollView>

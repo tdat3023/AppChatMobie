@@ -24,6 +24,8 @@ function ChatItem({ item, navigation, socket }) {
     depatch(SetUserChatting(item.inFo));
   };
 
+  //console.log(item)
+
   const content = item.conversations.lastMessage.map((x) => {
     return x;
   });
@@ -52,14 +54,16 @@ function ChatItem({ item, navigation, socket }) {
                 style={styles.imaAvatar}
                 source={{
                   uri: item.inFo.avatar,
-                }}></Image>
+                }}
+              ></Image>
             ) : (
               <Image
                 style={styles.imaAvatar}
                 accessibilityLabel="ok"
                 source={{
                   uri: "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
-                }}></Image>
+                }}
+              ></Image>
             )}
           </View>
 
@@ -73,21 +77,34 @@ function ChatItem({ item, navigation, socket }) {
                 justifyContent: "space-between",
                 flexDirection: "row",
                 alignItems: "center",
-              }}>
-              <Text style={styles.textLastMes}>
-                {/* check lastmess is image , sticker ? render lastmess [image, sticker], check length >10 ? .... */}
-                {item.conversations?.lastMessage[0].type === "NOTIFY" ||
-                typeof item.conversations?.lastMessage[0].type === "undefined"
-                  ? item.conversations?.lastMessage[0].content
-                  : checkUrlIsImage(item.conversations.lastMessage[0].content)
-                  ? "[Image]"
-                  : checkUrlIsSticker(item.conversations.lastMessage[0].content)
-                  ? "[Sticker]"
-                  : item.conversations.lastMessage[0].content.length > 15
-                  ? item.conversations.lastMessage[0].content.slice(0, 20) +
-                    " ..."
-                  : item.conversations.lastMessage[0].content}
-              </Text>
+              }}
+            >
+              <View
+                style={{ flexDirection: "row", marginLeft: 10, marginTop: 8 }}
+              >
+                <Text style={{ marginRight: 4 }}>
+                  {item.inFo.userIdFriend !== user.uid
+                    ? "Bạn :"
+                    : item?.inFo?.firstName + " " + item?.inFo.lastName + ":"}
+                </Text>
+
+                <Text style={styles.textLastMes}>
+                  {/* check lastmess is image , sticker ? render lastmess [image, sticker], check length >10 ? .... */}
+                  {item.conversations?.lastMessage[0].type === "NOTIFY" ||
+                  typeof item.conversations?.lastMessage[0].type === "undefined"
+                    ? item.conversations?.lastMessage[0].content
+                    : checkUrlIsImage(item.conversations.lastMessage[0].content)
+                    ? "[Image]"
+                    : checkUrlIsSticker(
+                        item.conversations.lastMessage[0].content
+                      )
+                    ? "[Sticker]"
+                    : item.conversations.lastMessage[0].content.length > 15
+                    ? item.conversations.lastMessage[0].content.slice(0, 20) +
+                      " ..."
+                    : item.conversations.lastMessage[0].content}
+                </Text>
+              </View>
               <Text style={styles.textLastMes}>
                 {/* {handleDate(
                   new Date(),
@@ -175,8 +192,8 @@ const styles = StyleSheet.create({
   },
 
   textLastMes: {
-    marginTop: 5,
-    marginLeft: 10,
+    // marginTop: 5,
+    //marginLeft: 10,
     fontSize: 15,
     //color: "red",
   },
