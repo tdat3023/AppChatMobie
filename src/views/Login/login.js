@@ -63,7 +63,7 @@ export default Login = function ({ navigation }) {
             //get info user by id
             const docRef = doc(db, "users", id);
             const docSnap = await getDoc(docRef);
-
+            console.log(docSnap.data());
             if (docSnap.exists()) {
               // return docSnap.data();
               //console.log("Document data:", docSnap.data());
@@ -99,7 +99,8 @@ export default Login = function ({ navigation }) {
             style={{ alignItems: "center", marginLeft: 5 }}
             onPress={() => {
               navigation.goBack();
-            }}>
+            }}
+          >
             <AntDesign name="arrowleft" size={30} color="white"></AntDesign>
           </TouchableOpacity>
           <Text style={styles.textTopTag}>Đăng nhập</Text>
@@ -126,7 +127,8 @@ export default Login = function ({ navigation }) {
                 );
                 setEmail(text);
               }}
-              placeholder="example@gmail.com"></TextInput>
+              placeholder="example@gmail.com"
+            ></TextInput>
           </View>
 
           {/* password */}
@@ -138,11 +140,13 @@ export default Login = function ({ navigation }) {
                 setPassword(text);
               }}
               placeholder="Enter your password"
-              secureTextEntry={getPassWordVisible ? false : true}></TextInput>
+              secureTextEntry={getPassWordVisible ? false : true}
+            ></TextInput>
             <TouchableOpacity
               onPress={() => {
                 setPassWordVisible(!getPassWordVisible);
-              }}>
+              }}
+            >
               {getPassWordVisible ? (
                 <Ionicons
                   style={styles.imageEye}
@@ -166,7 +170,8 @@ export default Login = function ({ navigation }) {
             <TouchableOpacity
               onPress={() => {
                 alert("Emai= ${email}");
-              }}>
+              }}
+            >
               <Text style={{ fontSize: 15, color: "blue", marginTop: 15 }}>
                 Lấy lại mật khẩu
               </Text>
@@ -185,7 +190,8 @@ export default Login = function ({ navigation }) {
           <TouchableOpacity
             style={styles.login}
             disabled={isValidationOK() == false}
-            onPress={() => handleLogin()}>
+            onPress={() => handleLogin()}
+          >
             <AntDesign name="login" size={30} color="white"></AntDesign>
           </TouchableOpacity>
         </View>

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { useState, useEffect, useRef } from "react";
-import { NavigationContainer } from "@react-navigation/native";
 import {
   View,
   Text,
@@ -8,41 +7,146 @@ import {
   TouchableOpacity,
   ImageBackground,
   SafeAreaView,
-  TextInput,
   StatusBar,
   ScrollView,
   Image,
   Dimensions,
+  Alert,
 } from "react-native";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import Feather from "react-native-vector-icons/Feather";
-import { firebase } from "../../firebase/firebaseDB";
-import "firebase/compat/auth";
-import { isValidEmail, isValidPassword } from "../../utilies/Validations";
-const WinWidth = Dimensions.get("window").width;
-const WinHeight = Dimensions.get("window").height;
+import { Stack, TextInput, IconButton } from "@react-native-material/core";
+
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  getDoc,
+  setDoc,
+  doc,
+  query,
+  where,
+} from "firebase/firestore/lite";
+import { authetication, db } from "../../firebase/firebaseDB";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+
+import Contex from "../../store/Context";
+import { useContext } from "react";
+import { SetUser } from "../../store/Actions";
 
 export default Resgister = function ({ navigation, route }) {
-  const [errorEmail, setErrorEmail] = useState("");
-  const [errorPassword, setErrorPassword] = useState("");
+  //store
+  const { state, depatch } = useContext(Contex);
+  const { user } = state;
+
   //states to store email/password
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [retypePassword, setRetypePassword] = useState();
-  const data = { name: "cuong ga", age: "22" };
-  const isValidationOK = () => {
-    firstName.length > 0 &&
-      lastName.length > 0 &&
-      email.length > 0 &&
-      password.length > 0 &&
-      isValidEmail(email) == true &&
-      isValidPassword(password) == true &&
-      password == retypePassword;
+  const [retypePassword, setRetypePassword] = useState("");
+  const [userDataTemp, setUserDataTemp] = useState(null);
+
+  //register new account
+  const handleRegister = async () => {
+    //valid email
+    var regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+    if (!email.match(regex)) {
+      Alert.alert("Email không đúng định dạng!!");
+      return;
+    } else if (password.length < 8 || retypePassword.length < 8) {
+      Alert.alert("Mật khẩu phải nhiều hơn 7 ký tự!");
+
+      return;
+    } else if (password != retypePassword) {
+      Alert.alert("Mật khẩu không trùng khớp!!");
+
+      return;
+    } else if (firstName.length === 0 || lastName.length === 0) {
+      Alert("Họ và Tên không được bỏ trống");
+
+      return;
+    }
+
+    const userTemp = {
+      first_name: firstName,
+      last_name: lastName,
+      email,
+      sex: 0,
+      avatar: "",
+      is_active: true,
+      create_date: new Date(),
+    };
+
+    //register with firebase
+    createUserWithEmailAndPassword(authetication, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log(user);
+
+        const { uid } = user;
+        const userCurrent = { uid, ...userTemp };
+        //luu thong tin user moi tao vao firestore
+        // Add a new document in collection "cities"
+        const saveUser = async (database, name, id) => {
+          await setDoc(doc(database, name, id), {
+            first_name: firstName,
+            last_name: lastName,
+            email,
+            sex: 0,
+            avatar: "",
+            is_active: true,
+            create_date: new Date(),
+            uid: id,
+          });
+        };
+
+        saveUser(db, "users", userCurrent.uid);
+
+        signInWithEmailAndPassword(authetication, email, password)
+          .then((userCredential) => {
+            // console.log(userCredential.user.uid);
+            const getUser = async (db, id) => {
+              //get info user by id
+              const docRef = doc(db, "users", id);
+              const docSnap = await getDoc(docRef);
+              console.log(docSnap.data());
+              if (docSnap.exists()) {
+                // return docSnap.data();
+                //console.log("Document data:", docSnap.data());
+                //set user
+                depatch(SetUser(docSnap.data()));
+              } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+              }
+            };
+
+            getUser(db, userCredential.user.uid);
+
+            //redict homepage
+
+            navigation.navigate("HomeTabs");
+          })
+          .catch((error) => {
+            alert("Email hoặc mật khẩu không chính xác!");
+          });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        if (errorCode === "auth/email-already-in-use") {
+          console.log(errorCode);
+
+          Alert.alert("Email already in use");
+        }
+      });
   };
+
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -52,7 +156,8 @@ export default Resgister = function ({ navigation, route }) {
             style={{ alignItems: "center", marginLeft: 5, marginRight: 10 }}
             onPress={() => {
               navigation.goBack();
-            }}>
+            }}
+          >
             <Ionicons name="arrow-back" size={30} color="white" />
           </TouchableOpacity>
 
@@ -67,129 +172,73 @@ export default Resgister = function ({ navigation, route }) {
         <ScrollView style={styles.body}>
           {/* first name */}
           <View style={styles.inputText}>
-            <Text style={{ fontSize: 20 }}>First Name:</Text>
+            <Text style={{ fontSize: 18, color: "black", marginBottom: 8 }}>
+              Họ:
+            </Text>
+
             <TextInput
+              variant="standard"
+              placeholder="Nhập họ..."
               onChangeText={(text) => {
                 setFirstName(text);
               }}
-              style={{
-                color: "black",
-                borderBottomWidth: 1,
-              }}
-              placeholder="Nguyen"
-              value={firstName}
             />
           </View>
 
-          {/* last name */}
-          <View style={{ marginHorizontal: 15, marginTop: 15 }}>
-            <Text style={{ fontSize: 20 }}>Last Name:</Text>
+          <View style={styles.inputText}>
+            <Text style={{ fontSize: 18, color: "black", marginBottom: 8 }}>
+              Tên:
+            </Text>
+
             <TextInput
+              variant="standard"
+              placeholder="Nhập tên..."
               onChangeText={(text) => {
                 setLastName(text);
               }}
-              style={{
-                color: "black",
-                borderBottomWidth: 1,
-              }}
-              placeholder="Van A"
-              value={lastName}
             />
           </View>
 
-          {/* email */}
-          <View style={{ marginHorizontal: 15, marginTop: 15 }}>
-            <Text style={{ fontSize: 20 }}>Email:</Text>
+          <View style={styles.inputText}>
+            <Text style={{ fontSize: 18, color: "black", marginBottom: 8 }}>
+              Email:
+            </Text>
+
             <TextInput
+              variant="standard"
+              placeholder="Nhập email..."
               onChangeText={(text) => {
-                setErrorEmail(
-                  isValidEmail(text) == true
-                    ? ""
-                    : "Email not in correct format"
-                );
                 setEmail(text);
               }}
-              style={{
-                color: "black",
-                borderBottomWidth: 1,
-              }}
-              placeholder="example@gmail.com"
-              value={email}
             />
-            <View
-              style={{
-                height: 1,
-                width: "100%",
-                marginHorizontal: 15,
-                marginBottom: 5,
-                alignSelf: "center",
-              }}
-            />
-            <Text
-              style={{
-                color: "red",
-                fontSize: 20,
-              }}>
-              {errorEmail}
-            </Text>
           </View>
 
-          {/* Password */}
-          <View style={{ marginHorizontal: 15 }}>
-            <Text style={{ fontSize: 20 }}>Password:</Text>
+          <View style={styles.inputText}>
+            <Text style={{ fontSize: 18, color: "black", marginBottom: 8 }}>
+              Mật khẩu:
+            </Text>
+
             <TextInput
+              variant="standard"
+              placeholder="Nhập mật khẩu..."
               onChangeText={(text) => {
-                setErrorPassword(
-                  isValidPassword(text) == true
-                    ? ""
-                    : "Password must be at least 3 characters"
-                );
                 setPassword(text);
               }}
-              style={{
-                color: "black",
-                borderBottomWidth: 1,
-              }}
-              secureTextEntry={true}
-              value={password}
-              placeholder="Enter your password"
             />
-            <View
-              style={{
-                height: 1,
-                width: "100%",
-                marginBottom: 10,
-                marginHorizontal: 15,
-                alignSelf: "center",
-              }}
-            />
-            <Text style={{ fontSize: 20 }}>{errorPassword}</Text>
           </View>
 
-          {/* Retype password */}
-          <View style={{ marginHorizontal: 15 }}>
-            <Text style={{ fontSize: 20 }}>Retype password:</Text>
+          <View style={styles.inputText}>
+            <Text style={{ fontSize: 18, color: "black", marginBottom: 8 }}>
+              Nhập lại mật khẩu:
+            </Text>
+
             <TextInput
+              variant="standard"
+              placeholder="Nhập lại mật khẩu"
               onChangeText={(text) => {
-                setErrorPassword(
-                  isValidPassword(text) == true
-                    ? ""
-                    : "Password must be at least 3 characters"
-                );
                 setRetypePassword(text);
               }}
-              style={{
-                color: "black",
-                borderBottomWidth: 1,
-              }}
-              value={retypePassword}
-              secureTextEntry={true}
-              placeholder="Re-Enter your password"
             />
-            {/* <View
-              style={}
-            /> */}
-            <Text style={styles.textError}>{errorPassword}</Text>
           </View>
         </ScrollView>
 
@@ -203,25 +252,8 @@ export default Resgister = function ({ navigation, route }) {
 
           <TouchableOpacity
             style={styles.btnRegister}
-            onPress={() => {
-              //alert(`Email = ${email}, password = ${password}`)
-              firebase
-                .auth()
-                .createUserWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                  const user = userCredential.user;
-                  console.log(userCredential);
-
-                  // sendEmailVerification(user).then(() => {
-                  //   console.log('Email verification sent');
-                  // });
-                  navigation.navigate("HomeTabs", data);
-                })
-                .catch((error) => {
-                  alert(`Cannot signin, error: ${error.message}`);
-                  console.log(error);
-                });
-            }}>
+            onPress={() => handleRegister()}
+          >
             <AntDesign name="login" size={24} color="white" />
           </TouchableOpacity>
         </View>
@@ -251,7 +283,7 @@ const styles = StyleSheet.create({
   textRemind: {
     width: "100%",
     height: 50,
-    backgroundColor: "gray",
+    backgroundColor: "#DCD7C9",
     justifyContent: "center",
     alignItems: "center",
   },

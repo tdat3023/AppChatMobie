@@ -33,11 +33,6 @@ import conversationApi from "../../api/conversationApi";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-// import socket from "../../socket/socketClient";
-import socket from "../../socket/socketClient";
-import conversationApi from "../../api/conversationApi";
-import { SetIdConversation, SetUserChatting } from "../../store/Actions";
-
 export default ChatScreen = ({ props, navigation, route }) => {
   // const [panigation, setPanigation] = React.useState({ page: 0, size: 50 });
   // const [page, setPage] = React.useState(0);
@@ -109,7 +104,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
     const featchListMember = async (_id) => {
       try {
         const response = await conversationApi.getListMember(_id);
-        console.log("data::: ", response);
+       // console.log("data::: ", response);
 
         setMembers(response.members);
         setLeaderId(response.leaderId);
@@ -330,7 +325,8 @@ export default ChatScreen = ({ props, navigation, route }) => {
               style={{ alignItems: "center", marginLeft: 10 }}
               onPress={() => {
                 navigation.goBack();
-              }}>
+              }}
+            >
               <Ionicons name="arrow-back" size={24} color="white" />
             </TouchableOpacity>
             <View style={styles.nameFriend}>
@@ -341,7 +337,8 @@ export default ChatScreen = ({ props, navigation, route }) => {
                   textTransform: "capitalize",
                   color: "white",
                   marginLeft: 12,
-                }}>
+                }}
+              >
                 {/* check type conversations ? set name group : set name user chat */}
                 {idConversation?.type
                   ? userChatting?.name
@@ -352,7 +349,8 @@ export default ChatScreen = ({ props, navigation, route }) => {
                   fontSize: 10,
                   color: "white",
                   marginLeft: 12,
-                }}>
+                }}
+              >
                 {/* check type conversations ? set name group : set name user chat */}
                 {idConversation?.type ? (
                   <Text>{members.length} thành viên</Text>
@@ -380,7 +378,8 @@ export default ChatScreen = ({ props, navigation, route }) => {
               }}
               onPress={() => {
                 aboutScreen();
-              }}>
+              }}
+            >
               <Ionicons name="menu" size={24} color="white" />
             </TouchableOpacity>
           </View>
@@ -394,7 +393,8 @@ export default ChatScreen = ({ props, navigation, route }) => {
               !onFocus
                 ? { height: windowHeight - 140 }
                 : { height: windowHeight - 400 },
-            ]}>
+            ]}
+          >
             <View style={styles.bodyListChat}>
               <FlatList
                 // invertStickyHeaders={false}
@@ -427,7 +427,8 @@ export default ChatScreen = ({ props, navigation, route }) => {
                 onBlur={onFoucsInPut}
                 onSubmitEditing={handSendMess}
                 blurOnSubmit={false}
-                placeholder="Tin nhắn"></TextInput>
+                placeholder="Tin nhắn"
+              ></TextInput>
             </View>
 
             {/* input */}
