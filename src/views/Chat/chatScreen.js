@@ -280,34 +280,23 @@ export default ChatScreen = ({ props, navigation, route }) => {
         </View>
 
         {/* Body */}
-        {/* <KeyboardAwareScrollView> */}
-        <KeyboardAvoidingView behavior="padding">
-          <View
-            style={[
-              !onFocus
-                ? { height: windowHeight - 140 }
-                : { height: windowHeight - 400 },
-              // { flex: 1 },
-            ]}
-          >
-            <View style={styles.bodyListChat}>
-              <FlatList
-                // invertStickyHeaders={false}
-                inverted={true}
-                style={styles.bodyList}
-                data={(() => [...listMessgae].reverse())()}
-                renderItem={({ item }) => (
-                  <MessengerItem
-                    messend={item}
-                    setOpacity={setOpacity}
-                    opacity={opacity}
-                  ></MessengerItem>
-                )}
-                //</View>key={"&{item.}timestamp"}
-              ></FlatList>
-            </View>
+        <View style={{ flex: 1 }}>
+          <View style={styles.bodyListChat}>
+            <FlatList
+              // invertStickyHeaders={false}
+              inverted={true}
+              style={styles.bodyList}
+              data={(() => [...listMessgae].reverse())()}
+              renderItem={({ item }) => (
+                <MessengerItem
+                  messend={item}
+                  setOpacity={setOpacity}
+                  opacity={opacity}
+                ></MessengerItem>
+              )}
+              //</View>key={"&{item.}timestamp"}
+            ></FlatList>
           </View>
-
           {/*Footer */}
           <View style={styles.footerContainer}>
             <View style={styles.inputMess}>
@@ -347,7 +336,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
               </View>
             )}
           </View>
-        </KeyboardAvoidingView>
+        </View>
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );
@@ -368,18 +357,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    //marginBottom: 10,
-    // marginTop: 20,
   },
 
   bodyContainer: {
     width: "100%",
-    height: windowHeight - 400,
-    // height: 500,
+    // height: windowHeight - 400,
   },
 
   footerContainer: {
-    // height: 60,
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
@@ -408,14 +393,12 @@ const styles = StyleSheet.create({
   },
 
   textChat: {
-    // flex: 1,
     fontSize: 14,
     marginHorizontal: 5,
-    // backgroundColor: "#E4E4E4",
-    //  backgroundColor: "red",
   },
 
   bodyListChat: {
+    flex: 1,
     width: "100%",
     alignItems: "center",
   },

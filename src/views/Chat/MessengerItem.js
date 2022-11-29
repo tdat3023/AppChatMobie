@@ -82,7 +82,7 @@ function MessengerItem({ messend, props, route, setOpacity, opacity }) {
   const [reactListIcon, setReactListcon] = useState([]);
   // const reactListIcon = [];
   const [count, setCount] = useState(0);
-  // console.log(reactListIcon);
+  console.log(reactListIcon);
   const ReactIcons = () => {
     // function RenderImage(reactListIcon) {
     //   return (
