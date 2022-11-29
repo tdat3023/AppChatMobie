@@ -14,11 +14,11 @@ export const handleDate = (currentDate, passDate) => {
   const minus = differenceInMinutes(currentDate, passDate);
   //check duoi 1p -> tinh giay
 
-  if (minus <= 1) return " now";
-  if (minus < 61) return minus + " minutes ";
+  if (minus <= 1) return " vừa truy cập";
+  if (minus < 61) return minus + " phút ";
   const resultTime = differenceInHours(currentDate, passDate);
-  if (resultTime < 25) return resultTime + " hours";
+  if (resultTime < 25) return resultTime + " giờ";
   const resultDate = differenceInCalendarDays(currentDate, passDate);
-  if (resultDate < 8) return resultDate + " day";
+  if (resultDate < 8) return resultDate + " ngày";
   return passDate.slice(0, 10);
 };

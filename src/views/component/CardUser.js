@@ -14,7 +14,7 @@ import Contex from "../../store/Context";
 import { checkUrlIsImage, checkUrlIsSticker } from "../../utilies/Validations";
 // import { convertDateTimeToString, handleDate } from "../../utilies/DateTime";
 
-export default CardUser = ({ value, navigation }) => {
+export default CardUser = ({ value, navigation, setTyping, setSreachText }) => {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
   const handleClickOpenSreenChat = () => {
@@ -54,6 +54,8 @@ export default CardUser = ({ value, navigation }) => {
         }
         //redict chat screen
         navigation.navigate("ChatScreen");
+        setTyping(false);
+        setSreachText("");
 
         //set userChangting = user currently clicked
         // depatch(SetUserChatting(u));
@@ -77,15 +79,13 @@ export default CardUser = ({ value, navigation }) => {
                 style={styles.imaAvatar}
                 source={{
                   uri: value?.avatar,
-                }}
-              ></Image>
+                }}></Image>
             ) : (
               <Image
                 style={styles.imaAvatar}
                 source={{
                   uri: "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/908.jpg",
-                }}
-              ></Image>
+                }}></Image>
             )}
           </View>
 
@@ -99,8 +99,7 @@ export default CardUser = ({ value, navigation }) => {
                 justifyContent: "space-between",
                 flexDirection: "row",
                 alignItems: "center",
-              }}
-            ></View>
+              }}></View>
           </View>
         </View>
       </TouchableOpacity>

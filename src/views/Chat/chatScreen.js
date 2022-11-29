@@ -27,13 +27,17 @@ import Contex from "../../store/Context";
 import messageApi from "../../api/messageApi";
 import { Dimensions } from "react-native";
 import conversationApi from "../../api/conversationApi";
+import { SetIdConversation, SetUserChatting } from "../../store/Actions";
+import { format } from "timeago.js";
+import useDateLogic from "../../hook/useDateLogic";
 
 // import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 // import ImagePicker from "react-native-image-picker";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
+import { convertDateTimeToString, handleDate } from "../../utilies/DateTime";
 
-export default ChatScreen = ({ props, navigation, route }) => {
+export default ChatScreen = ({ props, navigation }) => {
   // const [panigation, setPanigation] = React.useState({ page: 0, size: 50 });
   // const [page, setPage] = React.useState(0);
 
@@ -41,13 +45,16 @@ export default ChatScreen = ({ props, navigation, route }) => {
   //   // messagesEnd.current.scrollToEnd({ animated: true });
   // };
 
-  // const socket = route?.params;
+  //const socketTmp = route?.params;
 
   const [onFocus, setOnFocus] = useState(false);
   // const {item} = route.params;
   const [typing, setTyping] = useState(false);
   const [members, setMembers] = useState([]);
   const [leaderId, setLeaderId] = useState("");
+  //const { handleDate } = useDateLogic();
+
+  const [friendStatus, setFriendStatus] = useState();
 
   const { state, depatch } = React.useContext(Contex);
   const { user, idConversation, userChatting, socket } = state;
@@ -55,6 +62,8 @@ export default ChatScreen = ({ props, navigation, route }) => {
   // if (socket) {
   //   console.log("socket", socket);
   // }
+
+  console.log("friend", friendStatus);
   const onFoucsInPut = () => {
     setOnFocus(!onFocus);
   };
@@ -82,10 +91,12 @@ export default ChatScreen = ({ props, navigation, route }) => {
           0,
           200
         );
-        const { data, page, size, totalPages } = response;
+        const { data, page, size, totalPages, friendStatus } = response;
         // console.log("listMess ", data[0].messages);
         if (response) {
           setListMessage(data[0].messages);
+          setFriendStatus(friendStatus);
+
           //  console.log("listMess", data[0].messages);
         }
       } catch (error) {
@@ -113,11 +124,30 @@ export default ChatScreen = ({ props, navigation, route }) => {
       }
     };
     socket.current?.on("notifi-kickUser", (data) => {
-      featchListMember(idConversation._id);
+      featchListMember(idConversation?._id);
       console.log("kich dm ");
     });
-    featchListMember(idConversation._id);
+    if (idConversation) {
+      socket?.current.emit(
+        "get-user-online",
+        userChatting.userIdFriend,
+        ({ isOnline, lastLogin }) => {
+          depatch(
+            SetUserChatting({
+              ...userChatting,
+              isOnline: isOnline,
+              lastLogin: lastLogin,
+            })
+          );
+          console.log("online:", isOnline);
+          console.log("lasst login:", userChatting?.lastLogin);
+        }
+      );
+    }
+
+    featchListMember(idConversation?._id);
   }, []);
+  console.log("userChattting:", userChatting);
 
   useEffect(() => {
     console.log("renderrr");
@@ -184,9 +214,10 @@ export default ChatScreen = ({ props, navigation, route }) => {
             const newMessSend = {
               userId: user.uid,
               content: newMess,
-              conversationId: idConversation?._id,
+              conversationId: response,
               type: "TEXT",
             };
+            console.log("messSend conver new :", newMessSend);
             const messSave = await messageApi.addTextMess(newMessSend);
 
             if (socket.current) {
@@ -336,8 +367,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
               style={{ alignItems: "center", marginLeft: 10 }}
               onPress={() => {
                 navigation.goBack();
-              }}
-            >
+              }}>
               <Ionicons name="arrow-back" size={24} color="white" />
             </TouchableOpacity>
             <View style={styles.nameFriend}>
@@ -348,8 +378,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
                   textTransform: "capitalize",
                   color: "white",
                   marginLeft: 12,
-                }}
-              >
+                }}>
                 {/* check type conversations ? set name group : set name user chat */}
                 {idConversation?.type
                   ? userChatting?.name
@@ -360,13 +389,36 @@ export default ChatScreen = ({ props, navigation, route }) => {
                   fontSize: 10,
                   color: "white",
                   marginLeft: 12,
-                }}
-              >
+                }}>
                 {/* check type conversations ? set name group : set name user chat */}
                 {idConversation?.type ? (
                   <Text>{members.length} thành viên</Text>
                 ) : (
-                  <Text>Truy cập 11 phút trước</Text>
+                  <>
+                    {friendStatus ? (
+                      userChatting?.isOnline ? (
+                        <Text>Đang truy cập</Text>
+                      ) : (
+                        <Text>
+                          {" "}
+                          {handleDate(
+                            new Date(),
+                            new Date(
+                              `${userChatting?.lastLogin}`.toLocaleString(
+                                "en-US",
+                                {
+                                  timeZone: "Asia/Ho_Chi_Minh",
+                                }
+                              )
+                            )
+                          )}
+                          {" trước"}
+                        </Text>
+                      )
+                    ) : (
+                      <Text>Người lạ</Text>
+                    )}
+                  </>
                 )}
               </Text>
             </View>
@@ -389,8 +441,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
               }}
               onPress={() => {
                 aboutScreen();
-              }}
-            >
+              }}>
               <Ionicons name="menu" size={24} color="white" />
             </TouchableOpacity>
           </View>
@@ -404,8 +455,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
               !onFocus
                 ? { height: windowHeight - 140 }
                 : { height: windowHeight - 400 },
-            ]}
-          >
+            ]}>
             <View style={styles.bodyListChat}>
               <FlatList
                 // invertStickyHeaders={false}
@@ -438,8 +488,7 @@ export default ChatScreen = ({ props, navigation, route }) => {
                 onBlur={onFoucsInPut}
                 onSubmitEditing={handSendMess}
                 blurOnSubmit={false}
-                placeholder="Tin nhắn"
-              ></TextInput>
+                placeholder="Tin nhắn"></TextInput>
             </View>
 
             {/* input */}

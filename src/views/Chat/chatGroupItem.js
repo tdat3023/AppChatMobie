@@ -27,7 +27,7 @@ function ChatGroupItem({ item, navigation, socket }) {
   const { state, depatch } = React.useContext(Contex);
   const { user, userSearched, idConversation, userChatting } = state;
   const onPress = () => {
-    navigation.navigate("ChatScreen", socket);
+    navigation.navigate("ChatScreen");
     // type conversation is true set conversation= conversation, chatUser= GroupInfo
     depatch(SetIdConversation(item.conversations));
     depatch(SetUserChatting(item.inFo));
@@ -134,8 +134,8 @@ function ChatGroupItem({ item, navigation, socket }) {
                   ? "[Image]"
                   : checkUrlIsSticker(item.conversations.lastMessage[0].content)
                   ? "[Sticker]"
-                  : item.conversations.lastMessage[0].content.length > 15
-                  ? item.conversations.lastMessage[0].content.slice(0, 20) +
+                  : item.conversations.lastMessage[0].content.length > 30
+                  ? item.conversations.lastMessage[0].content.slice(0, 28) +
                     " ..."
                   : item.conversations.lastMessage[0].content + " "}
               </Text>

@@ -65,7 +65,7 @@ function MemberCard({ value, leaderId, navigation }) {
       });
     }
 
-    navigation.navigate("ChatScreen", socket);
+    navigation.navigate("ChatScreen");
 
     //call socket in here
   };
