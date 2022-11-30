@@ -30,23 +30,13 @@ import conversationApi from "../../api/conversationApi";
 import { SetIdConversation, SetUserChatting } from "../../store/Actions";
 import { format } from "timeago.js";
 import useDateLogic from "../../hook/useDateLogic";
+import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 
-// import { launchCamera, launchImageLibrary } from "react-native-image-picker";
-// import ImagePicker from "react-native-image-picker";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 import { convertDateTimeToString, handleDate } from "../../utilies/DateTime";
 
 export default ChatScreen = ({ props, navigation }) => {
-  // const [panigation, setPanigation] = React.useState({ page: 0, size: 50 });
-  // const [page, setPage] = React.useState(0);
-
-  // const scrollToBottom = () => {
-  //   // messagesEnd.current.scrollToEnd({ animated: true });
-  // };
-
-  //const socketTmp = route?.params;
-
   const [onFocus, setOnFocus] = useState(false);
   // const {item} = route.params;
   const [typing, setTyping] = useState(false);
@@ -292,7 +282,6 @@ export default ChatScreen = ({ props, navigation }) => {
   // if (socket) {
   //   console.log("socket connected", socket);
   // }
-
   // UI send mes
   const handleChangText = (text) => {
     if (text.length > 0) {
@@ -304,51 +293,43 @@ export default ChatScreen = ({ props, navigation }) => {
   };
 
   // UI send image
-  // const [galleryPhoto, setGalleryPhoto] = useState();
-  // const options = {
-  //   title: "Select Image",
-  //   storageOptions: {
-  //     skipBackup: true,
-  //     path: "images",
-  //   },
-  // };
+  // Open choose Image
+  const [filePath, setFilePath] = useState({});
+  const chooseFile = (type) => {
+    let options = {
+      mediaType: type,
+      maxWidth: 300,
+      maxHeight: 550,
+      quality: 1,
+    };
+    launchImageLibrary(options, (response) => {
+      console.log("Response = ", response);
 
-  // const openGallery = () => {
-  //   ImagePicker.showImagePicker(options, (response) => {
-  //     if (response.didCancle) {
-  //       console.log("User cancelled image picker");
-  //     } else if (response.error) {
-  //       console.log("ImagePicker error: " + response.error);
-  //     } else {
-  //       const source = { uri: response.uri };
-  //       console.log(source);
-  //     }
-  //   });
-  // };
+      if (response.didCancel) {
+        alert("User cancelled camera picker");
+        return;
+      } else if (response.errorCode == "camera_unavailable") {
+        alert("Camera not available on device");
+        return;
+      } else if (response.errorCode == "permission") {
+        alert("Permission not satisfied");
+        return;
+      } else if (response.errorCode == "others") {
+        alert(response.errorMessage);
+        return;
+      }
+      console.log("base64 -> ", response.base64);
+      console.log("uri -> ", response.uri);
+      console.log("width -> ", response.width);
+      console.log("height -> ", response.height);
+      console.log("fileSize -> ", response.fileSize);
+      console.log("type -> ", response.type);
+      console.log("fileName -> ", response.fileName);
+      setFilePath(response);
+    });
+  };
 
-  // const pickImage = async () => {
-  //   // No permissions request is necessary for launching the image library
-  //   let result = await ImagePicker.launchImageLibrary({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
-  //     allowsEditing: true,
-  //     quality: 1,
-  //   });
-  //   if (!result.cancelled) {
-  //     // console.log(result.uri);
-  //     let localUri = result.uri;
-  //     let filename = localUri.split("/").pop();
-  //     console.log("_______________________________________________________");
-  //     console.log("file name:" + filename);
-  //     let formData = new FormData();
-  //     formData.append("file", filename);
-  //     console.log(formData);
-  //   } else if (result.cancelled) {
-  //     console.log(result);
-  //   }
-  // };
-
-  // console.log(item);
-
+  //more
   const aboutScreen = () => {
     if (idConversation?.type) {
       // console.log("type", con.conversations.type);
@@ -357,6 +338,9 @@ export default ChatScreen = ({ props, navigation }) => {
       return navigation.navigate("CreateAboutScreen");
     }
   };
+
+  const [opacity, setOpacity] = useState(1);
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.container}>
@@ -367,7 +351,8 @@ export default ChatScreen = ({ props, navigation }) => {
               style={{ alignItems: "center", marginLeft: 10 }}
               onPress={() => {
                 navigation.goBack();
-              }}>
+              }}
+            >
               <Ionicons name="arrow-back" size={24} color="white" />
             </TouchableOpacity>
             <View style={styles.nameFriend}>
@@ -378,7 +363,8 @@ export default ChatScreen = ({ props, navigation }) => {
                   textTransform: "capitalize",
                   color: "white",
                   marginLeft: 12,
-                }}>
+                }}
+              >
                 {/* check type conversations ? set name group : set name user chat */}
                 {idConversation?.type
                   ? userChatting?.name
@@ -389,7 +375,8 @@ export default ChatScreen = ({ props, navigation }) => {
                   fontSize: 10,
                   color: "white",
                   marginLeft: 12,
-                }}>
+                }}
+              >
                 {/* check type conversations ? set name group : set name user chat */}
                 {idConversation?.type ? (
                   <Text>{members.length} thành viên</Text>
@@ -441,39 +428,32 @@ export default ChatScreen = ({ props, navigation }) => {
               }}
               onPress={() => {
                 aboutScreen();
-              }}>
+              }}
+            >
               <Ionicons name="menu" size={24} color="white" />
             </TouchableOpacity>
           </View>
         </View>
 
         {/* Body */}
-        {/* <KeyboardAwareScrollView> */}
-        <KeyboardAvoidingView behavior="padding">
-          <View
-            style={[
-              !onFocus
-                ? { height: windowHeight - 140 }
-                : { height: windowHeight - 400 },
-            ]}>
-            <View style={styles.bodyListChat}>
-              <FlatList
-                // invertStickyHeaders={false}
-                inverted={true}
-                style={styles.bodyList}
-                data={(() => [...listMessgae].reverse())()}
-                renderItem={({ item }) => (
-                  <MessengerItem messend={item}></MessengerItem>
-                )}
-                //</View>key={"&{item.}timestamp"}
-              ></FlatList>
-            </View>
+        <View style={{ flex: 1, opacity }}>
+          <View style={styles.bodyListChat}>
+            <FlatList
+              // invertStickyHeaders={false}
+              inverted={true}
+              style={styles.bodyList}
+              data={(() => [...listMessgae].reverse())()}
+              renderItem={({ item }) => (
+                <MessengerItem
+                  messend={item}
+                  setOpacity={setOpacity}
+                  opacity={opacity}
+                ></MessengerItem>
+              )}
+              //</View>key={"&{item.}timestamp"}
+            ></FlatList>
           </View>
 
-          {/* <View
-            style={{ float: "left", clear: "both" }}
-            ref={messagesEnd}
-          ></View> */}
           {/*Footer */}
           <View style={styles.footerContainer}>
             <View style={styles.inputMess}>
@@ -488,13 +468,14 @@ export default ChatScreen = ({ props, navigation }) => {
                 onBlur={onFoucsInPut}
                 onSubmitEditing={handSendMess}
                 blurOnSubmit={false}
-                placeholder="Tin nhắn"></TextInput>
+                placeholder="Tin nhắn"
+              ></TextInput>
             </View>
 
             {/* input */}
             {typing ? (
               <View style={styles.send}>
-                <TouchableOpacity onPress={handSendMess}>
+                <TouchableOpacity>
                   <Feather name="send" size={27} color="#3F4E4F" />
                 </TouchableOpacity>
               </View>
@@ -506,15 +487,18 @@ export default ChatScreen = ({ props, navigation }) => {
                 <TouchableOpacity>
                   <Feather name="mic" size={27} color="black" />
                 </TouchableOpacity> */}
-                <TouchableOpacity
-                //onPress={pickImage}
-                >
+                <TouchableOpacity onPress={() => chooseFile("photo")}>
                   <Feather name="image" size={27} color="#3F4E4F" />
                 </TouchableOpacity>
               </View>
             )}
           </View>
-        </KeyboardAvoidingView>
+        </View>
+
+        {/* <View
+            style={{ float: "left", clear: "both" }}
+            ref={messagesEnd}
+          ></View> */}
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );
@@ -528,32 +512,23 @@ const styles = StyleSheet.create({
   },
 
   headerContainer: {
-    //display: "flex",
-    height: 60,
+    height: 50,
     backgroundColor: "#0091ff",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    //marginBottom: 10,
-    // marginTop: 20,
   },
 
   bodyContainer: {
-    // display: "flex",
-
-    backgroundColor: "yellow",
-    height: windowHeight - 400,
-    // height: 500,
+    width: "100%",
   },
 
   footerContainer: {
-    // height: 60,
-    display: "flex",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",
-    //borderWidth: 0.2,
     backgroundColor: "white",
+    borderBottomWidth: 0.2,
   },
 
   inputMess: {
@@ -563,7 +538,6 @@ const styles = StyleSheet.create({
   },
 
   moreTag: {
-    display: "flex",
     marginRight: 10,
     justifyContent: "space-between",
     flexDirection: "row",
@@ -581,12 +555,10 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
     marginHorizontal: 5,
-    // backgroundColor: "#E4E4E4",
-    //  backgroundColor: "red",
   },
 
   bodyListChat: {
-    //flex: 1,
+    flex: 1,
     width: "100%",
     alignItems: "center",
   },

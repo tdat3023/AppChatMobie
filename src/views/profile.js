@@ -75,9 +75,8 @@ export default Profile = ({ navigation }) => {
               Edit Profile
             </Text>
           </TouchableOpacity>
-          {/* <Button style={styles.buttonP2} type="outline"></Button> */}
         </Container>
-        {/* <View
+        <View
           style={{
             flex: 1,
             justifyContent: "center",
@@ -91,10 +90,11 @@ export default Profile = ({ navigation }) => {
             Hãy chia sẻ cảm súc với bạn bè và lưu lại những khoảng khắc đáng nhớ
             nhé
           </Text>
-        </View> */}
-        {/* <TouchableOpacity style={styles.viewAl}>
+        </View>
+        <TouchableOpacity style={styles.viewAl}>
           <Text onPress={() => handleLogout()}>Logout</Text>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
+
         {/* <Container useThemeGutterPadding={true} elevation={0}>
           <Touchable style={StyleSheet.flatten([styles.touchableJg])}>
             <View style={styles.viewAl}>
@@ -120,7 +120,6 @@ export default Profile = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   screenContainerJb: {
-    //justifyContent: "space-evenly",
     height: 50,
   },
   viewKs: {
